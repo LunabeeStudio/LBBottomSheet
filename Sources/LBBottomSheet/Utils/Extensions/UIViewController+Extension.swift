@@ -1,0 +1,61 @@
+//  Copyright © 2021 Lunabee Studio
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+//  UIViewController+Extension.swift
+//  LBBottomSheet
+//
+//  Created by Lunabee Studio / Date - 12/10/2021 - for the LBBottomSheet Swift Package.
+//
+
+import UIKit
+
+// MARK: - Public extensions -
+public extension UIViewController {
+    var bottomSheetController: BottomSheetController? {
+        var parentController: UIViewController? = self
+        while let controller = parentController?.parent {
+            parentController = controller
+            if parentController is BottomSheetController {
+                break
+            }
+        }
+        return parentController as? BottomSheetController
+    }
+
+    @discardableResult
+    func presentAsBottomSheet(_ controller: UIViewController,
+                              rearController: BottomSheetRearController? = nil,
+                              theme: BottomSheetController.Theme = BottomSheetController.Theme(),
+                              behavior: BottomSheetController.Behavior = BottomSheetController.Behavior()) -> BottomSheetController {
+        let bottomSheetController: BottomSheetController = BottomSheetController.controller(bottomSheetChild: controller, bottomSheetRearController: rearController, theme: theme, behavior: behavior)
+        present(bottomSheetController, animated: false, completion: nil)
+        return bottomSheetController
+    }
+}
+
+// MARK: - Internal extensions -
+internal extension UIViewController {
+    func addChildViewController(_ childController: UIViewController, containerView: UIView) {
+        self.addChild(childController)
+        let childView = childController.view
+        containerView.addSubview(childView!)
+        childView?.translatesAutoresizingMaskIntoConstraints = false
+        
+        let views =  ["childView": childView!]
+        containerView.addConstraints(NSLayoutConstraint .constraints(withVisualFormat: "V:|[childView]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: views))
+        containerView.addConstraints(NSLayoutConstraint .constraints(withVisualFormat: "H:|[childView]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: views))
+        
+        childController.didMove(toParent: self)
+    }
+}
