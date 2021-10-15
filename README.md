@@ -1,4 +1,4 @@
-# LBBottomSheet-SPM-Test
+# LBBottomSheet
 
 ![SPM](https://img.shields.io/badge/SPM-Compatible-brightgreen.svg?style=flat)
 ![Swift](https://img.shields.io/badge/Swift-v5-brightgreen.svg?style=flat)
