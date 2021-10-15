@@ -11,7 +11,7 @@
 
 To install using Swift Package Manager, add this to the `dependencies` section in your Package.swift file:
 ```swift
-.package(url: "https://github.com/LunabeeStudio/LBBottomSheet.git", from: "1.0.0"),
+.package(url: "https://github.com/LunabeeStudio/LBBottomSheet.git", from: "0.9.0"),
 ```
    
 After adding this Swift Package to your project, you have to import the module:   
