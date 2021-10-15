@@ -1,7 +1,8 @@
 # LBBottomSheet
 
+![Version](https://img.shields.io/github/v/tag/LunabeeStudio/LBBottomSheet?color=informational&label=Version&sort=semver)
 ![SPM](https://img.shields.io/badge/SPM-Compatible-brightgreen.svg?style=flat)
-![Swift](https://img.shields.io/badge/Swift-v5-brightgreen.svg?style=flat)
+![Swift](https://img.shields.io/badge/Swift-v5-brightgreen.svg?style=flat&logo=swift)
 ![Platform](https://img.shields.io/badge/platform-iOS_11.4+-lightgrey.svg?style=flat)
 ![License](https://img.shields.io/badge/License-Apache--2.0-informational.svg?style=flat)
 
