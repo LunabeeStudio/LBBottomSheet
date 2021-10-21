@@ -20,9 +20,8 @@
 
 import UIKit
 
-extension UIView {
-
-    internal func lbbsAddFullSubview(_ subview: UIView, belowSubview: UIView? = nil) {
+internal extension UIView {
+    func lbbsAddFullSubview(_ subview: UIView, belowSubview: UIView? = nil) {
         if let belowSubview = belowSubview {
             insertSubview(subview, belowSubview: belowSubview)
         } else {
@@ -35,4 +34,17 @@ extension UIView {
         subview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0.0).isActive = true
     }
 
+    func getSubviews<T: UIView>() -> [T] {
+        var foundSubviews: [T] = []
+        if let subview = self as? T { foundSubviews.append(subview) }
+        self.subviews.forEach {
+            foundSubviews += $0.getSubviews() as [T]
+            if let subview = $0 as? T { foundSubviews.append(subview) }
+        }
+        return foundSubviews
+    }
+
+    func getFirstScrollView() -> UIScrollView? {
+        (getSubviews() as? [UIScrollView])?.first
+    }
 }
