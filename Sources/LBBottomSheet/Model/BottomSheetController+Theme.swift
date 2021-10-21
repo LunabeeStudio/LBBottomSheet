@@ -33,12 +33,12 @@ extension BottomSheetController {
                 /// Use a simple color as the grabber "zone" background.
                 /// - Parameters:
                 ///     - color: The color to use as the grabber "zone" background.
-                ///     - isTranslucent: If `true`, the embeded view will be extended under the grabber "zone". Otherwise, the embeded view will have its top starting at the bottom of the grabber "zone".
+                ///     - isTranslucent: If `true`, the embedded view will be extended under the grabber "zone". Otherwise, the embedded view will have its top starting at the bottom of the grabber "zone".
                 case color(_ color: UIColor = .clear, isTranslucent: Bool = true)
                 /// Use a custom view as the grabber "zone" background.
                 /// - Parameters:
                 ///     - view: The view to insert as the grabber "zone" background.
-                ///     - isTranslucent: If `true`, the embeded view will be extended under the grabber "zone". Otherwise, the embeded view will have its top starting at the bottom of the grabber "zone".
+                ///     - isTranslucent: If `true`, the embedded view will be extended under the grabber "zone". Otherwise, the embedded view will have its top starting at the bottom of the grabber "zone".
                 case view(_ view: UIView, isTranslucent: Bool)
             }
 

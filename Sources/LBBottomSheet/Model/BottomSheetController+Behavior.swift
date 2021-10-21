@@ -36,12 +36,17 @@ extension BottomSheetController {
 
         /// An enum describing the available height modes.
         public enum HeightMode {
-            /// The bottom sheet will call `preferredHeightInBottomSheet on the embeded controller to get the needed height.
+            /// The bottom sheet will call `preferredHeightInBottomSheet` on the embedded controller to get the needed height.
             case fitContent
-            /// The bottom sheet height will be contained between `minHeight` and `maxHeight` and the bottom sheet will remains where the user released it.
+            /// The bottom sheet height will be contained between `minHeight` and `maxHeight` and the bottom sheet will remain where the user releases it.
+            /// - Parameters:
+            ///     - minHeight: The minimum height to use for the bottom sheet.
+            ///     - maxHeight: The maximum height to use for the bottom sheet.
             case free(minHeight: CGFloat? = nil, maxHeight: CGFloat? = nil)
             /// The bottom sheet will have multiple height values. When the user releases it, it will be attached to the nearest provided specific value.
             /// When presented, the bottom sheet will use the minimum value. It can be swipped up to the maximum value. You don't have to take care of the values order, the bottom sheet will sort them to find the matching one.
+            /// - Parameters:
+            ///     - values: An array of `HeightValue` values to use with the bottom sheet if we need to manage multiple positions.
             case specific(values: [HeightValue])
 
             internal func minimumHeight(with childHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
@@ -71,14 +76,20 @@ extension BottomSheetController {
 
         /// An enum describing the available height values for the `specific` HeightMode.
         public enum HeightValue {
-            /// It takes an arbitrary height in points.
+            /// Defines an arbitrary height in points.
+            /// - Parameters:
+            ///     - value: The absolute height value in points.
             case fixed(value: CGFloat)
-            /// It takes a percentage (between 0.0 and 1.0) that will be applied to the screen height to determine the bottom sheet height.
+            /// Defines a height being a ratio of the screen height.
+            /// - Parameters:
+            ///     - value: A percentage (between 0.0 and 1.0) that will be applied to the screen height to determine the bottom sheet height.
             case screenRatio(value: CGFloat)
-            /// It takes a percentage (between 0.0 and 1.0) that will be applied to the height of the controller embeded in the bottom sheet.
+            /// Defines a height being a ratio of the embedded controller `preferredHeightInBottomSheet` value.
+            /// - Parameters:
+            ///     - value: A percentage (between 0.0 and 1.0) that will be applied to the height of the controller embedded in the bottom sheet.
             case childRatio(value: CGFloat)
 
-            /// This is a shortcut allowing you to have in your specific values, one matching the needed height.
+            /// This is a shortcut allowing you to have in your specific values, one matching the embedded controller `preferredHeightInBottomSheet` value.
             public static let fitContent: HeightValue = .childRatio(value: 1.0)
         }
 

@@ -28,6 +28,14 @@ public final class BottomSheetController: UIViewController {
         set { }
     }
 
+    /// This is the height of the grabber "zone".
+    /// ![TopInset](TopInset)
+    ///
+    /// Here is it's implementation:
+    /// ```swift
+    /// public var topInset: CGFloat { (theme.grabber?.topMargin ?? 0.0) * 2.0 + (theme.grabber?.size.height ?? 0.0) }
+    /// ```
+    /// You can have a look at <doc:BottomSheetController/Theme/Grabber-swift.struct> to check the ``LBBottomSheet/BottomSheetController/Theme/Grabber-swift.struct/topMargin``.
     public var topInset: CGFloat { (theme.grabber?.topMargin ?? 0.0) * 2.0 + (theme.grabber?.size.height ?? 0.0) }
 
     @IBOutlet private var mainDismissButton: UIButton!
