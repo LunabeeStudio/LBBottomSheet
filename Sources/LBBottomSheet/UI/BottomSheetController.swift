@@ -56,7 +56,6 @@ public final class BottomSheetController: UIViewController {
     private var tapGesture: UITapGestureRecognizer?
     private var isGestureBeingActivated: Bool = false
     private var lastHeightAtPanGestureStart: CGFloat = 0.0
-    private var lastContentOffsetAtPanGestureStart: CGPoint?
     private var bottomSheetChild: UIViewController!
     private var isChildAlreadyVisible: Bool = false
     private var defaultMaximumHeight: CGFloat {
@@ -298,7 +297,6 @@ private extension BottomSheetController {
         tapGesture?.cancel()
         isGestureBeingActivated = true
         lastHeightAtPanGestureStart = bottomContainerHeightConstraint.constant
-        lastContentOffsetAtPanGestureStart = bottomSheetChild.view.getFirstScrollView()?.contentOffset
     }
 
     func processPanGestureChanged(_ gesture: UIPanGestureRecognizer) {
@@ -334,14 +332,8 @@ private extension BottomSheetController {
             let destinationMaximumHeight: CGFloat = yVelocity < -behavior.velocityThresholdToOpenAtMaxHeight ? maxHeight : calculateExpectedHeight()
             bottomContainerHeightConstraint.constant = destinationMaximumHeight
             bottomContainerBottomConstraint.constant = 0.0
-            UIView.animate(withDuration: 0.2) {
-                self.view.layoutIfNeeded()
-                if let offset = self.lastContentOffsetAtPanGestureStart {
-                    self.bottomSheetChild.view.getFirstScrollView()?.contentOffset = offset
-                }
-            }
+            UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
         }
-        lastContentOffsetAtPanGestureStart = nil
         isGestureBeingActivated = false
     }
 
