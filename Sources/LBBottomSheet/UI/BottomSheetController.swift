@@ -136,7 +136,7 @@ public final class BottomSheetController: UIViewController {
 
     /// Overriden to customize the way this controller is dismissed.
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        if animated {
+        if flag {
             makeDisappearing { super.dismiss(animated: false, completion: completion) }
         } else {
             super.dismiss(animated: false, completion: completion)
@@ -336,7 +336,7 @@ private extension BottomSheetController {
             bottomContainerBottomConstraint.constant = 0.0
             UIView.animate(withDuration: 0.2) {
                 self.view.layoutIfNeeded()
-                bottomSheetChild.view.getFirstScrollView()?.contentOffset = self.lastContentOffsetAtPanGestureStart
+                self.bottomSheetChild.view.getFirstScrollView()?.contentOffset = self.lastContentOffsetAtPanGestureStart
             }
         }
         isGestureBeingActivated = false
