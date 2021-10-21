@@ -45,6 +45,7 @@ internal extension UIView {
     }
 
     func getFirstScrollView() -> UIScrollView? {
-        (getSubviews() as? [UIScrollView])?.first
+        let scrollViews: [UIScrollView] = getSubviews()
+        return scrollViews.first
     }
 }
