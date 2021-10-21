@@ -12,7 +12,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
-//  BottomSheetRearController.swift
+//  BottomSheetPositionDelegate.swift
 //  LBBottomSheet
 //
 //  Created by Lunabee Studio / Date - 12/10/2021 - for the LBBottomSheet Swift Package.
@@ -20,7 +20,12 @@
 
 import UIKit
 
-// TODO: Add comment.
-public protocol BottomSheetRearController: UIViewController {
-    func bottomSheetOffsetDidUpdate(bottomSheetOffsetY: CGFloat)
+/// Implement this protocol to dynamically get bottom sheet offset changes.
+/// Only UIViewController's can implement this protocol.
+public protocol BottomSheetPositionDelegate: UIViewController {
+    /// This method is called at each bottom sheet offset change during the layout process.
+    /// This way you can dynamically align the components being at the bottom of the controller behind the bottom sheet.
+    /// - Parameters:
+    ///     - y: This is the vertical bottom sheet coordinate (0.0 behing the top of the screen).
+    func bottomSheetPositionDidUpdate(y: CGFloat)
 }

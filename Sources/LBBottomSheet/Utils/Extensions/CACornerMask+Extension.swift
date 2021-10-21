@@ -21,13 +21,13 @@
 import UIKit
 
 public extension CACornerMask {
-    static var all: CACornerMask { [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner] }
-    static var top: CACornerMask { [.layerMinXMinYCorner, .layerMaxXMinYCorner] }
-    static var bottom: CACornerMask { [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] }
-    static var none: CACornerMask { [] }
+    static var lbbsAll: CACornerMask { [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner] }
+    static var lbbsTop: CACornerMask { [.layerMinXMinYCorner, .layerMaxXMinYCorner] }
+    static var lbbsBottom: CACornerMask { [.layerMinXMaxYCorner, .layerMaxXMaxYCorner] }
+    static var lbbsNone: CACornerMask { [] }
 
-    static var topLeft: CACornerMask { .layerMinXMinYCorner }
-    static var topRight: CACornerMask { .layerMaxXMinYCorner }
-    static var bottomLeft: CACornerMask { .layerMinXMaxYCorner }
-    static var bottomRight: CACornerMask { .layerMaxXMaxYCorner }
+    static var lbbsTopLeft: CACornerMask { .layerMinXMinYCorner }
+    static var lbbsTopRight: CACornerMask { .layerMaxXMinYCorner }
+    static var lbbsBottomLeft: CACornerMask { .layerMinXMaxYCorner }
+    static var lbbsBottomRight: CACornerMask { .layerMaxXMaxYCorner }
 }

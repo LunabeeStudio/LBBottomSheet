@@ -1,19 +1,21 @@
 # LBBottomSheet
-
-![Version](https://img.shields.io/github/v/tag/LunabeeStudio/LBBottomSheet?color=informational&label=Version&sort=semver)
-![SPM](https://img.shields.io/badge/SPM-Compatible-brightgreen.svg?style=flat)
-![Swift](https://img.shields.io/badge/Swift-v5-brightgreen.svg?style=flat&logo=swift)
-![Platform](https://img.shields.io/badge/platform-iOS_11.4+-lightgrey.svg?style=flat)
-![License](https://img.shields.io/badge/License-Apache--2.0-informational.svg?style=flat)
+<p align="center">
+  <img src="https://github.com/LunabeeStudio/LBBottomSheet-Internal/raw/master/Sources/LBBottomSheet/LBBottomSheet.docc/Resources/PackageIcon.png"/>
+</p>
+<p align="center">
+<img src="https://img.shields.io/github/v/tag/LunabeeStudio/LBBottomSheet?color=informational&label=Version&sort=semver"/>
+<img src="https://img.shields.io/badge/SPM-Compatible-brightgreen.svg?style=flat"/>
+<img src="https://img.shields.io/badge/Swift-v5-brightgreen.svg?style=flat&logo=swift"/>
+<img src="https://img.shields.io/badge/platform-iOS_11.4+-lightgrey.svg?style=flat"/>
+<img src="https://img.shields.io/badge/License-Apache--2.0-informational.svg?style=flat"/>
+</p>
 
 ## Installation
 
 ### Swift Package Manager
 
-To install using Swift Package Manager, add this to the `dependencies` section in your Package.swift file:
-```swift
-.package(url: "https://github.com/LunabeeStudio/LBBottomSheet.git", from: "0.9.0"),
-```
+To install using Swift Package Manager, in Xcode, go to File > Add Packages..., and use this URL to find the LBBottomSheet package:
+`https://github.com/LunabeeStudio/LBBottomSheet.git`
    
 After adding this Swift Package to your project, you have to import the module:   
 ```swift
@@ -33,7 +35,7 @@ More documentation to come.
 
 ## Author
 
-Lunabee Studio     
+The iOS team at [Lunabee Studio](https://www.lunabee.studio)     
 
 ## License
 

@@ -23,19 +23,33 @@ import UIKit
 extension BottomSheetController {
     /// Struct used to define the theme of a BottomSheetController.
     public struct Theme {
-        // TODO: Add comment.
-        public enum CornerRadiusType {
-            case rounded
-            case fixed(_ value: CGFloat)
-        }
-
         /// Struct used to represent a grabber that can be added to a BottomSheetControllerTheme.
         /// It will be visible at the top of the BottomSheetController.
+        /// ![Grabber](Grabber)
         public struct Grabber {
-            // TODO: Add comment.
+            /// An enum describing the available background types for the Grabber.
+            /// ![GrabberBackground](GrabberBackground)
             public enum Background {
+                /// Use a simple color as the grabber "zone" background.
+                /// - Parameters:
+                ///     - color: The color to use as the grabber "zone" background.
+                ///     - isTranslucent: If `true`, the embeded view will be extended under the grabber "zone". Otherwise, the embeded view will have its top starting at the bottom of the grabber "zone".
                 case color(_ color: UIColor = .clear, isTranslucent: Bool = true)
+                /// Use a custom view as the grabber "zone" background.
+                /// - Parameters:
+                ///     - view: The view to insert as the grabber "zone" background.
+                ///     - isTranslucent: If `true`, the embeded view will be extended under the grabber "zone". Otherwise, the embeded view will have its top starting at the bottom of the grabber "zone".
                 case view(_ view: UIView, isTranslucent: Bool)
+            }
+
+            /// An enum describing the available corner radius types.
+            public enum CornerRadiusType {
+                /// The grabber corner radius will be the height of the grabber devided by 2.
+                case rounded
+                /// The grabber corner redius will be the given value.
+                /// - Parameters:
+                ///     - value: The corner radius value.
+                case fixed(_ value: CGFloat)
             }
 
             /// The size of the grabber.
@@ -48,14 +62,15 @@ extension BottomSheetController {
             public var color: UIColor
             /// The margin between the grabber top and the top of the BottomSheetController view.
             public var topMargin: CGFloat
-            /// Defines whether or not the BottomSheetController should be dismissed when tapping the grabber (in addition to swipping it up).
+            /// Defines whether or not the BottomSheetController should be dismissed when tapping the grabber.
             public var canTouchToDismiss: Bool
-            // TODO: Add comment.
+            /// The background to use behind the grabber. By default it is transparent.
             public var background: Background
 
+            /// Initializes a new Grabber.
             public init(size: CGSize = CGSize(width: 30.0, height: 4.0),
-                        cornerRadiusType: BottomSheetController.Theme.CornerRadiusType = .rounded,
-                        maskedCorners: CACornerMask = .all,
+                        cornerRadiusType: BottomSheetController.Theme.Grabber.CornerRadiusType = .rounded,
+                        maskedCorners: CACornerMask = .lbbsAll,
                         color: UIColor = .lightGray,
                         topMargin: CGFloat = 20.0,
                         canTouchToDismiss: Bool = false,
@@ -72,8 +87,9 @@ extension BottomSheetController {
         
         /// Struct used to represent a shadow that can be added to a BottomSheetControllerTheme.
         /// It will then appear behind the top of the BottomSheetController.
+        /// ![Shadow](Shadow)
         public struct Shadow {
-            ///The color of the shadow.
+            /// The color of the shadow.
             public var color: UIColor
             /// The opacity of the shadow. Specifying a value outside the [0,1] range will give undefined results.
             public var opacity: Float
@@ -82,6 +98,7 @@ extension BottomSheetController {
             /// The blur radius used to create the shadow.
             public var radius: CGFloat
 
+            /// Initializes a new Shadow.
             public init(color: UIColor = .lbbsDefaultShadowColor,
                         opacity: Float = 0.3,
                         offset: CGSize = .zero,
@@ -108,9 +125,10 @@ extension BottomSheetController {
         /// Trailing margin to apply to the bottom sheet in case we don't want it being attached to the right screen edge.
         public var trailingMargin: CGFloat
 
+        /// Initializes a new Theme.
         public init(grabber: BottomSheetController.Theme.Grabber? = Grabber(),
                     cornerRadius: CGFloat = 25.0,
-                    maskedCorners: CACornerMask = .top,
+                    maskedCorners: CACornerMask = .lbbsTop,
                     dimmingBackgroundColor: UIColor = UIColor.black.withAlphaComponent(0.4),
                     shadow: BottomSheetController.Theme.Shadow? = Shadow(),
                     leadingMargin: CGFloat = 0.0,

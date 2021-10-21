@@ -35,7 +35,7 @@ public extension UIViewController {
 
     @discardableResult
     func presentAsBottomSheet(_ controller: UIViewController,
-                              rearController: BottomSheetRearController? = nil,
+                              rearController: BottomSheetPositionDelegate? = nil,
                               theme: BottomSheetController.Theme = BottomSheetController.Theme(),
                               behavior: BottomSheetController.Behavior = BottomSheetController.Behavior()) -> BottomSheetController {
         let bottomSheetController: BottomSheetController = BottomSheetController.controller(bottomSheetChild: controller, bottomSheetRearController: rearController, theme: theme, behavior: behavior)
@@ -47,15 +47,8 @@ public extension UIViewController {
 // MARK: - Internal extensions -
 internal extension UIViewController {
     func addChildViewController(_ childController: UIViewController, containerView: UIView) {
-        self.addChild(childController)
-        let childView = childController.view
-        containerView.addSubview(childView!)
-        childView?.translatesAutoresizingMaskIntoConstraints = false
-        
-        let views =  ["childView": childView!]
-        containerView.addConstraints(NSLayoutConstraint .constraints(withVisualFormat: "V:|[childView]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: views))
-        containerView.addConstraints(NSLayoutConstraint .constraints(withVisualFormat: "H:|[childView]|", options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: views))
-        
+        addChild(childController)
+        containerView.lbbsAddFullSubview(childController.view)
         childController.didMove(toParent: self)
     }
 }

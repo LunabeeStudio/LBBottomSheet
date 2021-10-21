@@ -18,11 +18,70 @@
 //  Created by Lunabee Studio / Date - 12/10/2021 - for the LBBottomSheet Swift Package.
 //
 
-import UIKit
+import CoreGraphics
 
 extension BottomSheetController {
     /// Struct used to define the behavior of a BottomSheetController.
     public struct Behavior {
+        /// An enum describing the available swipe modes.
+        /// It impacts the way the swipe down gesture is detected.
+        public enum SwipeMode {
+            /// Swipe down only detected from the grabber zone. (the top of the bottom sheet)
+            case top
+            /// Swipe down detected from the whole bottom sheet.
+            case full
+            /// Swipe down gesture blocked to prevent bottom sheet dismissal.
+            case none
+        }
+
+        /// An enum describing the available height modes.
+        public enum HeightMode {
+            /// The bottom sheet will call `preferredHeightInBottomSheet on the embeded controller to get the needed height.
+            case fitContent
+            /// The bottom sheet height will be contained between `minHeight` and `maxHeight` and the bottom sheet will remains where the user released it.
+            case free(minHeight: CGFloat? = nil, maxHeight: CGFloat? = nil)
+            /// The bottom sheet will have multiple height values. When the user releases it, it will be attached to the nearest provided specific value.
+            /// When presented, the bottom sheet will use the minimum value. It can be swipped up to the maximum value. You don't have to take care of the values order, the bottom sheet will sort them to find the matching one.
+            case specific(values: [HeightValue])
+
+            internal func minimumHeight(with childHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
+                switch self {
+                case .fitContent:
+                    return childHeight
+                case let .free(minHeight , _):
+                    return minHeight ?? 0.0
+                case let .specific(values):
+                    return values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight).first ?? 0.0
+                }
+            }
+
+            internal func maximumHeight(with childHeight: CGFloat, screenHeight: CGFloat, defaultMaximumHeight: CGFloat) -> CGFloat {
+                switch self {
+                case .fitContent:
+                    return min(childHeight, defaultMaximumHeight)
+                case let .free(_ , maxHeight):
+                    guard let maxHeight = maxHeight else { return defaultMaximumHeight }
+                    return min(maxHeight, defaultMaximumHeight)
+                case let .specific(values):
+                    guard let maxHeight = values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight).last else { return defaultMaximumHeight }
+                    return min(maxHeight, defaultMaximumHeight)
+                }
+            }
+        }
+
+        /// An enum describing the available height values for the `specific` HeightMode.
+        public enum HeightValue {
+            /// It takes an arbitrary height in points.
+            case fixed(value: CGFloat)
+            /// It takes a percentage (between 0.0 and 1.0) that will be applied to the screen height to determine the bottom sheet height.
+            case screenRatio(value: CGFloat)
+            /// It takes a percentage (between 0.0 and 1.0) that will be applied to the height of the controller embeded in the bottom sheet.
+            case childRatio(value: CGFloat)
+
+            /// This is a shortcut allowing you to have in your specific values, one matching the needed height.
+            public static let fitContent: HeightValue = .childRatio(value: 1.0)
+        }
+
         /// The duration of the appearing animation.
         public var appearingAnimationDuration: Double = 0.5
         /// The duration of the disappearing animation.
@@ -56,15 +115,16 @@ extension BottomSheetController {
         /// This is a block allowing you to customize how the elasticity effect is calculated (when you are trying to swipe the BottomSheetController view up, above its maximum height).
         public var elasticityFunction: (_ x: CGFloat) -> CGFloat
 
+        /// Initializes a new Behavior.
         public init(appearingAnimationDuration: Double = 0.5,
                     disappearingAnimationDuration: Double = 0.5,
-                    swipeMode: BottomSheetController.SwipeMode = .full,
+                    swipeMode: BottomSheetController.Behavior.SwipeMode = .full,
                     forwardEventsToRearController: Bool = false,
                     heightPercentageThresholdToDismiss: CGFloat = 0.5,
                     velocityThresholdToDismiss: CGFloat = 700,
                     velocityThresholdToOpenAtMaxHeight: CGFloat = 700,
                     shouldShowAboveNavigationBar: Bool = false,
-                    heightMode: BottomSheetController.HeightMode = .fitContent,
+                    heightMode: BottomSheetController.Behavior.HeightMode = .fitContent,
                     elasticityFunction: @escaping (CGFloat) -> CGFloat = BottomSheetConstant.Animation.Elasticity.logarithmic) {
             self.appearingAnimationDuration = appearingAnimationDuration
             self.disappearingAnimationDuration = disappearingAnimationDuration
@@ -78,67 +138,9 @@ extension BottomSheetController {
             self.elasticityFunction = elasticityFunction
         }
     }
-
-    /// Available swipe modes. It impacts the way the swipe down gesture is detected.
-    public enum SwipeMode {
-        /// Swipe down only detected from the grabber zone. (the top of the bottom sheet)
-        case top
-        /// Swipe down detected from the whole bottom sheet.
-        case full
-        /// Swipe down gesture blocked to prevent bottom sheet dismissal.
-        case none
-    }
-
-    /// Available height modes.
-    public enum HeightMode {
-        /// The bottom sheet will call `preferredHeightInBottomSheet on the embeded controller to get the needed height.
-        case fitContent
-        /// The bottom sheet height will be contained between `minHeight` and `maxHeight` and the bottom sheet will remains where the user released it.
-        case free(minHeight: CGFloat? = nil, maxHeight: CGFloat? = nil)
-        /// The bottom sheet will have multiple height values. When the user releases it, it will be attached to the nearest provided specific value.
-        /// When presented, the bottom sheet will use the minimum value. It can be swipped up to the maximum value. You don't have to take care of the values order, the bottom sheet will sort them to find the matching one.
-        case specific(values: [HeightValue])
-
-        internal func minimumHeight(with childHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
-            switch self {
-            case .fitContent:
-                return childHeight
-            case let .free(minHeight , _):
-                return minHeight ?? 0.0
-            case let .specific(values):
-                return values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight).first ?? 0.0
-            }
-        }
-
-        internal func maximumHeight(with childHeight: CGFloat, screenHeight: CGFloat, defaultMaximumHeight: CGFloat) -> CGFloat {
-            switch self {
-            case .fitContent:
-                return min(childHeight, defaultMaximumHeight)
-            case let .free(_ , maxHeight):
-                guard let maxHeight = maxHeight else { return defaultMaximumHeight }
-                return min(maxHeight, defaultMaximumHeight)
-            case let .specific(values):
-                guard let maxHeight = values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight).last else { return defaultMaximumHeight }
-                return min(maxHeight, defaultMaximumHeight)
-            }
-        }
-    }
-
-    /// Available height values for the `specific` height mode.
-    public enum HeightValue {
-        /// It takes an arbitrary height in points.
-        case fixed(value: CGFloat)
-        /// It takes a percentage (between 0.0 and 1.0) that will be applied to the screen height to determine the bottom sheet height.
-        case screenRatio(value: CGFloat)
-        /// It takes a percentage (between 0.0 and 1.0) that will be applied to the height of the controller embeded in the bottom sheet.
-        case childRatio(value: CGFloat)
-
-        /// This is a shortcut allowing you to have in your specific values, one matching the needed height.
-        public static let fitContent: HeightValue = .childRatio(value: 1.0)
-    }
 }
 
-extension Array where Element == BottomSheetController.HeightValue {
+extension Array where Element == BottomSheetController.Behavior.HeightValue {
 
     internal func sortedPointValues(screenHeight: CGFloat, childHeight: CGFloat) -> [CGFloat] {
         map {

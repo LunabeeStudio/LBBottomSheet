@@ -20,9 +20,23 @@
 
 import CoreGraphics
 
+/// Botttom sheet constants.
 public enum BottomSheetConstant {
+    /// Bottom sheet animation constants.
     public enum Animation {
+        /// Bottom sheet animation elasticity functions.
         public enum Elasticity {
+            /// Bottom sheet logarithmic animation function.
+            ///
+            /// Here is the implementation of this function:
+            /// ```swift
+            /// let baseFunction: (_ x: CGFloat) -> CGFloat = { (2.0 * log($0 + 3.0) / log(2.0)) }
+            /// return baseFunction(x) - baseFunction(0.0)
+            /// ```
+            ///
+            /// - Parameters:
+            ///     - x: The abscissa: The bottom sheet will give the height slice that has to be computed to create the elacticity effect.
+            /// - Returns: The ordonate: The height value to be applied to be used by the bottom sheet to calculate its full height.
             public static let logarithmic: (_ x: CGFloat) -> CGFloat = { x -> CGFloat in
                 let baseFunction: (_ x: CGFloat) -> CGFloat = { (2.0 * log($0 + 3.0) / log(2.0)) }
                 return baseFunction(x) - baseFunction(0.0)
@@ -30,5 +44,5 @@ public enum BottomSheetConstant {
         }
     }
 
-    static let preferredHeightVariableName: String = "preferredHeightInBottomSheet"
+    internal static let preferredHeightVariableName: String = "preferredHeightInBottomSheet"
 }
