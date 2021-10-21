@@ -334,12 +334,14 @@ private extension BottomSheetController {
             let destinationMaximumHeight: CGFloat = yVelocity < -behavior.velocityThresholdToOpenAtMaxHeight ? maxHeight : calculateExpectedHeight()
             bottomContainerHeightConstraint.constant = destinationMaximumHeight
             bottomContainerBottomConstraint.constant = 0.0
-            if let offset = self.lastContentOffsetAtPanGestureStart {
-                bottomSheetChild.view.getFirstScrollView()?.contentOffset = offset
-                lastContentOffsetAtPanGestureStart = nil
+            UIView.animate(withDuration: 0.2) {
+                self.view.layoutIfNeeded()
+                if let offset = self.lastContentOffsetAtPanGestureStart {
+                    self.bottomSheetChild.view.getFirstScrollView()?.contentOffset = offset
+                }
             }
-            UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
         }
+        lastContentOffsetAtPanGestureStart = nil
         isGestureBeingActivated = false
     }
 
