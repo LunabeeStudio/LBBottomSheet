@@ -125,6 +125,12 @@ extension BottomSheetController {
         }
         /// This is a block allowing you to customize how the elasticity effect is calculated (when you are trying to swipe the BottomSheetController view up, above its maximum height).
         public var elasticityFunction: (_ x: CGFloat) -> CGFloat
+        /// Defines whether or not the bottom sheet layout will be updated when the user changes the iOS font size.
+        ///
+        /// As your embedded controller height might be impacted by a font size change, the bottom sheet will update its height too if you use a ``LBBottomSheet/BottomSheetController/Behavior/HeightMode-swift.enum`` depending on the embedded controller height.
+        ///
+        /// If you don't use a ``LBBottomSheet/BottomSheetController/Behavior/HeightMode-swift.enum`` depending on the embedded controller height, nothing will happen.
+        public var updateHeightOnContentSizeCategoryChange: Bool = true
 
         /// Initializes a new Behavior.
         public init(appearingAnimationDuration: Double = 0.5,

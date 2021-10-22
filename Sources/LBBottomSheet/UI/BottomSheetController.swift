@@ -97,6 +97,7 @@ public final class BottomSheetController: UIViewController {
         initUI()
         initGrabberBackgroundView()
         addGesture()
+        addObservers()
     }
 
     /// Overriden to customize the way the controller is appearing.
@@ -257,6 +258,17 @@ private extension BottomSheetController {
             tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognizerHandler(_:)))
             tapGesture?.delegate = self
             view.addGestureRecognizer(tapGesture!)
+        }
+    }
+}
+
+// MARK: - Observers -
+private extension BottomSheetController {
+    func addObservers() {
+        guard behavior.updateHeightOnContentSizeCategoryChange else { return }
+        NotificationCenter.default.addObserver(forName: UIContentSizeCategory.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
+            self?.bottomContainerView?.layoutIfNeeded()
+            self?.preferredHeightInBottomSheetDidUpdate()
         }
     }
 }
