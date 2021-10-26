@@ -129,7 +129,7 @@ extension BottomSheetController {
         public init(grabber: BottomSheetController.Theme.Grabber? = Grabber(),
                     cornerRadius: CGFloat = 25.0,
                     maskedCorners: CACornerMask = .lbbsTop,
-                    dimmingBackgroundColor: UIColor = UIColor.black.withAlphaComponent(0.4),
+                    dimmingBackgroundColor: UIColor = .lbbsDefaultDimmingBackgroundColor,
                     shadow: BottomSheetController.Theme.Shadow? = Shadow(),
                     leadingMargin: CGFloat = 0.0,
                     trailingMargin: CGFloat = 0.0) {

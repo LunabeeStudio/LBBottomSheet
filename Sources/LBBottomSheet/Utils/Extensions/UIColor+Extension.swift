@@ -21,6 +21,20 @@
 import UIKit
 
 public extension UIColor {
+    static var lbbsDefaultDimmingBackgroundColor: UIColor {
+        if #available(iOS 13.0, *) {
+            return UIColor.init(dynamicProvider: {
+                switch $0.userInterfaceStyle {
+                case .dark:
+                    return .white.withAlphaComponent(0.1)
+                default:
+                    return .black.withAlphaComponent(0.4)
+                }
+            })
+        } else {
+            return .black.withAlphaComponent(0.4)
+        }
+    }
     static var lbbsDefaultShadowColor: UIColor {
         if #available(iOS 13.0, *) {
             return UIColor.init(dynamicProvider: {
