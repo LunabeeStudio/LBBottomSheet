@@ -67,7 +67,7 @@ public final class BottomSheetController: UIViewController {
     private var bottomSheetChild: UIViewController!
     private var isChildAlreadyVisible: Bool = false
     private var defaultMaximumHeight: CGFloat {
-        var topMargin: CGFloat = (UIApplication.shared.lbbsKeySceneWindow?.safeAreaInsets.top ?? 0.0)
+        var topMargin: CGFloat = UIApplication.shared.lbbsKeySceneWindow?.safeAreaInsets.top ?? 0.0
         if let navController = presentingViewController as? UINavigationController ?? presentingViewController?.navigationController, !behavior.shouldShowAboveNavigationBar {
             topMargin = navController.navigationBar.frame.maxY + 8.0
         }
@@ -76,7 +76,7 @@ public final class BottomSheetController: UIViewController {
     private var childHeight: CGFloat {
         let propertiesName: [String] = Mirror.getTypesOfProperties(in: type(of: bottomSheetChild)) ?? []
         if !propertiesName.contains(BottomSheetConstant.preferredHeightVariableName) {
-            print("⚠️ [LBBottomSheet] ⚠️: If you use the \"fitContent\" heightMode, you have to declare the following variable in the controller you want to present: \"@objc var preferredHeightInBottomSheet: CGFloat\" returning the height you want the bottom sheet to have.")
+            print("⚠️ [LBBottomSheet] ⚠️: If you use the \"fitContent\" heightMode, you can declare the following variable in the controller you want to present: \"@objc var preferredHeightInBottomSheet: CGFloat\" returning the customized height you want the bottom sheet to have.")
             return UIScreen.main.bounds.height * 0.75
         } else {
             var height: CGFloat = bottomSheetChild.value(forKey: BottomSheetConstant.preferredHeightVariableName) as? CGFloat ?? 0.0

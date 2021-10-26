@@ -27,7 +27,7 @@ internal extension UIApplication {
             return UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
                 .filter { $0.screen === UIScreen.main }
                 .first?.windows
-                .filter { $0.isKeyWindow }.first
+                .filter { $0.isKeyWindow }.first ?? UIApplication.shared.keyWindow
         } else {
             return UIApplication.shared.keyWindow
         }

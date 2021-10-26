@@ -1,6 +1,6 @@
 # LBBottomSheet
 <p align="center">
-  <img src="https://github.com/LunabeeStudio/LBBottomSheet-Internal/raw/master/Sources/LBBottomSheet/LBBottomSheet.docc/Resources/PackageIcon.png"/>
+  <img src="https://github.com/LunabeeStudio/LBBottomSheet/raw/master/Sources/LBBottomSheet/LBBottomSheet.docc/Resources/PackageIcon.png"/>
 </p>
 <p align="center">
 <img src="https://img.shields.io/github/v/tag/LunabeeStudio/LBBottomSheet?color=informational&label=Version&sort=semver"/>

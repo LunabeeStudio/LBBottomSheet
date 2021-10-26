@@ -110,7 +110,15 @@ extension BottomSheetController {
         public var velocityThresholdToDismiss: CGFloat = 700
         /// The minimum velocity (in points/second) when swipping the bottom sheet up to open it at its maximum height.
         public var velocityThresholdToOpenAtMaxHeight: CGFloat = 700
-        /// Allowing or not the bottom sheet to go over the navigation bar behind it.
+        /// Defines whether or not the bottom sheet height must be limited under the navigation bar behind it.
+        ///
+        /// If the controller presenting the bottom sheet is or is embedded in a navigation controller, it might be possible that the bottom sheet will go over the navigation bar.
+        ///
+        /// Automatically, the bottom sheet will calculate the maximum height it can have not to have a height greater than the screen one.
+        ///
+        /// If this boolean is set to `true`, the bottom sheet height will be limited under the notch/status bar.
+        ///
+        /// If set to `false` (the default value) the bottom sheet height will be limited under the navigation bar.
         public var shouldShowAboveNavigationBar: Bool = false
         /// The mode used to calculate the bottom sheet height.
         public var heightMode: HeightMode = .fitContent {
