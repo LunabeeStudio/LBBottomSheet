@@ -82,10 +82,10 @@ public final class BottomSheetController: UIViewController {
             let defaultFirstScrollView: UIScrollView? = childView?.lbbsGetFirstTableOrCollectionView()
             let defaultHeight: CGFloat = defaultFirstScrollView?.lbbsContentHeight ?? childView?.frame.height ?? 0.0
             if defaultHeight == 0.0 {
-                print("⚠️ [LBBottomSheet] ⚠️: The default calculated height is 0.0 so the applied height is by default 75% of the screen height.")
+                print("👉 [LBBottomSheet]: The default calculated height is 0.0 so the applied height is by default 75% of the screen height.")
                 return UIScreen.main.bounds.height * 0.75
             } else {
-                print("⚠️ [LBBottomSheet] ⚠️: The default calculated height is \(defaultHeight) based on your layout. You can have a look at the previous comment to customize this behavior.")
+                print("👉 [LBBottomSheet]: The default calculated height is \(defaultHeight) based on your layout. You can have a look at the previous warning log to customize this behavior.")
                 let bottomSafeArea: CGFloat = UIApplication.shared.lbbsKeySceneWindow?.safeAreaInsets.bottom ?? 0.0
                 var height: CGFloat = defaultHeight + bottomSafeArea
                 if let grabber = theme.grabber, !grabber.background.isTranslucent { height += topInset }
@@ -353,7 +353,7 @@ private extension BottomSheetController {
         if yTranslation > lastHeightAtPanGestureStart * behavior.heightPercentageThresholdToDismiss || yVelocity > behavior.velocityThresholdToDismiss {
             dismiss(animated: true)
         } else {
-            let destinationMaximumHeight: CGFloat = yVelocity < -behavior.velocityThresholdToOpenAtMaxHeight ? maxHeight : calculateExpectedHeight()
+            let destinationMaximumHeight: CGFloat = yVelocity < -behavior.velocityThresholdToOpenAtMaxHeight ? maxHeight : calculateExpectedHeight(lastChildHeightAtPanGestureStart)
             bottomContainerHeightConstraint.constant = destinationMaximumHeight
             bottomContainerBottomConstraint.constant = 0.0
             UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
@@ -361,8 +361,8 @@ private extension BottomSheetController {
         isGestureBeingActivated = false
     }
 
-    func calculateExpectedHeight() -> CGFloat {
-        let childHeight: CGFloat = childHeight
+    func calculateExpectedHeight(_ givenChildHeight: CGFloat? = nil) -> CGFloat {
+        let childHeight: CGFloat = givenChildHeight ?? self.childHeight
         switch behavior.heightMode {
         case .fitContent:
             return min(childHeight, defaultMaximumHeight)
