@@ -42,7 +42,7 @@ extension BottomSheetController {
                 case view(_ view: UIView, isTranslucent: Bool)
 
                 /// This is a shorcut to easily know if the background is translucent or not.
-                var isTranslucent: Bool {
+                public var isTranslucent: Bool {
                     switch self {
                     case .color(_, let isTranslucent), .view(_, let isTranslucent):
                         return isTranslucent
