@@ -64,6 +64,7 @@ public final class BottomSheetController: UIViewController {
     private var tapGesture: UITapGestureRecognizer?
     private var isGestureBeingActivated: Bool = false
     private var lastHeightAtPanGestureStart: CGFloat = 0.0
+    private var lastChildHeightAtPanGestureStart: CGFloat = 0.0
     private var bottomSheetChild: UIViewController!
     private var isChildAlreadyVisible: Bool = false
     private var defaultMaximumHeight: CGFloat {
@@ -319,12 +320,13 @@ private extension BottomSheetController {
         tapGesture?.lbbsCancel()
         isGestureBeingActivated = true
         lastHeightAtPanGestureStart = bottomContainerHeightConstraint.constant
+        lastChildHeightAtPanGestureStart = childHeight
     }
 
     func processPanGestureChanged(_ gesture: UIPanGestureRecognizer) {
         let yTranslation: CGFloat = gesture.translation(in: bottomContainerView).y
         let destinationHeight: CGFloat = lastHeightAtPanGestureStart - yTranslation
-        let childHeight: CGFloat = childHeight
+        let childHeight: CGFloat = lastChildHeightAtPanGestureStart
         let newHeight: CGFloat
         let newBottom: CGFloat
         let minHeight: CGFloat = behavior.heightMode.minimumHeight(with: childHeight, screenHeight: view.frame.height)
@@ -347,7 +349,7 @@ private extension BottomSheetController {
     func processPanGestureEnded(_ gesture: UIPanGestureRecognizer) {
         let yTranslation: CGFloat = gesture.translation(in: bottomContainerView).y
         let yVelocity: CGFloat = gesture.velocity(in: bottomContainerView).y
-        let maxHeight: CGFloat = behavior.heightMode.maximumHeight(with: childHeight, screenHeight: view.frame.height, defaultMaximumHeight: defaultMaximumHeight)
+        let maxHeight: CGFloat = behavior.heightMode.maximumHeight(with: lastChildHeightAtPanGestureStart, screenHeight: view.frame.height, defaultMaximumHeight: defaultMaximumHeight)
         if yTranslation > lastHeightAtPanGestureStart * behavior.heightPercentageThresholdToDismiss || yVelocity > behavior.velocityThresholdToDismiss {
             dismiss(animated: true)
         } else {
@@ -400,7 +402,7 @@ extension BottomSheetController: UIGestureRecognizerDelegate {
             case .top:
                 return gestureView.frame.contains(gestureRecognizer.location(in: gestureView))
             case .full:
-                return view.frame.contains(gestureRecognizer.location(in: view))
+                return bottomContainerView!.frame.contains(gestureRecognizer.location(in: bottomContainerView))
             default:
                 return false
             }

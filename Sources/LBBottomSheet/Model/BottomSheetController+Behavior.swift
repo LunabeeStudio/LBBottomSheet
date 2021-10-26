@@ -37,6 +37,12 @@ extension BottomSheetController {
         /// An enum describing the available height modes.
         public enum HeightMode {
             /// The bottom sheet will call `preferredHeightInBottomSheet` on the embedded controller to get the needed height.
+            ///
+            /// If `preferredHeightInBottomSheet` is not declared on the embedded controller, the BottomSheet will calculate a default height to use based on the embedded controller content: if there is a tableView or a collectionView it will use the content size and content insets, otherwise it will use the first view height. If this calculation returns 0 as the height, 75% of the screen height will be used instead.
+            /// To declare the preferred height, add this to your embedded controller:
+            /// ```swift
+            /// @objc var preferredHeightInBottomSheet: CGFloat { /* Do you custom calculation here */ }
+            /// ```
             case fitContent
             /// The bottom sheet height will be contained between `minHeight` and `maxHeight` and the bottom sheet will remain where the user releases it.
             /// - Parameters:
