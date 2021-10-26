@@ -396,13 +396,13 @@ private extension BottomSheetController {
 extension BottomSheetController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer === tapGesture {
-            return gestureView.frame.contains(gestureRecognizer.location(in: gestureView))
+            return gestureView.bounds.contains(gestureRecognizer.location(in: gestureView))
         } else if gestureRecognizer === panGesture {
             switch behavior.swipeMode {
             case .top:
-                return gestureView.frame.contains(gestureRecognizer.location(in: gestureView))
+                return gestureView.bounds.contains(gestureRecognizer.location(in: gestureView))
             case .full:
-                return bottomContainerView!.frame.contains(gestureRecognizer.location(in: bottomContainerView))
+                return bottomContainerView!.bounds.contains(gestureRecognizer.location(in: bottomContainerView))
             default:
                 return false
             }
