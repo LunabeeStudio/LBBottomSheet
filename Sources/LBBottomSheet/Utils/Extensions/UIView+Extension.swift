@@ -34,18 +34,19 @@ internal extension UIView {
         subview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0.0).isActive = true
     }
 
-    func getSubviews<T: UIView>() -> [T] {
+    func lbbsGetSubviews<T: UIView>() -> [T] {
         var foundSubviews: [T] = []
         if let subview = self as? T { foundSubviews.append(subview) }
         self.subviews.forEach {
-            foundSubviews += $0.getSubviews() as [T]
+            foundSubviews += $0.lbbsGetSubviews() as [T]
             if let subview = $0 as? T { foundSubviews.append(subview) }
         }
         return foundSubviews
     }
 
-    func getFirstScrollView() -> UIScrollView? {
-        let scrollViews: [UIScrollView] = getSubviews()
-        return scrollViews.first
+    func lbbsGetFirstTableOrCollectionView() -> UIScrollView? {
+        let tableViews: [UITableView] = lbbsGetSubviews()
+        let collectionViews: [UICollectionView] = lbbsGetSubviews()
+        return tableViews.first ?? collectionViews.first
     }
 }

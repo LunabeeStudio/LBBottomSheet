@@ -74,10 +74,19 @@ public final class BottomSheetController: UIViewController {
         return UIScreen.main.bounds.height - topMargin
     }
     private var childHeight: CGFloat {
-        let propertiesName: [String] = Mirror.getTypesOfProperties(in: type(of: bottomSheetChild)) ?? []
+        let propertiesName: [String] = Mirror.lbbsGetTypesOfProperties(in: type(of: bottomSheetChild)) ?? []
         if !propertiesName.contains(BottomSheetConstant.preferredHeightVariableName) {
             print("⚠️ [LBBottomSheet] ⚠️: If you use the \"fitContent\" heightMode, you can declare the following variable in the controller you want to present: \"@objc var preferredHeightInBottomSheet: CGFloat\" returning the customized height you want the bottom sheet to have.")
-            return UIScreen.main.bounds.height * 0.75
+            let childView: UIView? = bottomSheetChild?.view
+            let defaultFirstScrollView: UIScrollView? = childView?.lbbsGetFirstTableOrCollectionView()
+            let defaultHeight: CGFloat = defaultFirstScrollView?.lbbsContentHeight ?? childView?.frame.height ?? 0.0
+            if defaultHeight == 0.0 {
+                print("⚠️ [LBBottomSheet] ⚠️: The default calculated height is 0.0 so the applied height is by default 75% of the screen height.")
+                return UIScreen.main.bounds.height * 0.75
+            } else {
+                print("⚠️ [LBBottomSheet] ⚠️: The default calculated height is \(defaultHeight) based on your layout. You can have a look at the previous comment to customize this behavior.")
+                return defaultHeight
+            }
         } else {
             var height: CGFloat = bottomSheetChild.value(forKey: BottomSheetConstant.preferredHeightVariableName) as? CGFloat ?? 0.0
             if let grabber = theme.grabber {
@@ -119,7 +128,7 @@ public final class BottomSheetController: UIViewController {
     /// Call this function to tell the bottom sheet the embedded controller height did change.
     /// This way, this controller will calculate the new needed height and the bottom sheet layout will be updated.
     public func preferredHeightInBottomSheetDidUpdate() {
-        panGesture?.cancel()
+        panGesture?.lbbsCancel()
         let newHeight: CGFloat = calculateExpectedHeight()
         guard newHeight != bottomContainerHeightConstraint.constant else { return }
         bottomContainerHeightConstraint.constant = newHeight
@@ -199,7 +208,7 @@ private extension BottomSheetController {
             view.layer.rasterizationScale = UIScreen.main.scale
         }
 
-        addChildViewController(bottomSheetChild, containerView: bottomContainerInnerView)
+        lbbsAddChildViewController(bottomSheetChild, containerView: bottomContainerInnerView)
         bottomContainerView.backgroundColor = bottomSheetChild.view.backgroundColor
 
         bottomContainerLeadingConstraint.constant = theme.leadingMargin
@@ -314,7 +323,7 @@ private extension BottomSheetController {
     }
 
     func processPanGestureBegan(_ gesture: UIPanGestureRecognizer) {
-        tapGesture?.cancel()
+        tapGesture?.lbbsCancel()
         isGestureBeingActivated = true
         lastHeightAtPanGestureStart = bottomContainerHeightConstraint.constant
     }
@@ -417,7 +426,7 @@ extension BottomSheetController: UIGestureRecognizerDelegate {
                 let isScrollViewAtTheTop: Bool = scrollView.contentOffset.y <= 0.0
                 let isUserSwipingDown: Bool = panGesture.translation(in: view).y > 0
                 if isSwipingFromGestureView || (isTheMainEmbeddedViewAScrollView && isScrollViewAtTheTop && isUserSwipingDown && behavior.swipeMode == .full) {
-                    otherGestureRecognizer.cancel()
+                    otherGestureRecognizer.lbbsCancel()
                     return true
                 } else {
                     return false

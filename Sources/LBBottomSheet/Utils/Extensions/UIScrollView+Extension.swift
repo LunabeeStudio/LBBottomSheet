@@ -12,7 +12,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
-//  UIGestureRecognizer+Extensions.swift
+//  UIViewController+Extension.swift
 //  LBBottomSheet
 //
 //  Created by Lunabee Studio / Date - 12/10/2021 - for the LBBottomSheet Swift Package.
@@ -20,9 +20,6 @@
 
 import UIKit
 
-internal extension UIGestureRecognizer {
-    func lbbsCancel() {
-        isEnabled = false
-        isEnabled = true
-    }
+internal extension UIScrollView {
+    var lbbsContentHeight: CGFloat { contentInset.top + contentSize.height + contentInset.bottom }
 }

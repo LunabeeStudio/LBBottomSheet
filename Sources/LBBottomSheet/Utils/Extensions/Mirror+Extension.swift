@@ -21,13 +21,13 @@
 import Foundation
 
 internal extension Mirror {
-    static func getTypesOfProperties(in class: NSObject.Type) -> [String]? {
+    static func lbbsGetTypesOfProperties(in class: NSObject.Type) -> [String]? {
         var count: UInt32 = UInt32()
         guard let properties = class_copyPropertyList(`class`, &count) else { return nil }
         var names: [String] = []
         for i in 0..<Int(count) {
             let property: objc_property_t = properties[i]
-            guard let name = getNameOf(property: property) else { continue }
+            guard let name = lbbsGetNameOf(property: property) else { continue }
             names.append(name)
         }
         free(properties)
@@ -36,7 +36,7 @@ internal extension Mirror {
 }
 
 private extension Mirror {
-    static func getNameOf(property: objc_property_t) -> String? {
+    static func lbbsGetNameOf(property: objc_property_t) -> String? {
         guard let name: NSString = NSString(utf8String: property_getName(property)) else { return nil }
         return name as String
     }

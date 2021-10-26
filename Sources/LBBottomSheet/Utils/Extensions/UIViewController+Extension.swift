@@ -46,7 +46,7 @@ public extension UIViewController {
 
 // MARK: - Internal extensions -
 internal extension UIViewController {
-    func addChildViewController(_ childController: UIViewController, containerView: UIView) {
+    func lbbsAddChildViewController(_ childController: UIViewController, containerView: UIView) {
         addChild(childController)
         containerView.lbbsAddFullSubview(childController.view)
         childController.didMove(toParent: self)
