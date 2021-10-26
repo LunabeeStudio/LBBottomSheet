@@ -40,6 +40,14 @@ extension BottomSheetController {
                 ///     - view: The view to insert as the grabber "zone" background.
                 ///     - isTranslucent: If `true`, the embedded view will be extended under the grabber "zone". Otherwise, the embedded view will have its top starting at the bottom of the grabber "zone".
                 case view(_ view: UIView, isTranslucent: Bool)
+
+                /// This is a shorcut to easily know if the background is translucent or not.
+                var isTranslucent: Bool {
+                    switch self {
+                    case .color(_, let isTranslucent), .view(_, let isTranslucent):
+                        return isTranslucent
+                    }
+                }
             }
 
             /// An enum describing the available corner radius types.
@@ -127,7 +135,7 @@ extension BottomSheetController {
 
         /// Initializes a new Theme.
         public init(grabber: BottomSheetController.Theme.Grabber? = Grabber(),
-                    cornerRadius: CGFloat = 25.0,
+                    cornerRadius: CGFloat = 12.0,
                     maskedCorners: CACornerMask = .lbbsTop,
                     dimmingBackgroundColor: UIColor = .lbbsDefaultDimmingBackgroundColor,
                     shadow: BottomSheetController.Theme.Shadow? = Shadow(),

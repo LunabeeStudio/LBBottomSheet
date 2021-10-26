@@ -86,16 +86,13 @@ public final class BottomSheetController: UIViewController {
             } else {
                 print("⚠️ [LBBottomSheet] ⚠️: The default calculated height is \(defaultHeight) based on your layout. You can have a look at the previous comment to customize this behavior.")
                 let bottomSafeArea: CGFloat = UIApplication.shared.lbbsKeySceneWindow?.safeAreaInsets.bottom ?? 0.0
-                return defaultHeight + bottomSafeArea
+                var height: CGFloat = defaultHeight + bottomSafeArea
+                if let grabber = theme.grabber, !grabber.background.isTranslucent { height += topInset }
+                return height
             }
         } else {
             var height: CGFloat = bottomSheetChild.value(forKey: BottomSheetConstant.preferredHeightVariableName) as? CGFloat ?? 0.0
-            if let grabber = theme.grabber {
-                switch grabber.background {
-                case .color(_, let isTranslucent), .view(_, let isTranslucent):
-                    if !isTranslucent { height += topInset }
-                }
-            }
+            if let grabber = theme.grabber, !grabber.background.isTranslucent { height += topInset }
             return height
         }
     }
