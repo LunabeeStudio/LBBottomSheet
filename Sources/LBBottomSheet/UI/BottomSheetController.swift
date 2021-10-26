@@ -85,7 +85,8 @@ public final class BottomSheetController: UIViewController {
                 return UIScreen.main.bounds.height * 0.75
             } else {
                 print("⚠️ [LBBottomSheet] ⚠️: The default calculated height is \(defaultHeight) based on your layout. You can have a look at the previous comment to customize this behavior.")
-                return defaultHeight
+                let bottomSafeArea: CGFloat = UIApplication.shared.lbbsKeySceneWindow?.safeAreaInsets.bottom ?? 0.0
+                return defaultHeight + bottomSafeArea
             }
         } else {
             var height: CGFloat = bottomSheetChild.value(forKey: BottomSheetConstant.preferredHeightVariableName) as? CGFloat ?? 0.0
@@ -118,11 +119,6 @@ public final class BottomSheetController: UIViewController {
         setInitialPosition()
         setupDimmingBackground()
         makeAppearing()
-    }
-
-    // TODO: To delete.
-    deinit {
-        print("\(type(of: self)) deallocated")
     }
 
     /// Call this function to tell the bottom sheet the embedded controller height did change.
