@@ -55,8 +55,8 @@ public final class BottomSheetController: UIViewController {
 
     private weak var bottomSheetPositionDelegate: BottomSheetPositionDelegate?
 
-    private var theme: Theme = Theme()
-    private var behavior: Behavior = Behavior()
+    public private(set) var theme: Theme = Theme()
+    public private(set) var behavior: Behavior = Behavior()
     private let minTopMargin: CGFloat = 40.0
     private var didAlreadyUpdateHeight: Bool = false
 
