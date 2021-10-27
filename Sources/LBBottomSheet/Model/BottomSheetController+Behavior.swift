@@ -141,9 +141,9 @@ extension BottomSheetController {
         public var elasticityFunction: (_ x: CGFloat) -> CGFloat
         /// Defines whether or not the bottom sheet layout will be updated when the user changes the iOS font size.
         ///
-        /// As your embedded controller height might be impacted by a font size change, the bottom sheet will update its height too if you use a ``LBBottomSheet/BottomSheetController/Behavior/HeightMode-swift.enum`` depending on the embedded controller height.
+        /// As your embedded controller height might be impacted by a font size change, the bottom sheet will update its height too if you use a <doc:/LBBottomSheet/BottomSheetController/Behavior-swift.struct/HeightMode-swift.enum> depending on the embedded controller height.
         ///
-        /// If you don't use a ``LBBottomSheet/BottomSheetController/Behavior/HeightMode-swift.enum`` depending on the embedded controller height, nothing will happen.
+        /// If you don't use a <doc:/LBBottomSheet/BottomSheetController/Behavior-swift.struct/HeightMode-swift.enum> depending on the embedded controller height, nothing will happen.
         public var updateHeightOnContentSizeCategoryChange: Bool = true
 
         /// Initializes a new Behavior.

@@ -35,7 +35,7 @@ public final class BottomSheetController: UIViewController {
     /// ```swift
     /// public var topInset: CGFloat { (theme.grabber?.topMargin ?? 0.0) * 2.0 + (theme.grabber?.size.height ?? 0.0) }
     /// ```
-    /// You can have a look at <doc:BottomSheetController/Theme/Grabber-swift.struct> to check the ``LBBottomSheet/BottomSheetController/Theme/Grabber-swift.struct/topMargin``.
+    /// You can have a look at <doc:/LBBottomSheet/BottomSheetController/Theme-swift.struct/Grabber-swift.struct> to check the <doc:/LBBottomSheet/BottomSheetController/Theme-swift.struct/Grabber-swift.struct/topMargin>.
     public var topInset: CGFloat { (theme.grabber?.topMargin ?? 0.0) * 2.0 + (theme.grabber?.size.height ?? 0.0) }
 
     @IBOutlet private var mainDismissButton: UIButton!
@@ -157,10 +157,10 @@ public final class BottomSheetController: UIViewController {
 
 // MARK: - Controller instantiation -
 internal extension BottomSheetController {
-    static func controller(bottomSheetChild: UIViewController, bottomSheetRearController: BottomSheetPositionDelegate? = nil, theme: Theme = Theme(), behavior: Behavior = Behavior()) -> BottomSheetController {
+    static func controller(bottomSheetChild: UIViewController, bottomSheetPositionDelegate: BottomSheetPositionDelegate? = nil, theme: Theme = Theme(), behavior: Behavior = Behavior()) -> BottomSheetController {
         let bottomController: BottomSheetController = UIStoryboard(name: "BottomSheet", bundle: Bundle.module).instantiateInitialViewController() as! BottomSheetController
         bottomController.bottomSheetChild = bottomSheetChild
-        bottomController.bottomSheetPositionDelegate = bottomSheetRearController
+        bottomController.bottomSheetPositionDelegate = bottomSheetPositionDelegate
         bottomController.theme = theme
         bottomController.behavior = behavior
         return bottomController

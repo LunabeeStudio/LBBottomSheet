@@ -22,6 +22,8 @@ import UIKit
 
 // MARK: - Public extensions -
 public extension UIViewController {
+    /// Find the BottomSheetController embedding the current controller.
+    /// It is working like `navigationController` or others.
     var bottomSheetController: BottomSheetController? {
         var parentController: UIViewController? = self
         while let controller = parentController?.parent {
@@ -33,12 +35,19 @@ public extension UIViewController {
         return parentController as? BottomSheetController
     }
 
+    /// Presents a given controller as a bottom sheet.
+    /// - Parameters:
+    ///   - controller: The controller to present in a bottom sheet.
+    ///   - positionDelegate: A `UIViewController` being a <doc:LBBottomSheet/BottomSheetPositionDelegate> to get the bottom sheet position updates if it needs to update its content bottom inset.
+    ///   - theme: A Theme to customize the bottom sheet appearance.
+    ///   - behavior: A Behavior to customize the way the bottom sheet behaves.
+    /// - Returns: A reference to the created `BottomSheetController`.
     @discardableResult
     func presentAsBottomSheet(_ controller: UIViewController,
-                              rearController: BottomSheetPositionDelegate? = nil,
+                              positionDelegate: BottomSheetPositionDelegate? = nil,
                               theme: BottomSheetController.Theme = BottomSheetController.Theme(),
                               behavior: BottomSheetController.Behavior = BottomSheetController.Behavior()) -> BottomSheetController {
-        let bottomSheetController: BottomSheetController = BottomSheetController.controller(bottomSheetChild: controller, bottomSheetRearController: rearController, theme: theme, behavior: behavior)
+        let bottomSheetController: BottomSheetController = BottomSheetController.controller(bottomSheetChild: controller, bottomSheetPositionDelegate: positionDelegate, theme: theme, behavior: behavior)
         present(bottomSheetController, animated: false, completion: nil)
         return bottomSheetController
     }
