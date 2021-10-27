@@ -28,7 +28,7 @@ public final class ForwardingEventsView: UIView {
     /// This is the view for which (children included) we must not forward the touch event to the view behind it.
     var excludedParentView: UIView?
 
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         // Here we get the original result of the hit test.
         let hitTest: UIView? = super.hitTest(point, with: event)
         
