@@ -166,7 +166,7 @@ private extension MainViewController {
               xibName: .swiftSectionCell,
               theme:  CVRow.Theme(backgroundColor: .blurContainerBackground,
                                   topInset: 40.0,
-                                  bottomInset: 8.0,
+                                  bottomInset: 0.0,
                                   leftInset: Appearance.Cell.leftMargin,
                                   rightInset: Appearance.Cell.leftMargin,
                                   textAlignment: .center,
@@ -177,11 +177,16 @@ private extension MainViewController {
     func menuRowsForEntries(_ entries: [MenuEntry]) -> [CVRow] {
         let rows: [CVRow] = entries.map {
             var row: CVRow = standardCardRow(title: $0.title, subtitle: $0.subtitle, isInverted: $0.isInverted, actionBlock: $0.actionBlock)
-            if $0 == entries.first {
+            if $0 == entries.first || $0.isHeader {
+                row.theme.topInset = 8.0
                 row.theme.maskedCorners = .top
                 row.theme.separatorLeftInset = 2.0 * Appearance.Cell.leftMargin
                 row.theme.separatorRightInset = Appearance.Cell.leftMargin
-            } else if $0 == entries.last {
+                if $0.isHeader {
+                    row.theme.textAlignment = .center
+                    row.theme.titleFont = { UIFont.systemFont(ofSize: 20.0, weight: .semibold) }
+                }
+            } else if $0 == entries.last || $0.isFooter {
                 row.theme.maskedCorners = .bottom
             } else {
                 row.theme.maskedCorners = .none
@@ -194,7 +199,6 @@ private extension MainViewController {
     }
 
     func standardCardRow(title: String, subtitle: String? = nil, topInset: CGFloat = 0.0, bottomInset: CGFloat = 0.0, isInverted: Bool = false, maskedCorners: CACornerMask = .all, actionBlock: (() -> ())? = nil) -> CVRow {
-        let bigFont: UIFont = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
         let standardFont: UIFont = UIFont.systemFont(ofSize: 17.0)
         let smallFont: UIFont = UIFont.systemFont(ofSize: 13.0)
         let subtitleColor: UIColor
@@ -212,7 +216,7 @@ private extension MainViewController {
                                                    leftInset: Appearance.Cell.leftMargin,
                                                    rightInset: Appearance.Cell.leftMargin,
                                                    textAlignment: .natural,
-                                                   titleFont: { isInverted ? smallFont : bigFont },
+                                                   titleFont: { isInverted ? smallFont : standardFont },
                                                    subtitleFont: { isInverted ? standardFont : smallFont },
                                                    subtitleColor: subtitleColor,
                                                    maskedCorners: maskedCorners),
@@ -227,6 +231,7 @@ private extension MainViewController {
     func demoCases() -> [MenuEntry] {
         var fitContentEntries: [MenuEntry] = [
             MenuEntry(title: "Fit content",
+                      isHeader: true,
                       subtitle: """
                                 The bottom sheet will have a height matching the embedded controller.
                                 You can see in the documentation how to customize this behavior.
@@ -244,7 +249,58 @@ private extension MainViewController {
                                            behavior: testCase.behavior())
             }
         })
-        return fitContentEntries
+        var lastEntry: MenuEntry = fitContentEntries.removeLast()
+        lastEntry.isFooter = true
+        fitContentEntries.append(lastEntry)
+
+        var freeEntries: [MenuEntry] = [
+            MenuEntry(title: "Free",
+                      isHeader: true,
+                      subtitle: """
+                                The bottom sheet will have a height between a minimum and a maximum given values.
+                                Between these values, the bottom sheet will remain where the user releases it.
+                                """)
+        ]
+        freeEntries.append(contentsOf: DemoTestCaseFactory.free.map { testCase in
+            MenuEntry(title: testCase.menuTitle) { [weak self] in
+                let behavior: BottomSheetController.Behavior = testCase.behavior()
+                let positionDelegate: BottomSheetPositionDelegate? = behavior.forwardEventsToRearController ? self : nil
+                self?.presentAsBottomSheet(DemoViewController(demoTitle: testCase.title,
+                                                              explanations: testCase.explanations,
+                                                              codeUrl: testCase.codeUrl),
+                                           positionDelegate: positionDelegate,
+                                           theme: testCase.theme(),
+                                           behavior: testCase.behavior())
+            }
+        })
+        lastEntry = freeEntries.removeLast()
+        lastEntry.isFooter = true
+        freeEntries.append(lastEntry)
+
+        var specificEntries: [MenuEntry] = [
+            MenuEntry(title: "Specific",
+                      isHeader: true,
+                      subtitle: """
+                                The bottom sheet will have a list of heights to define multiple possible positions.
+                                When the user releases the bottom sheet, the nearest heightvalue will be used to update the bottom sheet height.
+                                """)
+        ]
+        specificEntries.append(contentsOf: DemoTestCaseFactory.specific.map { testCase in
+            MenuEntry(title: testCase.menuTitle) { [weak self] in
+                let behavior: BottomSheetController.Behavior = testCase.behavior()
+                let positionDelegate: BottomSheetPositionDelegate? = behavior.forwardEventsToRearController ? self : nil
+                self?.presentAsBottomSheet(DemoViewController(demoTitle: testCase.title,
+                                                              explanations: testCase.explanations,
+                                                              codeUrl: testCase.codeUrl),
+                                           positionDelegate: positionDelegate,
+                                           theme: testCase.theme(),
+                                           behavior: testCase.behavior())
+            }
+        })
+        lastEntry = specificEntries.removeLast()
+        lastEntry.isFooter = true
+        specificEntries.append(lastEntry)
+        return fitContentEntries + freeEntries + specificEntries
     }
 }
 

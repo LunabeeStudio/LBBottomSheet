@@ -370,10 +370,10 @@ private extension BottomSheetController {
             return min(max(bottomContainerHeightConstraint.constant, minHeight ?? 0.0), maxHeight ?? defaultMaximumHeight)
         case let .specific(values):
             let heightValues: [CGFloat] = values.sortedPointValues(screenHeight: view.frame.height, childHeight: childHeight)
-            var matchingValue: CGFloat = 0.0
-            for value in heightValues {
-                guard abs(bottomContainerHeightConstraint.constant - value) < abs(bottomContainerHeightConstraint.constant - matchingValue) else { break }
-                matchingValue = value
+            var matchingValue: CGFloat = heightValues.first ?? 0.0
+            for heightValue in heightValues {
+                guard abs(bottomContainerHeightConstraint.constant - heightValue) < abs(bottomContainerHeightConstraint.constant - matchingValue) else { break }
+                matchingValue = heightValue
             }
             return matchingValue
         }

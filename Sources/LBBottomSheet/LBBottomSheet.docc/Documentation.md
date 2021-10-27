@@ -16,7 +16,7 @@ presentAsBottomSheet(controller)
 A default <doc:LBBottomSheet/BottomSheetController/Theme-swift.struct> and a default <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct> will be used.   
 
 ![LBBottomSheet](Intro)
-
+c
 If you want, you can provide your own <doc:LBBottomSheet/BottomSheetController/Theme-swift.struct> and <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct> configurations:   
 ```swift
 let controller: MyViewController = .init()

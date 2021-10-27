@@ -74,7 +74,7 @@ final class DemoTestCaseFactory {
                          let grabberBackground: BottomSheetController.Theme.Grabber.Background = .color(.tableViewBackground, isTranslucent: false)
                          let grabber: BottomSheetController.Theme.Grabber = .init(background: grabberBackground)
                          return BottomSheetController.Theme(grabber: grabber)
-                     },behavior: {
+                     }, behavior: {
                          BottomSheetController.Behavior(swipeMode: .top)
                      }),
         DemoTestCase(title: "FitContent",
@@ -92,8 +92,53 @@ final class DemoTestCaseFactory {
                          let grabberBackground: BottomSheetController.Theme.Grabber.Background = .color(.tableViewBackground, isTranslucent: false)
                          let grabber: BottomSheetController.Theme.Grabber = .init(background: grabberBackground)
                          return BottomSheetController.Theme(grabber: grabber, dimmingBackgroundColor: .clear)
-                     },behavior: {
+                     }, behavior: {
                          BottomSheetController.Behavior(forwardEventsToRearController: true)
+                     })
+    ]
+
+    static let free: [DemoTestCase] = [
+        DemoTestCase(title: "Free",
+                     menuTitle: "Free - Example #1",
+                     explanations: """
+                                   Here you have an example of a BottomSheet with a height being between 200pts and 500pts of the screen height.
+
+                                   👉 In this BottomSheet, all the other default values are used.
+
+                                   👉 If you release the BottomSheet at any point between the min and max height, it will remains there.
+                                   """,
+                     codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/c6b7c957ed34948cded52d34ba0597d8cc825d5b/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L111"),
+                     theme: {
+                         let grabberBackground: BottomSheetController.Theme.Grabber.Background = .color(.tableViewBackground, isTranslucent: false)
+                         let grabber: BottomSheetController.Theme.Grabber = .init(background: grabberBackground)
+                         return BottomSheetController.Theme(grabber: grabber)
+                     }, behavior: {
+                         BottomSheetController.Behavior(heightMode: .free(minHeight: 300.0, maxHeight: 600.0))
+                     })
+    ]
+
+    static let specific: [DemoTestCase] = [
+        DemoTestCase(title: "Specific",
+                     menuTitle: "Specific - Example #1",
+                     explanations: """
+                                   Here you have an example of a BottomSheet with specific heights.
+                                   This allows you to define multiple positions for your BottomSheet.
+
+                                   👉 In this BottomSheet, all the other default values are used.
+
+                                   👉 If you release the BottomSheet at any point between the min and max height, it will remains there.
+                                   """,
+                     codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/c6b7c957ed34948cded52d34ba0597d8cc825d5b/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L132"),
+                     theme: {
+                         let grabberBackground: BottomSheetController.Theme.Grabber.Background = .color(.tableViewBackground, isTranslucent: false)
+                         let grabber: BottomSheetController.Theme.Grabber = .init(background: grabberBackground)
+                         return BottomSheetController.Theme(grabber: grabber)
+                     }, behavior: {
+                         BottomSheetController.Behavior(heightMode: .specific(values: [
+                            .fixed(value: 200.0),
+                            .screenRatio(value: 0.5),
+                            .screenRatio(value: 0.75)
+                         ]))
                      })
     ]
 }

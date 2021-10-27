@@ -23,6 +23,8 @@ import UIKit
 struct MenuEntry: Equatable {
 
     let title: String
+    var isHeader: Bool = false
+    var isFooter: Bool = false
     var subtitle: String?
     var isInverted: Bool = false
     var actionBlock: (() -> ())?
