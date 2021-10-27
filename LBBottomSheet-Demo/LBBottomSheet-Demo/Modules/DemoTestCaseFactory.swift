@@ -50,7 +50,7 @@ final class DemoTestCaseFactory {
                                    This is the default behavior.
                                    You can have a look at the documentation to check the possible values.
                                    """,
-                     codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/72ffd1c6a36906e4caba94334746bf48a09f5f14/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L52"),
+                     codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/c6b7c957ed34948cded52d34ba0597d8cc825d5b/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L53"),
                      theme: {
                          let grabberBackground: BottomSheetController.Theme.Grabber.Background = .color(.tableViewBackground.withAlphaComponent(0.9), isTranslucent: true)
                          let grabber: BottomSheetController.Theme.Grabber = .init(background: grabberBackground)
@@ -69,7 +69,7 @@ final class DemoTestCaseFactory {
 
                                    👉 This BottomSheet has a `swipeMode` set to `.top`. It means that the dismiss swipe down gesture is only working when you start it from the grabber zone.
                                    """,
-                     codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/72ffd1c6a36906e4caba94334746bf48a09f5f14/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L70"),
+                     codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/c6b7c957ed34948cded52d34ba0597d8cc825d5b/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L74"),
                      theme: {
                          let grabberBackground: BottomSheetController.Theme.Grabber.Background = .color(.tableViewBackground, isTranslucent: false)
                          let grabber: BottomSheetController.Theme.Grabber = .init(background: grabberBackground)
@@ -85,8 +85,9 @@ final class DemoTestCaseFactory {
                                    👉 In addition to others, you can still interact with the controller behind it.
 
                                    👉 You can also see that the tableView behind the BottomSheet has its bottom inset updated to not have its content hidden by the BottomSheet.
+                                   To do this, you just have to implement the `BottomSheetPositionDelegate` on the controller needing a bottom inset update, and to give this controller to the `presentAsBottomSheet` method.
                                    """,
-                     codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/72ffd1c6a36906e4caba94334746bf48a09f5f14/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L86"),
+                     codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/c6b7c957ed34948cded52d34ba0597d8cc825d5b/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L91"),
                      theme: {
                          let grabberBackground: BottomSheetController.Theme.Grabber.Background = .color(.tableViewBackground, isTranslucent: false)
                          let grabber: BottomSheetController.Theme.Grabber = .init(background: grabberBackground)
