@@ -21,14 +21,14 @@
 import UIKit
 
 /// This view implementation makes us able to forward events not happening on the bottom sheet itself to the controller behind the bottom sheet.
-public final class ForwardingEventsView: UIView {
+final class ForwardingEventsView: UIView {
 
     /// The view which must be the destination of the detected touch events.
     var destinationView: UIView?
     /// This is the view for which (children included) we must not forward the touch event to the view behind it.
     var excludedParentView: UIView?
 
-    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         // Here we get the original result of the hit test.
         let hitTest: UIView? = super.hitTest(point, with: event)
         
