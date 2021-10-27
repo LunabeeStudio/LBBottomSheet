@@ -21,7 +21,7 @@
 import UIKit
 
 /// This view implementation makes us able to forward events not happening on the bottom sheet itself to the controller behind the bottom sheet.
-internal final class ForwardingEventsView: UIView {
+public final class ForwardingEventsView: UIView {
 
     /// The view which must be the destination of the detected touch events.
     var destinationView: UIView?
