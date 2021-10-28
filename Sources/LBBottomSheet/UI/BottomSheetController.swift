@@ -75,7 +75,11 @@ public final class BottomSheetController: UIViewController {
         return UIScreen.main.bounds.height - topMargin
     }
     private var childHeight: CGFloat {
-        if bottomSheetChild.lbbsFindControllerDeclaringPreferredHeightInBottomSheet() == nil {
+        if let heightDeclaringController = bottomSheetChild.lbbsFindControllerDeclaringPreferredHeightInBottomSheet() {
+            var height: CGFloat = heightDeclaringController.value(forKey: BottomSheetConstant.preferredHeightVariableName) as? CGFloat ?? 0.0
+            if let grabber = theme.grabber, !grabber.background.isTranslucent { height += topInset }
+            return height
+        } else {
             print("⚠️ [LBBottomSheet] ⚠️: If you use the \"fitContent\" heightMode, you can declare the following variable in the controller you want to present: \"@objc var preferredHeightInBottomSheet: CGFloat\" returning the customized height you want the bottom sheet to have.")
             let childView: UIView? = bottomSheetChild?.view
             let defaultFirstScrollView: UIScrollView? = childView?.lbbsGetFirstTableOrCollectionView()
@@ -90,10 +94,6 @@ public final class BottomSheetController: UIViewController {
                 if let grabber = theme.grabber, !grabber.background.isTranslucent { height += topInset }
                 return height
             }
-        } else {
-            var height: CGFloat = bottomSheetChild.value(forKey: BottomSheetConstant.preferredHeightVariableName) as? CGFloat ?? 0.0
-            if let grabber = theme.grabber, !grabber.background.isTranslucent { height += topInset }
-            return height
         }
     }
     private var isFirstLoad: Bool = true
