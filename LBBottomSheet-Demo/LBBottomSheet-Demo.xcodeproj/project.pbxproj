@@ -694,8 +694,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/LunabeeStudio/LBBottomSheet";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.11;
+				branch = "feature/recursive-preferredHeightInBottomSheet-search";
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
