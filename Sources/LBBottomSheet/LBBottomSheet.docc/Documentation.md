@@ -87,8 +87,7 @@ Examples to come.
 
 ## Repository
 
-You can find this Swift Package on this [GitHub repository](https://github.com/LunabeeStudio/LBBottomSheet).
-This package is indexed on the Swift 
+You can find this Swift Package on this [GitHub repository](https://github.com/LunabeeStudio/LBBottomSheet) and on the [Swift Package Index](https://swiftpackageindex.com/LunabeeStudio/LBBottomSheet). 
 
 ## Author
 
