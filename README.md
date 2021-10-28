@@ -23,7 +23,7 @@ import LBBottomSheet
 ```   
 
 ## Usage
-The BottomSheet gives you the ability to present a controller in a kind of "modal" which you can choose the height you want.   
+The BottomSheet gives you the ability to present a controller in a kind of "modal" for which you can choose the height you want.   
 ### Using the default configuration 
 To show `MyViewController` in a bottom sheet above the current controller, you just need to call this from a view controller:
 ```swift
@@ -52,13 +52,13 @@ This way you can continue to interact with the controller behind it. For a bette
 To finish with the default behaviors, if your embedded controller supports the dynamic types, you'll not have to manually ask the BottomSheet to update its height itself on a category content size change. The BottomSheet will automatically be updated.
 
 ### Update the BottomSheet height when already presented
-Let's say your controller is displayed using a BottomSheet fitting the needed height. If its height changes, for example, due to components in it which are appearing or disapparing, you'll want to update the BottomSheet height.   
+Let's say your controller is displayed using a BottomSheet fitting the needed height. If its height changes, for example, due to components in it which are appearing or disappearing, you'll want to update the BottomSheet height.   
 From the embedded controller, you just have to call this:   
 ```swift
 bottomSheetController?.preferredHeightInBottomSheetDidUpdate()
 ```   
    
-In the case you use the [fitContent](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior/heightmode-swift.enum/fitcontent) [HeightMode](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior/heightmode-swift.enum), this will call the `preferredHeightInBottomSheet` variable on the embedded controller and if this variable is not declared, the BottomSheet will calculate the height by itself based on the embedded controller content.   
+In case you use the [fitContent](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior/heightmode-swift.enum/fitcontent) [HeightMode](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior/heightmode-swift.enum), this will call the `preferredHeightInBottomSheet` variable on the embedded controller and if this variable is not declared, the BottomSheet will calculate the height by itself based on the embedded controller content.   
 If you want to implement your own needed height calculation, you have to add this to your embedded controller:
 ```swift
 @objc var preferredHeightInBottomSheet: CGFloat { /* Do your custom calculation here */ }
