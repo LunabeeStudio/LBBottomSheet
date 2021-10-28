@@ -33,6 +33,10 @@ internal extension Mirror {
         free(properties)
         return names
     }
+    static func isPreferredHeightInBottomSheetDeclared(in class: NSObject.Type) -> Bool {
+        let propertiesName: [String] = lbbsGetTypesOfProperties(in: `class`) ?? []
+        return propertiesName.contains(BottomSheetConstant.preferredHeightVariableName)
+    }
 }
 
 private extension Mirror {

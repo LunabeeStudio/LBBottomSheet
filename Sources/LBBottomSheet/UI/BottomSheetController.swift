@@ -75,8 +75,7 @@ public final class BottomSheetController: UIViewController {
         return UIScreen.main.bounds.height - topMargin
     }
     private var childHeight: CGFloat {
-        let propertiesName: [String] = Mirror.lbbsGetTypesOfProperties(in: type(of: bottomSheetChild)) ?? []
-        if !propertiesName.contains(BottomSheetConstant.preferredHeightVariableName) {
+        if bottomSheetChild.lbbsFindControllerDeclaringPreferredHeightInBottomSheet() == nil {
             print("⚠️ [LBBottomSheet] ⚠️: If you use the \"fitContent\" heightMode, you can declare the following variable in the controller you want to present: \"@objc var preferredHeightInBottomSheet: CGFloat\" returning the customized height you want the bottom sheet to have.")
             let childView: UIView? = bottomSheetChild?.view
             let defaultFirstScrollView: UIScrollView? = childView?.lbbsGetFirstTableOrCollectionView()

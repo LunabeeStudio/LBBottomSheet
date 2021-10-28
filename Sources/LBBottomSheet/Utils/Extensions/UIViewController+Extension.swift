@@ -60,4 +60,12 @@ internal extension UIViewController {
         containerView.lbbsAddFullSubview(childController.view)
         childController.didMove(toParent: self)
     }
+
+    func lbbsFindControllerDeclaringPreferredHeightInBottomSheet() -> UIViewController? {
+        if Mirror.isPreferredHeightInBottomSheetDeclared(in: type(of: self)) {
+            return self
+        } else {
+            return children.first { Mirror.isPreferredHeightInBottomSheetDeclared(in: type(of: $0)) }
+        }
+    }
 }
