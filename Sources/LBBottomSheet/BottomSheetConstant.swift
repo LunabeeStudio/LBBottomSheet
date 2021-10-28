@@ -20,7 +20,7 @@
 
 import CoreGraphics
 
-/// Botttom sheet constants.
+/// Bottom sheet constants.
 public enum BottomSheetConstant {
     /// Bottom sheet animation constants.
     public enum Animation {

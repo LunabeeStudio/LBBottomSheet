@@ -20,7 +20,7 @@
 
 import UIKit
 
-/// This class the main component of this package.
+/// This class is the main component of this package.
 /// It is presented modally and embeds the controller you want to present as a bottom sheet.
 public final class BottomSheetController: UIViewController {
     override public var modalPresentationStyle: UIModalPresentationStyle {
