@@ -1,7 +1,7 @@
 # ``LBBottomSheet``
 ![LBBottomSheet](PackageIcon)   
 LBBottomSheet is a pure Swift component (iOS 11.4+) to easily present in a bottom sheet the controllers you want.   
-With its smart and easy-to-use options, you can take advantage of this flexible and powerful package to fit your needs (iOS 11.4+).   
+With its smart and easy-to-use options, you can take advantage of this flexible and powerful package to fit your needs.   
 
 ## Overview
 
