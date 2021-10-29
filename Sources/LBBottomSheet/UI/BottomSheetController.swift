@@ -170,6 +170,7 @@ internal extension BottomSheetController {
 private extension BottomSheetController {
     func initUI() {
         view.backgroundColor = .clear
+        bottomContainerView.backgroundColor = .clear
         bottomContainerView.layer.cornerRadius = theme.cornerRadius
         bottomContainerView.layer.maskedCorners = theme.maskedCorners
         bottomContainerView.layer.masksToBounds = true
