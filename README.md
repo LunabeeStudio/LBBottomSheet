@@ -43,9 +43,8 @@ presentAsBottomSheet(controller)
 ```   
 A default [Theme](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/theme-swift.struct) and a default [Behavior](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct) will be used.   
    
-
 <p align="center" width="100%">
-    <img width="200px" src="https://user-images.githubusercontent.com/6451155/139395767-deb5aff9-2900-4034-9864-0df0e745af83.png"> 
+    <img width="200px" src="https://user-images.githubusercontent.com/6451155/139485215-3a443ada-0346-4737-8221-8cf0538a7da0.gif"> 
 </p>
    
 In this example, the grabber background is transparent. This way you see the tableView content behind the grabber when scrolling, which is the default configuration. Let's see in the next example how to configure this.   
