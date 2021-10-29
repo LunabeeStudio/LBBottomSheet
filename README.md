@@ -62,7 +62,7 @@ presentAsBottomSheet(controller, theme: theme, behavior: behavior)
 ```   
 
 <p align="center" width="100%">
-    <img width="200px" src="https://user-images.githubusercontent.com/6451155/139395455-16e05d85-2695-400c-a61a-6a533538b49c.png"> 
+    <img width="200px" src="https://user-images.githubusercontent.com/6451155/139486482-3d092924-484b-4f87-8d1b-e7376b47ebec.gif"> 
 </p>   
    
 In this example, the background is translucent and we have a [swipeMode](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct/swipemode-swift.enum) set to [.full](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct/swipemode-swift.enum/full) which means that the swipe down gesture will be detected from all the BottomSheet (this is the default behavior).   
@@ -79,7 +79,7 @@ presentAsBottomSheet(controller, theme: theme, behavior: behavior)
 ```   
 
 <p align="center" width="100%">
-    <img width="200px" src="https://user-images.githubusercontent.com/6451155/139395531-d2f764d2-0a67-434d-a17e-1c696a4b8e3d.png"> 
+    <img width="200px" src="https://user-images.githubusercontent.com/6451155/139486535-1a002edb-6c76-485f-ab62-b8ebd135e582.gif"> 
 </p>   
 
 <br/>
@@ -108,7 +108,7 @@ extension MainViewController: BottomSheetPositionDelegate {
 ```   
 
 <p align="center" width="100%">
-    <img width="200px" src="https://user-images.githubusercontent.com/6451155/139395591-2ac9f67a-357b-49b0-b499-6b1385e8a42b.png"> 
+    <img width="200px" src="https://user-images.githubusercontent.com/6451155/139486574-5d358ba6-1dd0-4089-8429-182c51c365ed.gif"> 
 </p>   
 
 This will prevent you from having content hidden by the BottomSheet in case you need to interact with it.   
