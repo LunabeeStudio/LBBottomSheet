@@ -202,7 +202,6 @@ private extension BottomSheetController {
         }
 
         lbbsAddChildViewController(bottomSheetChild, containerView: bottomContainerInnerView)
-        bottomContainerView.backgroundColor = bottomSheetChild.view.backgroundColor
 
         bottomContainerLeadingConstraint.constant = theme.leadingMargin
         bottomContainerTrailingConstraint.constant = theme.trailingMargin
