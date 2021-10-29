@@ -24,7 +24,18 @@ import LBBottomSheet
 
 ## Usage
 The BottomSheet gives you the ability to present a controller in a kind of "modal" for which you can choose the height you want.   
-### Using the default configuration 
+   
+The are 3 differents ways of configuring the BottomSheet height represented by the [HeightMode](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct/heightmode-swift.enum) enum.   
+Here are the available height modes:
+| HeightMode   | Description                           |
+| ------------ | ------------------------------------- | 
+| `fitContent` | The bottom sheet will call `preferredHeightInBottomSheet` on the embedded controller to get the needed height.                            |
+| `free`       | The bottom sheet height will be contained between `minHeight` and `maxHeight` and the bottom sheet will remain where the user releases it.|
+| `specific`   | The bottom sheet will have multiple height values. When the user releases it, it will be attached to the nearest provided specific value. When presented, the bottom sheet will use the minimum value. It can be swipped up to the maximum value. You don't have to take care of the values order, the bottom sheet will sort them to find the matching one.|   
+   
+We'll see through the following examples, how you can configure it (don't hesitate to look at the [documentation](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet) to see all what you can do).   
+<br/>
+### FitContent - Example #1 
 To show `MyViewController` in a bottom sheet above the current controller, you just need to call this from a view controller:
 ```swift
 let controller: MyViewController = .init()
@@ -32,49 +43,113 @@ presentAsBottomSheet(controller)
 ```   
 A default [Theme](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/theme-swift.struct) and a default [Behavior](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct) will be used.   
    
+
 <p align="center" width="100%">
-    <img width="200px" src="https://user-images.githubusercontent.com/6451155/138927889-c1471730-cb99-4f20-9c43-bfdb60b5843b.png"> 
+    <img width="200px" src="https://user-images.githubusercontent.com/6451155/139395767-deb5aff9-2900-4034-9864-0df0e745af83.png"> 
 </p>
-
-
-If you want, you can provide your own [Theme](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/theme-swift.struct) and [Behavior](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct) configurations:   
+   
+In this example, the grabber background is transparent. This way you see the tableView content behind the grabber when scrolling, which is the default configuration. Let's see in the next example how to configure this.   
+<br/>
+### FitContent - Example #2
+If you want, you can provide your own [Theme](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/theme-swift.struct) and [Behavior](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct) configurations.   
+For example, here we customize the grabber [background](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/theme-swift.struct/grabber-swift.struct/background-swift.enum) and the [swipeMode](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct/swipemode-swift.enum):
 ```swift
 let controller: MyViewController = .init()
-let theme: BottomSheetController.Theme = .init(/* Customize your theme here */)
-let behavior: BottomSheetController.Behavior = .init(/* Customize your behavior here */)
+let grabberBackground: BottomSheetController.Theme.Grabber.Background = .color(.tableViewBackground.withAlphaComponent(0.9), isTranslucent: true)
+let grabber: BottomSheetController.Theme.Grabber = .init(background: grabberBackground)
+let theme: BottomSheetController.Theme = .init(grabber: grabber)
+let behavior: BottomSheetController.Behavior = .init(swipeMode: .full)
 presentAsBottomSheet(controller, theme: theme, behavior: behavior)
 ```   
 
+<p align="center" width="100%">
+    <img width="200px" src="https://user-images.githubusercontent.com/6451155/139395455-16e05d85-2695-400c-a61a-6a533538b49c.png"> 
+</p>   
+   
+In this example, the background is translucent and we have a [swipeMode](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct/swipemode-swift.enum) set to [.full](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct/swipemode-swift.enum/full) which means that the swipe down gesture will be detected from all the BottomSheet (this is the default behavior).   
+<br/>
+### FitContent - Example #3
+In this example, the grabber background is opaque and the swipeMode is set to .top which means that the swipe down gesture will only be detected from the grabber zone:
+```swift
+let controller: MyViewController = .init()
+let grabberBackground: BottomSheetController.Theme.Grabber.Background = .color(.tableViewBackground, isTranslucent: false)
+let grabber: BottomSheetController.Theme.Grabber = .init(background: grabberBackground)
+let theme: BottomSheetController.Theme = .init(grabber: grabber)
+let behavior: BottomSheetController.Behavior = .init(swipeMode: .top)
+presentAsBottomSheet(controller, theme: theme, behavior: behavior)
+```   
+
+<p align="center" width="100%">
+    <img width="200px" src="https://user-images.githubusercontent.com/6451155/139395531-d2f764d2-0a67-434d-a17e-1c696a4b8e3d.png"> 
+</p>   
+
+<br/>
+
+### FitContent - Example #4
 By default, the BottomSheet prevents you from interacting with the controller presenting it (like a standard modal).   
 It is possible to configure this in the [Behavior](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct) using this parameter: [forwardEventsToRearController](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct/forwardeventstorearcontroller).   
-This way you can continue to interact with the controller behind it. For a better experience, we advise you to set the `dimmingBackgroundColor` color to `.clear` and to implement the [BottomSheetPositionDelegate](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetpositiondelegate) on the controller presenting your BottomSheet to dynamically adapt its bottom content inset if needed (e.g: Fit content - Example #4).   
+This way you can continue to interact with the controller behind it. For a better experience, we advise you to set the `dimmingBackgroundColor` color to `.clear` and to implement the [BottomSheetPositionDelegate](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetpositiondelegate) on the controller presenting your BottomSheet to dynamically adapt its bottom content inset if needed.   
+Here is the BottomSheet configuration code:
+```swift
+let controller: MyViewController = .init()
+let grabberBackground: BottomSheetController.Theme.Grabber.Background = .color(.tableViewBackground, isTranslucent: false)
+let grabber: BottomSheetController.Theme.Grabber = .init(background: grabberBackground)
+let theme: BottomSheetController.Theme = .init(grabber: grabber, dimmingBackgroundColor: .clear)
+let behavior: BottomSheetController.Behavior = .init(swipeMode: .full, forwardEventsToRearController: true)
+presentAsBottomSheet(controller, theme: theme, behavior: behavior)
+```   
 
-To finish with the default behaviors, if your embedded controller supports the dynamic types, you'll not have to manually ask the BottomSheet to update its height itself on a category content size change. The BottomSheet will automatically be updated.
+Here is the [BottomSheetPositionDelegate](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetpositiondelegate) implementation on the controller presenting the BottomSheet:   
+```swift
+extension MainViewController: BottomSheetPositionDelegate {
+    func bottomSheetPositionDidUpdate(y: CGFloat) {
+        tableView.contentInset.bottom = tableView.frame.height - y
+    }
+}
+```   
 
-### Update the BottomSheet height when already presented
-Let's say your controller is displayed using a BottomSheet fitting the needed height. If its height changes, for example, due to components in it which are appearing or disappearing, you'll want to update the BottomSheet height.   
-From the embedded controller, you just have to call this:   
+<p align="center" width="100%">
+    <img width="200px" src="https://user-images.githubusercontent.com/6451155/139395591-2ac9f67a-357b-49b0-b499-6b1385e8a42b.png"> 
+</p>   
+
+This will prevent you from having content hidden by the BottomSheet in case you need to interact with it.   
+<br/>
+
+### FitContent - Advanced configuration
+In this mode, by default, the height is automatically calculated:
+- If the BottomSheet contains a UITableView/UICollectionView even if contained in a parent controller, it will use the contentInset top, bottom and the content size height to determine the needed height.
+- Otherwise, it will take the frame height of the embedded controller view.
+   
+If you want to customize this calculation, you have to declare this variable on the controller you're embedding en the BottomSheet:
+```swift
+@objc var preferredHeightInBottomSheet: CGFloat { /* Do your custom calculation here */ }
+```   
+When this variable is declared, the BottomSheet will find and use it instead of the default calculation.   
+   
+If you present in a BottomSheet a controller for which the height can change while it is visible, you can tell the BottomSheet to update its height in order to keep a height matching the embbeded controller needs. This update is animated by the BottomSheet.   
+To tell the BottomSheet to update its height, you just have to call this:   
 ```swift
 bottomSheetController?.preferredHeightInBottomSheetDidUpdate()
 ```   
+
+`bottomSheetController` is available in any `UIViewController` as `navigationController` or `tabBarController` for example.   
+
+The last thing for this mode is about the dynamic types. If you present in a BottomSheet, a controller using dynamic types to manage the font size changes based on the user's choices, the controller might need more height than the initial one if the font size changes while the controller is presented.   
+You don't have to manage this as the BottomSheet is listening for the content size category changes notification. If the user changes the font size, the BottomSheet will automatically trigger a height update.   
    
-In case you use the [fitContent](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct/heightmode-swift.enum/fitcontent) [HeightMode](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct/heightmode-swift.enum), this will call the `preferredHeightInBottomSheet` variable on the embedded controller and if this variable is not declared, the BottomSheet will calculate the height by itself based on the embedded controller content.   
-If you want to implement your own needed height calculation, you have to add this to your embedded controller:
-```swift
-@objc var preferredHeightInBottomSheet: CGFloat { /* Do your custom calculation here */ }
-```
+<br/>
 
-`bottomSheetController` can be called from any `UIViewController` like `navigationController` to get the BottomSheet embedding the current controller.
+### Free height - Example #1
+Examples to come.   
+   
+<br/>
 
-### Customization
-The are 3 differents ways of configuring the BottomSheet height represented by the [HeightMode](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct/heightmode-swift.enum) enum.   
-Here are the available height modes:
-| HeightMode   | Description                           |
-| ------------ | ------------------------------------- | 
-| `fitContent` | The bottom sheet will call `preferredHeightInBottomSheet` on the embedded controller to get the needed height.                            |
-| `free`       | The bottom sheet height will be contained between `minHeight` and `maxHeight` and the bottom sheet will remain where the user releases it.|
-| `specific`   | The bottom sheet will have multiple height values. When the user releases it, it will be attached to the nearest provided specific value.   When presented, the bottom sheet will use the minimum value. It can be swipped up to the maximum value. You don't have to take care of the values order, the bottom sheet will sort them to find the matching one.|   
+### Specific heights - Example #1
+Examples to come.   
 
+<br/>
+
+### Customization  
 On the BottomSheet, it is possible to configure its appearance and its behavior.   
 To do this you have 2 structs: [Theme](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/theme-swift.struct) and [Behavior](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct).   
 Thanks to these structs, you can configure things like:
@@ -90,20 +165,6 @@ Thanks to these structs, you can configure things like:
    
 You can find all the available configuration parameters in the [documentation](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet).
 
-### Fit content - Example #1
-Example to come.
-### Fit content - Example #2
-Example to come.
-### Fit content - Example #3
-Example to come.
-### Fit content - Example #4
-Example to come.
-
-### Free height - Example #1
-Examples to come.
-
-### Specific heights - Example #1
-Examples to come.
 
 ## Author
 
