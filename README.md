@@ -152,7 +152,7 @@ Examples to come.
 On the BottomSheet, it is possible to configure its appearance and its behavior.   
 To do this you have 2 structs: [Theme](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/theme-swift.struct) and [Behavior](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/behavior-swift.struct).   
 Thanks to these structs, you can configure things like:
-- [Grabber](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/theme-swift.struct/grabber-swift.struct): having it or not, is color, size, corner radius, background color or view...
+- [Grabber](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/theme-swift.struct/grabber-swift.struct): having it or not, its color, size, corner radius, background color or view...
 - [Dimming background color](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/theme-swift.struct/dimmingbackgroundcolor)
 - [Corner radius](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/theme-swift.struct/cornerradius)
 - [Shadow](https://lbbottomsheet.lunabee.studio/documentation/lbbottomsheet/bottomsheetcontroller/theme-swift.struct/shadow-swift.struct)
