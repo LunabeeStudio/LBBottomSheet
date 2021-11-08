@@ -59,7 +59,10 @@ extension BottomSheetController {
                 ///     - value: The corner radius value.
                 case fixed(_ value: CGFloat)
             }
-
+            /// A Grabber configured to look like the Apple one.
+            public static let appleDefault: Grabber = .init(size: CGSize(width: 36.0, height: 5.0),
+                                                            color: .lbbsDefaultGrabberColor,
+                                                            topMargin: 5.0)
             /// The size of the grabber.
             public var size: CGSize
             /// Defines whether or not the grabber shoiuld have a corner radius.
@@ -76,11 +79,11 @@ extension BottomSheetController {
             public var background: Background
 
             /// Initializes a new Grabber.
-            public init(size: CGSize = CGSize(width: 36.0, height: 5.0),
+            public init(size: CGSize = CGSize(width: 30.0, height: 4.0),
                         cornerRadiusType: BottomSheetController.Theme.Grabber.CornerRadiusType = .rounded,
                         maskedCorners: CACornerMask = .lbbsAll,
                         color: UIColor = .lbbsDefaultGrabberColor,
-                        topMargin: CGFloat = 5.0,
+                        topMargin: CGFloat = 20.0,
                         canTouchToDismiss: Bool = false,
                         background: BottomSheetController.Theme.Grabber.Background = .color()) {
                 self.size = size
