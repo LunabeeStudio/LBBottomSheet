@@ -101,9 +101,7 @@ final class DemoTestCaseFactory {
         DemoTestCase(title: "Free",
                      menuTitle: "Free - Example #1",
                      explanations: """
-                                   Here you have an example of a BottomSheet with a height being between 200pts and 500pts of the screen height.
-
-                                   👉 In this BottomSheet, all the other default values are used.
+                                   Here you have an example of a BottomSheet with a height being between 300pts and 600pts of the screen height.
 
                                    👉 If you release the BottomSheet at any point between the min and max height, it will remains there.
                                    """,
@@ -124,9 +122,7 @@ final class DemoTestCaseFactory {
                                    Here you have an example of a BottomSheet with specific heights.
                                    This allows you to define multiple positions for your BottomSheet.
 
-                                   👉 In this BottomSheet, all the other default values are used.
-
-                                   👉 If you release the BottomSheet at any point between the min and max height, it will remains there.
+                                   👉 This bottom sheet has different height values. When the user releases the bottom sheet, its height will be updated to the predefined nearest one.
                                    """,
                      codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/4c4273fbd9a2a44ca7802d3149b2f68e88f8f725/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L133"),
                      theme: {
