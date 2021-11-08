@@ -51,4 +51,11 @@ public extension UIColor {
             return .black
         }
     }
+    static var lbbsDefaultGrabberColor: UIColor {
+        if #available(iOS 13.0, *) {
+            return .tertiaryLabel
+        } else {
+            return .lightGray
+        }
+    }
 }

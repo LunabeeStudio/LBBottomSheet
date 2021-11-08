@@ -76,11 +76,11 @@ extension BottomSheetController {
             public var background: Background
 
             /// Initializes a new Grabber.
-            public init(size: CGSize = CGSize(width: 30.0, height: 4.0),
+            public init(size: CGSize = CGSize(width: 36.0, height: 5.0),
                         cornerRadiusType: BottomSheetController.Theme.Grabber.CornerRadiusType = .rounded,
                         maskedCorners: CACornerMask = .lbbsAll,
-                        color: UIColor = .lightGray,
-                        topMargin: CGFloat = 20.0,
+                        color: UIColor = .lbbsDefaultGrabberColor,
+                        topMargin: CGFloat = 5.0,
                         canTouchToDismiss: Bool = false,
                         background: BottomSheetController.Theme.Grabber.Background = .color()) {
                 self.size = size
