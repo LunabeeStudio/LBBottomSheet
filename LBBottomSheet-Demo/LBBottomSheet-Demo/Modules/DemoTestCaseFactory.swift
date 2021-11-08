@@ -138,7 +138,7 @@ final class DemoTestCaseFactory {
                             .fixed(value: 200.0),
                             .screenRatio(value: 0.5),
                             .screenRatio(value: 0.75)
-                         ]), canBeDismissed: false)
+                         ]))
                      })
     ]
 }
