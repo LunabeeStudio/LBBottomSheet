@@ -161,9 +161,10 @@ extension BottomSheetController {
         ///
         /// If you don't use a <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/HeightMode-swift.enum> depending on the embedded controller height, nothing will happen.
         public var updateHeightOnContentSizeCategoryChange: Bool
-
         /// Defines whether or not the bottom sheet can be dismissed. If set to `false`, it allows the bottom sheet to still be animated while swipping if the <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/swipeMode-swift.property> is different from <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/SwipeMode-swift.enum/none>.
-        public var canBeDismissed: Bool
+        public var allowsSwipeToDismiss: Bool
+        /// Defines whether or not the bottom sheet can be dismissed by touching the dimming background.
+        public var canTouchDimmingBackgroundToDismiss: Bool
 
         /// Initializes a new Behavior.
         public init(appearingAnimationDuration: Double = 0.5,
@@ -177,7 +178,8 @@ extension BottomSheetController {
                     heightMode: BottomSheetController.Behavior.HeightMode = .fitContent,
                     elasticityFunction: @escaping (CGFloat) -> CGFloat = BottomSheetConstant.Animation.Elasticity.logarithmic,
                     updateHeightOnContentSizeCategoryChange: Bool = true,
-                    canBeDismissed: Bool = true) {
+                    allowsSwipeToDismiss: Bool = true,
+                    canTouchDimmingBackgroundToDismiss: Bool = true) {
             self.appearingAnimationDuration = appearingAnimationDuration
             self.disappearingAnimationDuration = disappearingAnimationDuration
             self.swipeMode = swipeMode
@@ -189,7 +191,8 @@ extension BottomSheetController {
             self.heightMode = heightMode
             self.elasticityFunction = elasticityFunction
             self.updateHeightOnContentSizeCategoryChange = updateHeightOnContentSizeCategoryChange
-            self.canBeDismissed = canBeDismissed
+            self.allowsSwipeToDismiss = allowsSwipeToDismiss
+            self.canTouchDimmingBackgroundToDismiss = canTouchDimmingBackgroundToDismiss
         }
     }
 }
