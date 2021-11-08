@@ -348,7 +348,6 @@ private extension BottomSheetController {
     func processPanGestureEnded(_ gesture: UIPanGestureRecognizer) {
         let yTranslation: CGFloat = gesture.translation(in: bottomContainerView).y
         let yVelocity: CGFloat = gesture.velocity(in: bottomContainerView).y
-        let maxHeight: CGFloat = behavior.heightMode.maximumHeight(with: lastChildHeightAtPanGestureStart, screenHeight: UIScreen.main.bounds.height, defaultMaximumHeight: defaultMaximumHeight)
         if (yTranslation > lastHeightAtPanGestureStart * behavior.heightPercentageThresholdToDismiss || yVelocity > behavior.velocityThresholdToDismiss) {
             switch behavior.heightMode {
             case .specific:
@@ -373,10 +372,25 @@ private extension BottomSheetController {
                 if behavior.canBeDismissed { dismiss(animated: true) }
             }
         } else {
-            let destinationMaximumHeight: CGFloat = yVelocity < -behavior.velocityThresholdToOpenAtMaxHeight ? maxHeight : calculateExpectedHeight(lastChildHeightAtPanGestureStart)
-            bottomContainerHeightConstraint.constant = destinationMaximumHeight
-            bottomContainerBottomConstraint.constant = 0.0
-            UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
+            switch behavior.heightMode {
+            case .specific:
+                let isFastSwipeUpGestureDetected: Bool = yVelocity < -behavior.velocityThresholdToOpenAtMaxHeight
+                let nextUpperHeight: CGFloat = behavior.heightMode.nextHeight(with: lastChildHeightAtPanGestureStart,
+                                                                               screenHeight: UIScreen.main.bounds.height,
+                                                                               defaultMaximumHeight: defaultMaximumHeight,
+                                                                               originHeight: lastHeightAtPanGestureStart,
+                                                                               goingUp: true) ?? defaultMaximumHeight
+                let expectedHeight: CGFloat = calculateExpectedHeight(lastChildHeightAtPanGestureStart)
+                let destinationHeight: CGFloat = isFastSwipeUpGestureDetected ? nextUpperHeight : expectedHeight
+                bottomContainerHeightConstraint.constant = destinationHeight
+                bottomContainerBottomConstraint.constant = 0.0
+                UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
+            default:
+                let destinationHeight: CGFloat = calculateExpectedHeight(lastChildHeightAtPanGestureStart)
+                bottomContainerHeightConstraint.constant = destinationHeight
+                bottomContainerBottomConstraint.constant = 0.0
+                UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
+            }
         }
         isGestureBeingActivated = false
     }
