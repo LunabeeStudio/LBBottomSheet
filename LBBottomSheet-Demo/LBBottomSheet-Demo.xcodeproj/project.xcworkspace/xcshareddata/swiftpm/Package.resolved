@@ -5,8 +5,8 @@
         "package": "LBBottomSheet",
         "repositoryURL": "https://github.com/LunabeeStudio/LBBottomSheet",
         "state": {
-          "branch": "feature/recursive-preferredHeightInBottomSheet-search",
-          "revision": "ab6b388e9a16f06424536a9c55bdc2effbd3e2d3",
+          "branch": "feature/specific-heights-custom",
+          "revision": "ff56938d58fb804040445f07b4363fe5ad4aa69c",
           "version": null
         }
       }
