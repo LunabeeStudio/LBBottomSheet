@@ -58,7 +58,7 @@ extension BottomSheetController {
             internal func minimumHeight(with childHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
                 switch self {
                 case .fitContent:
-                    return childHeight
+                    return max(childHeight, 0.0)
                 case let .free(minHeight , _):
                     return minHeight ?? 0.0
                 case let .specific(values):
@@ -78,6 +78,18 @@ extension BottomSheetController {
                     return min(maxHeight, defaultMaximumHeight)
                 }
             }
+
+            internal func nextHeight(with childHeight: CGFloat, screenHeight: CGFloat, defaultMaximumHeight: CGFloat, originHeight: CGFloat, goingUp: Bool) -> CGFloat? {
+                switch self {
+                case let .specific(values):
+                    let allValues: [CGFloat] = values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight)
+                    guard let currentIndex = allValues.firstIndex(of: originHeight) else { return nil }
+                    let newIndex: Int = goingUp ? currentIndex + 1 : currentIndex - 1
+                    return newIndex < 0 ? nil : allValues[min(newIndex, allValues.count - 1)]
+                default:
+                    return goingUp ? maximumHeight(with: childHeight, screenHeight: screenHeight, defaultMaximumHeight: defaultMaximumHeight) : minimumHeight(with: childHeight, screenHeight: screenHeight)
+                }
+            }
         }
 
         /// An enum describing the available height values for the `specific` HeightMode.
@@ -94,6 +106,10 @@ extension BottomSheetController {
             /// - Parameters:
             ///     - value: A percentage (between 0.0 and 1.0) that will be applied to the height of the controller embedded in the bottom sheet.
             case childRatio(value: CGFloat)
+            /// Defines a height being obtained thanks to a block.
+            /// - Parameters:
+            ///     - heightBlock: A block that must return the needed height.
+            case custom(_ heightBlock: () -> CGFloat)
 
             /// This is a shortcut allowing you to have in your specific values, one matching the embedded controller `preferredHeightInBottomSheet` value.
             public static let fitContent: HeightValue = .childRatio(value: 1.0)
@@ -141,10 +157,13 @@ extension BottomSheetController {
         public var elasticityFunction: (_ x: CGFloat) -> CGFloat
         /// Defines whether or not the bottom sheet layout will be updated when the user changes the iOS font size.
         ///
-        /// As your embedded controller height might be impacted by a font size change, the bottom sheet will update its height too if you use a <doc:/LBBottomSheet/BottomSheetController/Behavior-swift.struct/HeightMode-swift.enum> depending on the embedded controller height.
+        /// As your embedded controller height might be impacted by a font size change, the bottom sheet will update its height too if you use a <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/HeightMode-swift.enum> depending on the embedded controller height.
         ///
-        /// If you don't use a <doc:/LBBottomSheet/BottomSheetController/Behavior-swift.struct/HeightMode-swift.enum> depending on the embedded controller height, nothing will happen.
+        /// If you don't use a <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/HeightMode-swift.enum> depending on the embedded controller height, nothing will happen.
         public var updateHeightOnContentSizeCategoryChange: Bool = true
+
+        /// Defines whether or not the bottom sheet can be dismissed. If set to `false`, it allows the bottom sheet to still be animated while swipping if the <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/swipeMode-swift.property> is different from <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/SwipeMode-swift.enum/none>.
+        public var canBeDismissed: Bool = true
 
         /// Initializes a new Behavior.
         public init(appearingAnimationDuration: Double = 0.5,
@@ -182,6 +201,8 @@ extension Array where Element == BottomSheetController.Behavior.HeightValue {
                 return screenHeight * Swift.min(Swift.max(value, 0.0), 1.0)
             case let .childRatio(value):
                 return childHeight * Swift.min(Swift.max(value, 0.0), 1.0)
+            case let .custom(block):
+                return block()
             }
         }.sorted()
     }

@@ -349,8 +349,27 @@ private extension BottomSheetController {
         let yTranslation: CGFloat = gesture.translation(in: bottomContainerView).y
         let yVelocity: CGFloat = gesture.velocity(in: bottomContainerView).y
         let maxHeight: CGFloat = behavior.heightMode.maximumHeight(with: lastChildHeightAtPanGestureStart, screenHeight: view.frame.height, defaultMaximumHeight: defaultMaximumHeight)
-        if yTranslation > lastHeightAtPanGestureStart * behavior.heightPercentageThresholdToDismiss || yVelocity > behavior.velocityThresholdToDismiss {
-            dismiss(animated: true)
+        if (yTranslation > lastHeightAtPanGestureStart * behavior.heightPercentageThresholdToDismiss || yVelocity > behavior.velocityThresholdToDismiss) {
+            switch behavior.heightMode {
+            case .specific:
+                let destinationHeight: CGFloat? = behavior.heightMode.nextHeight(with: lastChildHeightAtPanGestureStart,
+                                                                                 screenHeight: view.frame.height,
+                                                                                 defaultMaximumHeight: defaultMaximumHeight,
+                                                                                 originHeight: lastChildHeightAtPanGestureStart,
+                                                                                 goingUp: false)
+                if let destinationHeight = destinationHeight {
+                    bottomContainerHeightConstraint.constant = destinationHeight
+                } else if behavior.canBeDismissed {
+                    dismiss(animated: true)
+                } else {
+                    bottomContainerHeightConstraint.constant = behavior.heightMode.minimumHeight(with: lastChildHeightAtPanGestureStart,
+                                                                                                 screenHeight: view.frame.height)
+                }
+                bottomContainerBottomConstraint.constant = 0.0
+                UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
+            default:
+                if behavior.canBeDismissed { dismiss(animated: true) }
+            }
         } else {
             let destinationMaximumHeight: CGFloat = yVelocity < -behavior.velocityThresholdToOpenAtMaxHeight ? maxHeight : calculateExpectedHeight(lastChildHeightAtPanGestureStart)
             bottomContainerHeightConstraint.constant = destinationMaximumHeight
