@@ -335,7 +335,7 @@ private extension BottomSheetController {
             newBottom = 0.0
         } else if destinationHeight < minHeight {
             newHeight = minHeight
-            newBottom = behavior.canBeDismissed ? destinationHeight - minHeight : behavior.elasticityFunction(destinationHeight - minHeight)
+            newBottom = behavior.canBeDismissed ? destinationHeight - minHeight : -behavior.elasticityFunction(abs(destinationHeight - minHeight))
         } else {
             newHeight = destinationHeight
             newBottom = 0.0
