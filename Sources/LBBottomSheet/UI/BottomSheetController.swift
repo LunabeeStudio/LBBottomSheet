@@ -369,7 +369,14 @@ private extension BottomSheetController {
                     UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
                 }
             default:
-                if behavior.canBeDismissed { dismiss(animated: true) }
+                if behavior.canBeDismissed {
+                    dismiss(animated: true)
+                } else {
+                    bottomContainerHeightConstraint.constant = behavior.heightMode.minimumHeight(with: lastChildHeightAtPanGestureStart,
+                                                                                                 screenHeight: UIScreen.main.bounds.height)
+                    bottomContainerBottomConstraint.constant = 0.0
+                    UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
+                }
             }
         } else {
             switch behavior.heightMode {
