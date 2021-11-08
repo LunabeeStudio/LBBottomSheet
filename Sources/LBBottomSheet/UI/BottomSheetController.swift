@@ -355,7 +355,7 @@ private extension BottomSheetController {
                 let destinationHeight: CGFloat? = behavior.heightMode.nextHeight(with: lastChildHeightAtPanGestureStart,
                                                                                  screenHeight: UIScreen.main.bounds.height,
                                                                                  defaultMaximumHeight: defaultMaximumHeight,
-                                                                                 originHeight: lastChildHeightAtPanGestureStart,
+                                                                                 originHeight: lastHeightAtPanGestureStart,
                                                                                  goingUp: false)
                 if let destinationHeight = destinationHeight {
                     bottomContainerHeightConstraint.constant = destinationHeight
