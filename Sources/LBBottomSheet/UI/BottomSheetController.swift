@@ -328,8 +328,8 @@ private extension BottomSheetController {
         let childHeight: CGFloat = lastChildHeightAtPanGestureStart
         let newHeight: CGFloat
         let newBottom: CGFloat
-        let minHeight: CGFloat = behavior.heightMode.minimumHeight(with: childHeight, screenHeight: UIScreen.main.bounds)
-        let maxHeight: CGFloat = behavior.heightMode.maximumHeight(with: childHeight, screenHeight: UIScreen.main.bounds, defaultMaximumHeight: defaultMaximumHeight)
+        let minHeight: CGFloat = behavior.heightMode.minimumHeight(with: childHeight, screenHeight: UIScreen.main.bounds.height)
+        let maxHeight: CGFloat = behavior.heightMode.maximumHeight(with: childHeight, screenHeight: UIScreen.main.bounds.height, defaultMaximumHeight: defaultMaximumHeight)
         if destinationHeight > maxHeight {
             newHeight = maxHeight + behavior.elasticityFunction(destinationHeight - maxHeight)
             newBottom = 0.0
@@ -348,12 +348,12 @@ private extension BottomSheetController {
     func processPanGestureEnded(_ gesture: UIPanGestureRecognizer) {
         let yTranslation: CGFloat = gesture.translation(in: bottomContainerView).y
         let yVelocity: CGFloat = gesture.velocity(in: bottomContainerView).y
-        let maxHeight: CGFloat = behavior.heightMode.maximumHeight(with: lastChildHeightAtPanGestureStart, screenHeight: UIScreen.main.bounds, defaultMaximumHeight: defaultMaximumHeight)
+        let maxHeight: CGFloat = behavior.heightMode.maximumHeight(with: lastChildHeightAtPanGestureStart, screenHeight: UIScreen.main.bounds.height, defaultMaximumHeight: defaultMaximumHeight)
         if (yTranslation > lastHeightAtPanGestureStart * behavior.heightPercentageThresholdToDismiss || yVelocity > behavior.velocityThresholdToDismiss) {
             switch behavior.heightMode {
             case .specific:
                 let destinationHeight: CGFloat? = behavior.heightMode.nextHeight(with: lastChildHeightAtPanGestureStart,
-                                                                                 screenHeight: UIScreen.main.bounds,
+                                                                                 screenHeight: UIScreen.main.bounds.height,
                                                                                  defaultMaximumHeight: defaultMaximumHeight,
                                                                                  originHeight: lastChildHeightAtPanGestureStart,
                                                                                  goingUp: false)
@@ -363,7 +363,7 @@ private extension BottomSheetController {
                     dismiss(animated: true)
                 } else {
                     bottomContainerHeightConstraint.constant = behavior.heightMode.minimumHeight(with: lastChildHeightAtPanGestureStart,
-                                                                                                 screenHeight: UIScreen.main.bounds)
+                                                                                                 screenHeight: UIScreen.main.bounds.height)
                 }
                 bottomContainerBottomConstraint.constant = 0.0
                 UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
@@ -387,7 +387,7 @@ private extension BottomSheetController {
         case let .free(minHeight, maxHeight):
             return min(max(bottomContainerHeightConstraint.constant, minHeight ?? 0.0), maxHeight ?? defaultMaximumHeight)
         case let .specific(values):
-            let heightValues: [CGFloat] = values.sortedPointValues(screenHeight: UIScreen.main.bounds, childHeight: childHeight)
+            let heightValues: [CGFloat] = values.sortedPointValues(screenHeight: UIScreen.main.bounds.height, childHeight: childHeight)
             return heightValues.min { abs($0 - bottomContainerHeightConstraint.constant) < abs($1 - bottomContainerHeightConstraint.constant)} ?? 0.0
         }
     }
