@@ -160,10 +160,10 @@ extension BottomSheetController {
         /// As your embedded controller height might be impacted by a font size change, the bottom sheet will update its height too if you use a <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/HeightMode-swift.enum> depending on the embedded controller height.
         ///
         /// If you don't use a <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/HeightMode-swift.enum> depending on the embedded controller height, nothing will happen.
-        public var updateHeightOnContentSizeCategoryChange: Bool = true
+        public var updateHeightOnContentSizeCategoryChange: Bool
 
         /// Defines whether or not the bottom sheet can be dismissed. If set to `false`, it allows the bottom sheet to still be animated while swipping if the <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/swipeMode-swift.property> is different from <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/SwipeMode-swift.enum/none>.
-        public var canBeDismissed: Bool = true
+        public var canBeDismissed: Bool
 
         /// Initializes a new Behavior.
         public init(appearingAnimationDuration: Double = 0.5,
@@ -175,7 +175,9 @@ extension BottomSheetController {
                     velocityThresholdToOpenAtMaxHeight: CGFloat = 700,
                     shouldShowAboveNavigationBar: Bool = false,
                     heightMode: BottomSheetController.Behavior.HeightMode = .fitContent,
-                    elasticityFunction: @escaping (CGFloat) -> CGFloat = BottomSheetConstant.Animation.Elasticity.logarithmic) {
+                    elasticityFunction: @escaping (CGFloat) -> CGFloat = BottomSheetConstant.Animation.Elasticity.logarithmic,
+                    updateHeightOnContentSizeCategoryChange: Bool = true,
+                    canBeDismissed: Bool = true) {
             self.appearingAnimationDuration = appearingAnimationDuration
             self.disappearingAnimationDuration = disappearingAnimationDuration
             self.swipeMode = swipeMode
@@ -186,6 +188,8 @@ extension BottomSheetController {
             self.shouldShowAboveNavigationBar = shouldShowAboveNavigationBar
             self.heightMode = heightMode
             self.elasticityFunction = elasticityFunction
+            self.updateHeightOnContentSizeCategoryChange = updateHeightOnContentSizeCategoryChange
+            self.canBeDismissed = canBeDismissed
         }
     }
 }
