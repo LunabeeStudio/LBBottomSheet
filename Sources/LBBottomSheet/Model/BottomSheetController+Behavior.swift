@@ -83,7 +83,7 @@ extension BottomSheetController {
                 switch self {
                 case let .specific(values):
                     let allValues: [CGFloat] = values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight)
-                    guard let currentIndex = allValues.firstIndex(of: originHeight) else { return nil }
+                    guard let currentIndex = allValues.firstIndex(of: originHeight) ?? (originHeight == defaultMaximumHeight ? allValues.count - 1 : nil) else { return nil }
                     let newIndex: Int = goingUp ? currentIndex + 1 : currentIndex - 1
                     return newIndex < 0 ? nil : min(allValues[min(newIndex, allValues.count - 1)], defaultMaximumHeight)
                 default:
