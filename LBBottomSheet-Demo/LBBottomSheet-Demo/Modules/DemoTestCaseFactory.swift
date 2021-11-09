@@ -122,7 +122,8 @@ final class DemoTestCaseFactory {
                                    Here you have an example of a BottomSheet with specific heights.
                                    This allows you to define multiple positions for your BottomSheet.
 
-                                   👉 This bottom sheet has different height values. When the user releases the bottom sheet, its height will be updated to the predefined nearest one.
+                                   👉 This bottom sheet has different height values: 200.0pts, 50% and 75% of the screen height.
+                                   When the user releases the bottom sheet, its height will be updated to the predefined nearest one.
                                    """,
                      codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/4c4273fbd9a2a44ca7802d3149b2f68e88f8f725/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L133"),
                      theme: {
