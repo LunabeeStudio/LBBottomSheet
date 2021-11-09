@@ -54,8 +54,6 @@ extension BottomSheetController {
             public enum CornerRadiusType {
                 /// The grabber corner radius will be the height of the grabber devided by 2.
                 case rounded
-                /// The grabber corner radius will be the same as the screen one.
-                case screen
                 /// The grabber corner redius will be the given value.
                 /// - Parameters:
                 ///     - value: The corner radius value.

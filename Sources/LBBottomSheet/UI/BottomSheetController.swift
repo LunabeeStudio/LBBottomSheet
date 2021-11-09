@@ -186,8 +186,6 @@ private extension BottomSheetController {
             switch grabber.cornerRadiusType {
             case .rounded:
                 grabberView.layer.cornerRadius = grabber.size.height / 2.0
-            case .screen:
-                grabberView.layer.cornerRadius = UIScreen.main.lbbsCornerRadius
             case let .fixed(value):
                 grabberView.layer.cornerRadius = value
             }
