@@ -20,6 +20,6 @@
 
 import UIKit
 
-extension UIScreen {
+public extension UIScreen {
     var lbbsCornerRadius: CGFloat { UIScreen.main.value(forKey: ["Radius", "Corner", "display", "_"].reversed().joined()) as? CGFloat ?? 0.0 }
 }
