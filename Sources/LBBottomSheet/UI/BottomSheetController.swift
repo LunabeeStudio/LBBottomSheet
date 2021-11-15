@@ -145,9 +145,14 @@ public final class BottomSheetController: UIViewController {
         bottomSheetPositionDelegate?.bottomSheetPositionDidUpdate(y: UIScreen.main.bounds.height - bottomContainerHeightConstraint.constant - bottomContainerBottomConstraint.constant)
     }
 
+    @available(*, deprecated, message: "Use the bottom sheet provided dismiss function instead of the default one. Otherwise this will break the dismissing animation.", renamed: "dismiss(completion:)")
+    public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.dismiss(animated: flag, completion: completion)
+    }
+
     public func dismiss(_ completion: (() -> Void)? = nil) {
         makeDisappearing {
-            self.dismiss(animated: false, completion: completion)
+            super.dismiss(animated: false, completion: completion)
         }
     }
 }
