@@ -151,7 +151,7 @@ public final class BottomSheetController: UIViewController {
         }
     }
 
-    @available(swift, obsoleted: 5.0, message: "Use the bottom sheet provided dismiss function instead of the default one. Otherwise this will break the dismissing animation.", renamed: "dismiss(_:)")
+    @available(swift, obsoleted: 5.0, message: "Use the bottom sheet provided dismiss function instead of the default one.", renamed: "dismiss(_:)")
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         super.dismiss(animated: flag, completion: completion)
     }
