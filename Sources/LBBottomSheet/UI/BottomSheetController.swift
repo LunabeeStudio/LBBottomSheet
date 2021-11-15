@@ -369,7 +369,7 @@ private extension BottomSheetController {
                     bottomContainerBottomConstraint.constant = 0.0
                     UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
                 } else if behavior.allowsSwipeToDismiss {
-                    dismiss(animated: true)
+                    dismiss()
                 } else {
                     bottomContainerHeightConstraint.constant = behavior.heightMode.minimumHeight(with: lastChildHeightAtPanGestureStart,
                                                                                                  screenHeight: UIScreen.main.bounds.height)
@@ -378,7 +378,7 @@ private extension BottomSheetController {
                 }
             default:
                 if behavior.allowsSwipeToDismiss {
-                    dismiss(animated: true)
+                    dismiss()
                 } else {
                     bottomContainerHeightConstraint.constant = behavior.heightMode.minimumHeight(with: lastChildHeightAtPanGestureStart,
                                                                                                  screenHeight: UIScreen.main.bounds.height)
@@ -429,7 +429,7 @@ private extension BottomSheetController {
     @objc func tapGestureRecognizerHandler(_ gesture: UITapGestureRecognizer) {
         switch gesture.state {
         case .ended:
-            dismiss(animated: true)
+            dismiss()
         default:
             break
         }
@@ -482,7 +482,7 @@ extension BottomSheetController: UIGestureRecognizerDelegate {
 // MARK: - Actions -
 private extension BottomSheetController {
     @IBAction func dismissButtonPressed(_ sender: Any) {
-        if behavior.canTouchDimmingBackgroundToDismiss { dismiss(animated: true) }
+        if behavior.canTouchDimmingBackgroundToDismiss { dismiss() }
     }
 }
 
