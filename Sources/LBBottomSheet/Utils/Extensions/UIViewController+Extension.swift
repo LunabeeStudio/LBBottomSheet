@@ -55,7 +55,7 @@ public extension UIViewController {
     /// Presents a given controller as a bottom sheet.
     /// - Parameters:
     ///   - controller: The controller to present in a bottom sheet.
-    ///   - positionDelegate: A `UINavigationController` which may contain controllers being a <doc:LBBottomSheet/BottomSheetPositionDelegate> to get the bottom sheet position updates if they need to update their content bottom inset.
+    ///   - positionDelegate: A `UINavigationController` which may contain controllers being a <doc:LBBottomSheet/BottomSheetPositionDelegate> to get the bottom sheet position updates if they need to update their content bottom inset. Each time the `topViewController` changes, it becomes the bottom sheet <doc:LBBottomSheet/BottomSheetPositionDelegate> if it implements this protocol.
     ///   - theme: A Theme to customize the bottom sheet appearance.
     ///   - behavior: A Behavior to customize the way the bottom sheet behaves.
     /// - Returns: A reference to the created `BottomSheetController`.
