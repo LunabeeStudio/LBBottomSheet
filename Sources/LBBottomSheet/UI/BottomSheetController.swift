@@ -142,7 +142,7 @@ public final class BottomSheetController: UIViewController {
     /// Overriden to call the position delegate update method after a layout calculation.
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        bottomSheetPositionDelegate?.bottomSheetPositionDidUpdate(y: UIScreen.main.bounds.height - bottomContainerHeightConstraint.constant - bottomContainerBottomConstraint.constant)
+        notifyBottomSheetPositionUpdate()
     }
 
     /// Use this function to dismiss the bottom sheet. This will animate the disappearing based on the behavior configuration.
@@ -310,6 +310,13 @@ private extension BottomSheetController {
         }) { _ in
             completion()
         }
+    }
+}
+
+// MARK: - BottomSheet position update -
+private extension BottomSheetController {
+    func notifyBottomSheetPositionUpdate() {
+        bottomSheetPositionDelegate?.bottomSheetPositionDidUpdate(y: UIScreen.main.bounds.height - bottomContainerHeightConstraint.constant - bottomContainerBottomConstraint.constant)
     }
 }
 
@@ -496,6 +503,7 @@ private extension BottomSheetController {
 extension BottomSheetController: UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         bottomSheetPositionDelegate = viewController as? BottomSheetPositionDelegate
+        notifyBottomSheetPositionUpdate()
         originalChildNavigationControllerDelegate?.navigationController?(navigationController, willShow: viewController, animated: animated)
     }
     public func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
