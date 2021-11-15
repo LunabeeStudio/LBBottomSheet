@@ -39,7 +39,9 @@ public final class BottomSheetController: UIViewController {
     public var topInset: CGFloat { (theme.grabber?.topMargin ?? 0.0) * 2.0 + (theme.grabber?.size.height ?? 0.0) }
 
     /// The delegate to get the bottom sheet position updates if the presenting controller needs to update its content bottom inset.
-    public weak var bottomSheetPositionDelegate: BottomSheetPositionDelegate?
+    public weak var bottomSheetPositionDelegate: BottomSheetPositionDelegate? {
+        didSet { notifyBottomSheetPositionUpdate() }
+    }
 
     @IBOutlet private var mainDismissButton: UIButton!
     @IBOutlet private var grabberView: UIView!
