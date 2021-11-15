@@ -495,10 +495,10 @@ private extension BottomSheetController {
 // MARK: - UINavigationController delegate -
 extension BottomSheetController: UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        bottomSheetPositionDelegate = viewController as? BottomSheetPositionDelegate
         originalChildNavigationControllerDelegate?.navigationController?(navigationController, willShow: viewController, animated: animated)
     }
     public func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-        bottomSheetPositionDelegate = viewController as? BottomSheetPositionDelegate
         originalChildNavigationControllerDelegate?.navigationController?(navigationController, didShow: viewController, animated: animated)
     }
     public func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
