@@ -145,6 +145,7 @@ public final class BottomSheetController: UIViewController {
         bottomSheetPositionDelegate?.bottomSheetPositionDidUpdate(y: UIScreen.main.bounds.height - bottomContainerHeightConstraint.constant - bottomContainerBottomConstraint.constant)
     }
 
+    /// Use this function to dismiss the bottom sheet. This will animate the disappearing based on the behavior configuration.
     public func dismiss(_ completion: (() -> Void)? = nil) {
         makeDisappearing {
             super.dismiss(animated: false, completion: completion)
