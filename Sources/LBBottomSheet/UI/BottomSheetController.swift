@@ -98,7 +98,6 @@ public final class BottomSheetController: UIViewController {
         }
     }
     private var isFirstLoad: Bool = true
-    private var canDismiss: Bool = false
 
     /// Overriden to customize the way the controller is initialized.
     public override func viewDidLoad() {
@@ -146,16 +145,9 @@ public final class BottomSheetController: UIViewController {
         bottomSheetPositionDelegate?.bottomSheetPositionDidUpdate(y: UIScreen.main.bounds.height - bottomContainerHeightConstraint.constant - bottomContainerBottomConstraint.constant)
     }
 
-    /// Overriden to customize the way this controller is dismissed.
-    public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        guard canDismiss else { return }
-        super.dismiss(animated: flag, completion: completion)
-    }
-
-    public func dismiss() {
+    public func dismiss(_ completion: (() -> Void)? = nil) {
         makeDisappearing {
-            self.canDismiss = true
-            self.dismiss(animated: false)
+            self.dismiss(animated: false, completion: completion)
         }
     }
 }
