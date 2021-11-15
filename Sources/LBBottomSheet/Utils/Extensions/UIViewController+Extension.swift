@@ -51,23 +51,6 @@ public extension UIViewController {
         present(bottomSheetController, animated: false, completion: nil)
         return bottomSheetController
     }
-
-    /// Presents a given controller as a bottom sheet.
-    /// - Parameters:
-    ///   - controller: The controller to present in a bottom sheet.
-    ///   - positionDelegate: A `UINavigationController` which may contain controllers being a <doc:LBBottomSheet/BottomSheetPositionDelegate> to get the bottom sheet position updates if they need to update their content bottom inset. Each time the `topViewController` changes, it becomes the bottom sheet <doc:LBBottomSheet/BottomSheetPositionDelegate> if it implements this protocol.
-    ///   - theme: A Theme to customize the bottom sheet appearance.
-    ///   - behavior: A Behavior to customize the way the bottom sheet behaves.
-    /// - Returns: A reference to the created `BottomSheetController`.
-    @discardableResult
-    func presentAsBottomSheet(_ controller: UIViewController,
-                              positionDelegate: UINavigationController,
-                              theme: BottomSheetController.Theme = BottomSheetController.Theme(),
-                              behavior: BottomSheetController.Behavior = BottomSheetController.Behavior()) -> BottomSheetController {
-        let bottomSheetController: BottomSheetController = BottomSheetController.controller(bottomSheetChild: controller, bottomSheetPositionDelegate: positionDelegate, theme: theme, behavior: behavior)
-        present(bottomSheetController, animated: false, completion: nil)
-        return bottomSheetController
-    }
 }
 
 // MARK: - Internal extensions -

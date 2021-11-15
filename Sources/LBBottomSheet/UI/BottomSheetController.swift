@@ -38,6 +38,9 @@ public final class BottomSheetController: UIViewController {
     /// You can have a look at <doc:/LBBottomSheet/BottomSheetController/Theme-swift.struct/Grabber-swift.struct> to check the <doc:/LBBottomSheet/BottomSheetController/Theme-swift.struct/Grabber-swift.struct/topMargin>.
     public var topInset: CGFloat { (theme.grabber?.topMargin ?? 0.0) * 2.0 + (theme.grabber?.size.height ?? 0.0) }
 
+    /// The delegate to get the bottom sheet position updates if the presenting controller needs to update its content bottom inset.
+    public weak var bottomSheetPositionDelegate: BottomSheetPositionDelegate?
+
     @IBOutlet private var mainDismissButton: UIButton!
     @IBOutlet private var grabberView: UIView!
     @IBOutlet private var gestureView: UIView!
@@ -52,9 +55,6 @@ public final class BottomSheetController: UIViewController {
     @IBOutlet private var bottomContainerBottomConstraint: NSLayoutConstraint!
     @IBOutlet private var bottomContainerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private var bottomContainerTrailingConstraint: NSLayoutConstraint!
-
-    private weak var bottomSheetPositionDelegate: BottomSheetPositionDelegate?
-    private weak var originalChildNavigationControllerDelegate: UINavigationControllerDelegate?
 
     public private(set) var theme: Theme = Theme()
     public private(set) var behavior: Behavior = Behavior()
@@ -164,16 +164,6 @@ internal extension BottomSheetController {
         let bottomController: BottomSheetController = UIStoryboard(name: "BottomSheet", bundle: Bundle.module).instantiateInitialViewController() as! BottomSheetController
         bottomController.bottomSheetChild = bottomSheetChild
         bottomController.bottomSheetPositionDelegate = bottomSheetPositionDelegate
-        bottomController.theme = theme
-        bottomController.behavior = behavior
-        return bottomController
-    }
-
-    static func controller(bottomSheetChild: UIViewController, bottomSheetPositionDelegate: UINavigationController? = nil, theme: Theme = Theme(), behavior: Behavior = Behavior()) -> BottomSheetController {
-        let bottomController: BottomSheetController = UIStoryboard(name: "BottomSheet", bundle: Bundle.module).instantiateInitialViewController() as! BottomSheetController
-        bottomController.bottomSheetChild = bottomSheetChild
-        bottomController.originalChildNavigationControllerDelegate = bottomSheetPositionDelegate?.delegate
-        bottomSheetPositionDelegate?.delegate = bottomController
         bottomController.theme = theme
         bottomController.behavior = behavior
         return bottomController
@@ -496,29 +486,5 @@ extension BottomSheetController: UIGestureRecognizerDelegate {
 private extension BottomSheetController {
     @IBAction func dismissButtonPressed(_ sender: Any) {
         if behavior.canTouchDimmingBackgroundToDismiss { dismiss() }
-    }
-}
-
-// MARK: - UINavigationController delegate -
-extension BottomSheetController: UINavigationControllerDelegate {
-    public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        bottomSheetPositionDelegate = viewController as? BottomSheetPositionDelegate
-        notifyBottomSheetPositionUpdate()
-        originalChildNavigationControllerDelegate?.navigationController?(navigationController, willShow: viewController, animated: animated)
-    }
-    public func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-        originalChildNavigationControllerDelegate?.navigationController?(navigationController, didShow: viewController, animated: animated)
-    }
-    public func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        originalChildNavigationControllerDelegate?.navigationController?(navigationController, interactionControllerFor: animationController)
-    }
-    public func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        originalChildNavigationControllerDelegate?.navigationController?(navigationController, animationControllerFor: operation, from: fromVC, to: toVC)
-    }
-    public func navigationControllerSupportedInterfaceOrientations(_ navigationController: UINavigationController) -> UIInterfaceOrientationMask {
-        originalChildNavigationControllerDelegate?.navigationControllerSupportedInterfaceOrientations?(navigationController) ?? .all
-    }
-    public func navigationControllerPreferredInterfaceOrientationForPresentation(_ navigationController: UINavigationController) -> UIInterfaceOrientation {
-        originalChildNavigationControllerDelegate?.navigationControllerPreferredInterfaceOrientationForPresentation?(navigationController) ?? .portrait
     }
 }
