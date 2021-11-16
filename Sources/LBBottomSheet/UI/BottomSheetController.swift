@@ -301,6 +301,7 @@ private extension BottomSheetController {
 // MARK: - BottomSheet position update -
 private extension BottomSheetController {
     func notifyBottomSheetPositionUpdate() {
+        guard isViewLoaded else { return }
         bottomSheetPositionDelegate?.bottomSheetPositionDidUpdate(y: UIScreen.main.bounds.height - bottomContainerHeightConstraint.constant - bottomContainerBottomConstraint.constant)
     }
 }
