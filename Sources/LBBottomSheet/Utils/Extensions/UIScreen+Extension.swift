@@ -21,9 +21,5 @@
 import UIKit
 
 public extension UIScreen {
-    var lbbsCornerRadius: CGFloat {
-        let propertyName: String = ["Radius", "Corner", "display", "_"].reversed().joined()
-        guard Mirror.lbbsGetTypesOfProperties(in: UIScreen.self)?.contains(propertyName) == true else { return 0.0 }
-        return  UIScreen.main.value(forKey: propertyName) as? CGFloat ?? 0.0
-    }
+    var lbbsCornerRadius: CGFloat { UIScreen.main.value(forKey: ["Radius", "Corner", "display", "_"].reversed().joined()) as? CGFloat ?? 0.0 }
 }
