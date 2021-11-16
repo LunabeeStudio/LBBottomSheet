@@ -134,8 +134,9 @@ final class DemoTestCaseFactory {
                          BottomSheetController.Behavior(heightMode: .specific(values: [
                             .fixed(value: 200.0),
                             .screenRatio(value: 0.5),
-                            .screenRatio(value: 0.75)
-                         ]))
+                            .screenRatio(value: 0.75),
+                            .screenRatio(value: 1.0)
+                         ], heightLimit: .screen))
                      })
     ]
 }
