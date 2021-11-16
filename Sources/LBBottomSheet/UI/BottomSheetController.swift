@@ -366,7 +366,10 @@ private extension BottomSheetController {
                 if let destinationHeight = destinationHeight {
                     bottomContainerHeightConstraint.constant = destinationHeight
                     bottomContainerBottomConstraint.constant = 0.0
-                    UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
+                    UIView.animate(withDuration: 0.2) {
+                        self.updateCornerRadiusFor(destinationHeight: destinationHeight)
+                        self.view.layoutIfNeeded()
+                    }
                 } else if behavior.allowsSwipeToDismiss {
                     dismiss()
                 } else {
@@ -420,6 +423,10 @@ private extension BottomSheetController {
             let heightValues: [CGFloat] = values.sortedPointValues(screenHeight: UIScreen.main.bounds.height, childHeight: childHeight)
             return min(heightValues.min { abs($0 - bottomContainerHeightConstraint.constant) < abs($1 - bottomContainerHeightConstraint.constant) } ?? 0.0, heightLimit.value(from: self, screenHeight: UIScreen.main.bounds.height))
         }
+    }
+
+    func updateCornerRadiusFor(destinationHeight: CGFloat) {
+        bottomContainerView.layer.cornerRadius = destinationHeight == UIScreen.main.bounds.height ? UIScreen.main.lbbsCornerRadius : theme.cornerRadius
     }
 }
 
