@@ -694,7 +694,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/LunabeeStudio/LBBottomSheet";
 			requirement = {
-				branch = develop;
+				branch = "feature/support-fullscreen-height";
 				kind = branch;
 			};
 		};

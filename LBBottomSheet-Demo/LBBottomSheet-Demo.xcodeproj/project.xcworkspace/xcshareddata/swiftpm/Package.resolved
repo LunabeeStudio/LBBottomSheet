@@ -5,8 +5,8 @@
         "package": "LBBottomSheet",
         "repositoryURL": "https://github.com/LunabeeStudio/LBBottomSheet",
         "state": {
-          "branch": "develop",
-          "revision": "9f290fe40732bcba09a666e39f0d13f6e98c6e3f",
+          "branch": "feature/support-fullscreen-height",
+          "revision": "fc3eb3f54de1f0e79aa056fa863b9de95555e0fb",
           "version": null
         }
       }
