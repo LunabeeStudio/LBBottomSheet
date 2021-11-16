@@ -55,6 +55,14 @@ public extension UIViewController {
 
 // MARK: - Internal extensions -
 internal extension UIViewController {
+    func lbbsRearControllerTopInset(includeNavigationBar: Bool = true) -> CGFloat {
+        var topInset: CGFloat = UIApplication.shared.lbbsKeySceneWindow?.safeAreaInsets.top ?? 0.0
+        if let navController = presentingViewController as? UINavigationController ?? presentingViewController?.navigationController, !navController.isNavigationBarHidden && includeNavigationBar {
+            topInset = navController.navigationBar.frame.maxY + 8.0
+        }
+        return topInset
+    }
+
     func lbbsAddChildViewController(_ childController: UIViewController, containerView: UIView) {
         addChild(childController)
         containerView.lbbsAddFullSubview(childController.view)

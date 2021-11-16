@@ -70,13 +70,6 @@ public final class BottomSheetController: UIViewController {
     private var lastChildHeightAtPanGestureStart: CGFloat = 0.0
     private var bottomSheetChild: UIViewController!
     private var isChildAlreadyVisible: Bool = false
-    private var defaultMaximumHeight: CGFloat {
-        var topMargin: CGFloat = UIApplication.shared.lbbsKeySceneWindow?.safeAreaInsets.top ?? 0.0
-        if let navController = presentingViewController as? UINavigationController ?? presentingViewController?.navigationController, !behavior.shouldShowAboveNavigationBar {
-            topMargin = navController.navigationBar.frame.maxY + 8.0
-        }
-        return UIScreen.main.bounds.height - topMargin
-    }
     private var childHeight: CGFloat {
         if let heightDeclaringController = bottomSheetChild.lbbsFindControllerDeclaringPreferredHeightInBottomSheet() {
             var height: CGFloat = heightDeclaringController.value(forKey: BottomSheetConstant.preferredHeightVariableName) as? CGFloat ?? 0.0
@@ -342,7 +335,7 @@ private extension BottomSheetController {
         let newHeight: CGFloat
         let newBottom: CGFloat
         let minHeight: CGFloat = behavior.heightMode.minimumHeight(with: childHeight, screenHeight: UIScreen.main.bounds.height)
-        let maxHeight: CGFloat = behavior.heightMode.maximumHeight(with: childHeight, screenHeight: UIScreen.main.bounds.height, defaultMaximumHeight: defaultMaximumHeight)
+        let maxHeight: CGFloat = behavior.heightMode.maximumHeight(with: childHeight, screenHeight: UIScreen.main.bounds.height, from: self)
         if destinationHeight > maxHeight {
             newHeight = maxHeight + behavior.elasticityFunction(destinationHeight - maxHeight)
             newBottom = 0.0
@@ -366,7 +359,7 @@ private extension BottomSheetController {
             case .specific:
                 let destinationHeight: CGFloat? = behavior.heightMode.nextHeight(with: lastChildHeightAtPanGestureStart,
                                                                                  screenHeight: UIScreen.main.bounds.height,
-                                                                                 defaultMaximumHeight: defaultMaximumHeight,
+                                                                                 from: self,
                                                                                  originHeight: lastHeightAtPanGestureStart,
                                                                                  goingUp: false)
                 if let destinationHeight = destinationHeight {
@@ -396,10 +389,10 @@ private extension BottomSheetController {
             case .specific:
                 let isFastSwipeUpGestureDetected: Bool = yVelocity < -behavior.velocityThresholdToOpenAtMaxHeight
                 let nextUpperHeight: CGFloat = behavior.heightMode.nextHeight(with: lastChildHeightAtPanGestureStart,
-                                                                               screenHeight: UIScreen.main.bounds.height,
-                                                                               defaultMaximumHeight: defaultMaximumHeight,
-                                                                               originHeight: lastHeightAtPanGestureStart,
-                                                                               goingUp: true) ?? defaultMaximumHeight
+                                                                              screenHeight: UIScreen.main.bounds.height,
+                                                                              from: self,
+                                                                              originHeight: lastHeightAtPanGestureStart,
+                                                                              goingUp: true) ?? (UIScreen.main.bounds.height - lbbsRearControllerTopInset())
                 let expectedHeight: CGFloat = calculateExpectedHeight(lastChildHeightAtPanGestureStart)
                 let destinationHeight: CGFloat = isFastSwipeUpGestureDetected ? nextUpperHeight : expectedHeight
                 bottomContainerHeightConstraint.constant = destinationHeight
@@ -418,13 +411,13 @@ private extension BottomSheetController {
     func calculateExpectedHeight(_ givenChildHeight: CGFloat? = nil) -> CGFloat {
         let childHeight: CGFloat = givenChildHeight ?? self.childHeight
         switch behavior.heightMode {
-        case .fitContent:
-            return min(childHeight, defaultMaximumHeight)
-        case let .free(minHeight, maxHeight):
-            return min(max(bottomContainerHeightConstraint.constant, minHeight ?? 0.0), maxHeight ?? defaultMaximumHeight)
-        case let .specific(values):
+        case let .fitContent(heightLimit):
+            return min(childHeight, heightLimit.value(from: self, screenHeight: UIScreen.main.bounds.height))
+        case let .free(minHeight, maxHeight, heightLimit):
+            return min(max(bottomContainerHeightConstraint.constant, minHeight ?? 0.0), maxHeight ?? heightLimit.value(from: self, screenHeight: UIScreen.main.bounds.height))
+        case let .specific(values, heightLimit):
             let heightValues: [CGFloat] = values.sortedPointValues(screenHeight: UIScreen.main.bounds.height, childHeight: childHeight)
-            return min(heightValues.min { abs($0 - bottomContainerHeightConstraint.constant) < abs($1 - bottomContainerHeightConstraint.constant) } ?? 0.0, defaultMaximumHeight)
+            return min(heightValues.min { abs($0 - bottomContainerHeightConstraint.constant) < abs($1 - bottomContainerHeightConstraint.constant) } ?? 0.0, heightLimit.value(from: self, screenHeight: UIScreen.main.bounds.height))
         }
     }
 }

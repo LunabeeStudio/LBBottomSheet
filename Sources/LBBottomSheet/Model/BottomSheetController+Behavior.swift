@@ -18,7 +18,7 @@
 //  Created by Lunabee Studio / Date - 12/10/2021 - for the LBBottomSheet Swift Package.
 //
 
-import CoreGraphics
+import UIKit
 
 extension BottomSheetController {
     /// Struct used to define the behavior of a BottomSheetController.
@@ -43,51 +43,55 @@ extension BottomSheetController {
             /// ```swift
             /// @objc var preferredHeightInBottomSheet: CGFloat { /* Do you custom calculation here */ }
             /// ```
-            case fitContent
+            /// - Parameters:
+            ///     - heightLimit: The height limit the bottom sheet must not exceed.
+            case fitContent(heightLimit: HeightLimit = .navigationBar)
             /// The bottom sheet height will be contained between `minHeight` and `maxHeight` and the bottom sheet will remain where the user releases it.
             /// - Parameters:
             ///     - minHeight: The minimum height to use for the bottom sheet.
             ///     - maxHeight: The maximum height to use for the bottom sheet.
-            case free(minHeight: CGFloat? = nil, maxHeight: CGFloat? = nil)
+            ///     - heightLimit: The height limit the bottom sheet must not exceed.
+            case free(minHeight: CGFloat? = nil, maxHeight: CGFloat? = nil, heightLimit: HeightLimit = .navigationBar)
             /// The bottom sheet will have multiple height values. When the user releases it, it will be attached to the nearest provided specific value.
             /// When presented, the bottom sheet will use the minimum value. It can be swipped up to the maximum value. You don't have to take care of the values order, the bottom sheet will sort them to find the matching one.
             /// - Parameters:
             ///     - values: An array of `HeightValue` values to use with the bottom sheet if we need to manage multiple positions.
-            case specific(values: [HeightValue])
+            ///     - heightLimit: The height limit the bottom sheet must not exceed.
+            case specific(values: [HeightValue], heightLimit: HeightLimit = .navigationBar)
 
             internal func minimumHeight(with childHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
                 switch self {
                 case .fitContent:
                     return max(childHeight, 0.0)
-                case let .free(minHeight , _):
+                case let .free(minHeight , _, _):
                     return minHeight ?? 0.0
-                case let .specific(values):
+                case let .specific(values, _):
                     return values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight).first ?? 0.0
                 }
             }
 
-            internal func maximumHeight(with childHeight: CGFloat, screenHeight: CGFloat, defaultMaximumHeight: CGFloat) -> CGFloat {
+            internal func maximumHeight(with childHeight: CGFloat, screenHeight: CGFloat, from controller: UIViewController) -> CGFloat {
                 switch self {
-                case .fitContent:
-                    return min(childHeight, defaultMaximumHeight)
-                case let .free(_ , maxHeight):
-                    guard let maxHeight = maxHeight else { return defaultMaximumHeight }
-                    return min(maxHeight, defaultMaximumHeight)
-                case let .specific(values):
-                    guard let maxHeight = values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight).last else { return defaultMaximumHeight }
-                    return min(maxHeight, defaultMaximumHeight)
+                case let .fitContent(heightLimit):
+                    return min(childHeight, heightLimit.value(from: controller, screenHeight: screenHeight))
+                case let .free(_ , maxHeight, heightLimit):
+                    guard let maxHeight = maxHeight else { return heightLimit.value(from: controller, screenHeight: screenHeight) }
+                    return min(maxHeight, heightLimit.value(from: controller, screenHeight: screenHeight))
+                case let .specific(values, heightLimit):
+                    guard let maxHeight = values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight).last else { return heightLimit.value(from: controller, screenHeight: screenHeight) }
+                    return min(maxHeight, heightLimit.value(from: controller, screenHeight: screenHeight))
                 }
             }
 
-            internal func nextHeight(with childHeight: CGFloat, screenHeight: CGFloat, defaultMaximumHeight: CGFloat, originHeight: CGFloat, goingUp: Bool) -> CGFloat? {
+            internal func nextHeight(with childHeight: CGFloat, screenHeight: CGFloat, from controller: UIViewController, originHeight: CGFloat, goingUp: Bool) -> CGFloat? {
                 switch self {
-                case let .specific(values):
+                case let .specific(values, heightLimit):
                     let allValues: [CGFloat] = values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight)
-                    guard let currentIndex = allValues.firstIndex(of: originHeight) ?? (originHeight == defaultMaximumHeight ? allValues.count - 1 : nil) else { return nil }
+                    guard let currentIndex = allValues.firstIndex(of: originHeight) ?? (originHeight == heightLimit.value(from: controller, screenHeight: screenHeight) ? allValues.count - 1 : nil) else { return nil }
                     let newIndex: Int = goingUp ? currentIndex + 1 : currentIndex - 1
-                    return newIndex < 0 ? nil : min(allValues[min(newIndex, allValues.count - 1)], defaultMaximumHeight)
+                    return newIndex < 0 ? nil : min(allValues[min(newIndex, allValues.count - 1)], heightLimit.value(from: controller, screenHeight: screenHeight))
                 default:
-                    return goingUp ? maximumHeight(with: childHeight, screenHeight: screenHeight, defaultMaximumHeight: defaultMaximumHeight) : minimumHeight(with: childHeight, screenHeight: screenHeight)
+                    return goingUp ? maximumHeight(with: childHeight, screenHeight: screenHeight, from: controller) : minimumHeight(with: childHeight, screenHeight: screenHeight)
                 }
             }
         }
@@ -106,13 +110,37 @@ extension BottomSheetController {
             /// - Parameters:
             ///     - value: A percentage (between 0.0 and 1.0) that will be applied to the height of the controller embedded in the bottom sheet.
             case childRatio(value: CGFloat)
-            /// Defines a height being obtained thanks to a block.
+            /// Defines a height value being calculated by the given block.
             /// - Parameters:
             ///     - heightBlock: A block that must return the needed height.
             case custom(_ heightBlock: () -> CGFloat)
 
             /// This is a shortcut allowing you to have in your specific values, one matching the embedded controller `preferredHeightInBottomSheet` value.
             public static let fitContent: HeightValue = .childRatio(value: 1.0)
+            /// This is a shortcut allowing you to have in your specific values, one matching the full screen height.
+            public static let fullscreen: HeightValue = .screenRatio(value: 1.0)
+        }
+
+        /// An enum describing the available bottom sheet height limits.
+        public enum HeightLimit {
+            /// The bottom sheet height limit will be the bottom of the navigation bar behind the bottom sheet.
+            /// If there is no navigation controller behind the bottom sheet, this is equivalent to <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/HeightLimit-swift.enum/statusBar>.
+            case navigationBar
+            /// The bottom sheet height limit will be the bottom of the status bar.
+            case statusBar
+            /// The bottom sheet height limit will be the top of the screen.
+            case screen
+
+            func value(from controller: UIViewController, screenHeight: CGFloat) -> CGFloat {
+                switch self {
+                case .navigationBar:
+                    return screenHeight - controller.lbbsRearControllerTopInset()
+                case .statusBar:
+                    return screenHeight - controller.lbbsRearControllerTopInset(includeNavigationBar: false)
+                case .screen:
+                    return screenHeight
+                }
+            }
         }
 
         /// The duration of the appearing animation.
@@ -132,21 +160,11 @@ extension BottomSheetController {
         public var velocityThresholdToDismiss: CGFloat = 700
         /// The minimum velocity (in points/second) when swipping the bottom sheet up to open it at its maximum height.
         public var velocityThresholdToOpenAtMaxHeight: CGFloat = 700
-        /// Defines whether or not the bottom sheet height must be limited under the navigation bar behind it.
-        ///
-        /// If the controller presenting the bottom sheet is or is embedded in a navigation controller, it might be possible that the bottom sheet will go over the navigation bar.
-        ///
-        /// Automatically, the bottom sheet will calculate the maximum height it can have not to have a height greater than the screen one.
-        ///
-        /// If this boolean is set to `true`, the bottom sheet height will be limited under the notch/status bar.
-        ///
-        /// If set to `false` (the default value) the bottom sheet height will be limited under the navigation bar.
-        public var shouldShowAboveNavigationBar: Bool = false
         /// The mode used to calculate the bottom sheet height.
-        public var heightMode: HeightMode = .fitContent {
+        public var heightMode: HeightMode = .fitContent() {
             didSet {
                 switch heightMode {
-                case let .specific(values):
+                case let .specific(values, _):
                     guard !values.isEmpty else { fatalError("❌ [LBBottomSheet] ❌: You must provide an HeightValue array containing at least one value for the specific HeightMode.") }
                 default:
                     break
@@ -175,7 +193,7 @@ extension BottomSheetController {
                     velocityThresholdToDismiss: CGFloat = 700,
                     velocityThresholdToOpenAtMaxHeight: CGFloat = 700,
                     shouldShowAboveNavigationBar: Bool = false,
-                    heightMode: BottomSheetController.Behavior.HeightMode = .fitContent,
+                    heightMode: BottomSheetController.Behavior.HeightMode = .fitContent(),
                     elasticityFunction: @escaping (CGFloat) -> CGFloat = BottomSheetConstant.Animation.Elasticity.logarithmic,
                     updateHeightOnContentSizeCategoryChange: Bool = true,
                     allowsSwipeToDismiss: Bool = true,
@@ -187,7 +205,6 @@ extension BottomSheetController {
             self.heightPercentageThresholdToDismiss = heightPercentageThresholdToDismiss
             self.velocityThresholdToDismiss = velocityThresholdToDismiss
             self.velocityThresholdToOpenAtMaxHeight = velocityThresholdToOpenAtMaxHeight
-            self.shouldShowAboveNavigationBar = shouldShowAboveNavigationBar
             self.heightMode = heightMode
             self.elasticityFunction = elasticityFunction
             self.updateHeightOnContentSizeCategoryChange = updateHeightOnContentSizeCategoryChange
