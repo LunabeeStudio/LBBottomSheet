@@ -401,7 +401,10 @@ private extension BottomSheetController {
                 let destinationHeight: CGFloat = isFastSwipeUpGestureDetected ? nextUpperHeight : expectedHeight
                 bottomContainerHeightConstraint.constant = destinationHeight
                 bottomContainerBottomConstraint.constant = 0.0
-                UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
+                UIView.animate(withDuration: 0.2) {
+                    self.updateCornerRadiusFor(destinationHeight: destinationHeight)
+                    self.view.layoutIfNeeded()
+                }
             default:
                 let destinationHeight: CGFloat = calculateExpectedHeight(lastChildHeightAtPanGestureStart)
                 bottomContainerHeightConstraint.constant = destinationHeight
