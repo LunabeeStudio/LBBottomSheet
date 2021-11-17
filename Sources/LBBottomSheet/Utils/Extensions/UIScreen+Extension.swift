@@ -21,5 +21,8 @@
 import UIKit
 
 public extension UIScreen {
-    var lbbsCornerRadius: CGFloat { UIScreen.main.value(forKey: ["Radius", "Corner", "display", "_"].reversed().joined()) as? CGFloat ?? 0.0 }
+    var lbbsCornerRadius: CGFloat {
+        guard let radius = UIScreen.main.value(forKey: ["Radius", "Corner", "display", "_"].reversed().joined()) as? CGFloat else { return 0.0 }
+        return radius + 1.0
+    }
 }
