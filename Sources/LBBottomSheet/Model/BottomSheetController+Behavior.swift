@@ -124,7 +124,7 @@ extension BottomSheetController {
         /// An enum describing the available bottom sheet height limits.
         public enum HeightLimit {
             /// The bottom sheet height limit will be the bottom of the navigation bar behind the bottom sheet.
-            /// If there is no navigation controller behind the bottom sheet, this is equivalent to <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/HeightLimit-swift.enum/statusBar>.
+            /// If there is no navigation controller behind the bottom sheet, this is equivalent to <doc:LBBottomSheet/BottomSheetController/Behavior-swift.struct/HeightLimit/statusBar>.
             case navigationBar
             /// The bottom sheet height limit will be the bottom of the status bar.
             case statusBar
