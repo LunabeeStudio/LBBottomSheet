@@ -27,7 +27,7 @@ public final class BottomSheetController: UIViewController {
         get { .overFullScreen }
         set { }
     }
-
+    
     /// This is the height of the grabber "zone".
     /// ![TopInset](TopInset)
     ///
@@ -37,12 +37,12 @@ public final class BottomSheetController: UIViewController {
     /// ```
     /// You can have a look at <doc:/LBBottomSheet/BottomSheetController/Theme-swift.struct/Grabber-swift.struct> to check the <doc:/LBBottomSheet/BottomSheetController/Theme-swift.struct/Grabber-swift.struct/topMargin>.
     public var topInset: CGFloat { (theme.grabber?.topMargin ?? 0.0) * 2.0 + (theme.grabber?.size.height ?? 0.0) }
-
+    
     /// The delegate to get the bottom sheet position updates if the presenting controller needs to update its content bottom inset.
     public weak var bottomSheetPositionDelegate: BottomSheetPositionDelegate? {
         didSet { notifyBottomSheetPositionUpdate() }
     }
-
+    
     @IBOutlet private var mainDismissButton: UIButton!
     @IBOutlet private var grabberView: UIView!
     @IBOutlet private var gestureView: UIView!
@@ -57,12 +57,12 @@ public final class BottomSheetController: UIViewController {
     @IBOutlet private var bottomContainerBottomConstraint: NSLayoutConstraint!
     @IBOutlet private var bottomContainerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private var bottomContainerTrailingConstraint: NSLayoutConstraint!
-
+    
     public private(set) var theme: Theme = Theme()
     public private(set) var behavior: Behavior = Behavior()
     private let minTopMargin: CGFloat = 40.0
     private var didAlreadyUpdateHeight: Bool = false
-
+    
     private var panGesture: UIPanGestureRecognizer?
     private var tapGesture: UITapGestureRecognizer?
     private var isGestureBeingActivated: Bool = false
@@ -93,7 +93,7 @@ public final class BottomSheetController: UIViewController {
         }
     }
     private var isFirstLoad: Bool = true
-
+    
     /// Overriden to customize the way the controller is initialized.
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,7 +102,7 @@ public final class BottomSheetController: UIViewController {
         addGesture()
         addObservers()
     }
-
+    
     /// Overriden to customize the way the controller is appearing.
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -113,7 +113,7 @@ public final class BottomSheetController: UIViewController {
         setupDimmingBackground()
         makeAppearing()
     }
-
+    
     /// Call this function to tell the bottom sheet the embedded controller height did change.
     /// This way, this controller will calculate the new needed height and the bottom sheet layout will be updated.
     public func preferredHeightInBottomSheetDidUpdate() {
@@ -127,7 +127,7 @@ public final class BottomSheetController: UIViewController {
             view.layoutIfNeeded()
         }
     }
-
+    
     /// Overriden to update the shadow color in case of light/dark mode change.
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -139,17 +139,65 @@ public final class BottomSheetController: UIViewController {
         super.viewDidLayoutSubviews()
         notifyBottomSheetPositionUpdate()
     }
-
+    
     /// Use this function to dismiss the bottom sheet. This will animate the disappearing based on the behavior configuration.
     public func dismiss(_ completion: (() -> Void)? = nil) {
         makeDisappearing {
             super.dismiss(animated: false, completion: completion)
         }
     }
-
+    
     @available(swift, obsoleted: 5.0, message: "Use the bottom sheet provided dismiss function instead of the default one.", renamed: "dismiss(_:)")
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         super.dismiss(animated: flag, completion: completion)
+    }
+    
+    public func grow(toMaximumHeight: Bool = false) {
+        switch behavior.heightMode {
+        case .specific:
+            let childHeight: CGFloat = childHeight
+            let screenHeight: CGFloat = UIScreen.main.bounds.height
+            let maximumHeight: CGFloat = behavior.heightMode.maximumHeight(with: childHeight, screenHeight: screenHeight, from: self)
+            let nextHeight: CGFloat? = behavior.heightMode.nextHeight(with: childHeight,
+                                                                      screenHeight: maximumHeight,
+                                                                      from: self,
+                                                                      originHeight: bottomContainerHeightConstraint.constant,
+                                                                      goingUp: true)
+            guard let destinationHeight = toMaximumHeight ? maximumHeight : nextHeight else { return }
+            bottomContainerHeightConstraint.constant = destinationHeight
+            bottomContainerBottomConstraint.constant = 0.0
+            UIView.animate(withDuration: 0.2) {
+                self.updateCornerRadiusFor(destinationHeight: destinationHeight)
+                self.view.layoutIfNeeded()
+            }
+        default:
+            print("⚠️ [LBBottomSheet] ⚠️: Call to grow(toMaximumHeight:) doesn't have any effect as the current HeightMode is not `.specific`")
+            break
+        }
+    }
+    
+    public func reduce(toMinimumHeight: Bool = false) {
+        switch behavior.heightMode {
+        case .specific:
+            let childHeight: CGFloat = childHeight
+            let screenHeight: CGFloat = UIScreen.main.bounds.height
+            let minimumHeight: CGFloat = behavior.heightMode.minimumHeight(with: childHeight, screenHeight: screenHeight)
+            let nextHeight: CGFloat? = behavior.heightMode.nextHeight(with: childHeight,
+                                                                      screenHeight: UIScreen.main.bounds.height,
+                                                                      from: self,
+                                                                      originHeight: bottomContainerHeightConstraint.constant,
+                                                                      goingUp: false)
+            guard let destinationHeight = toMinimumHeight ? minimumHeight : nextHeight else { return }
+            bottomContainerHeightConstraint.constant = destinationHeight
+            bottomContainerBottomConstraint.constant = 0.0
+            UIView.animate(withDuration: 0.2) {
+                self.updateCornerRadiusFor(destinationHeight: destinationHeight)
+                self.view.layoutIfNeeded()
+            }
+        default:
+            print("⚠️ [LBBottomSheet] ⚠️: Call to reduce(toMinimumHeight:) doesn't have any effect as the current HeightMode is not `.specific`")
+            break
+        }
     }
 }
 
@@ -174,7 +222,7 @@ private extension BottomSheetController {
         bottomContainerView.layer.maskedCorners = theme.maskedCorners
         bottomContainerView.layer.masksToBounds = true
         bottomContainerView.alpha = 0.0
-
+        
         if let grabber = theme.grabber {
             topGrabberConstraint.constant = grabber.topMargin
             widthGrabberConstraint.constant = grabber.size.width
@@ -191,7 +239,7 @@ private extension BottomSheetController {
         } else {
             grabberView.isHidden = true
         }
-
+        
         if let shadow = theme.shadow {
             updateShadowColors()
             view.layer.shadowOffset = shadow.offset
@@ -200,13 +248,13 @@ private extension BottomSheetController {
             view.layer.shouldRasterize = true
             view.layer.rasterizationScale = UIScreen.main.scale
         }
-
+        
         lbbsAddChildViewController(bottomSheetChild, containerView: bottomContainerInnerView)
         bottomContainerView.backgroundColor = bottomSheetChild.view.backgroundColor
         bottomContainerLeadingConstraint.constant = theme.leadingMargin
         bottomContainerTrailingConstraint.constant = theme.trailingMargin
     }
-
+    
     func initGrabberBackgroundView() {
         guard let background = theme.grabber?.background else { return }
         switch background {
@@ -220,23 +268,23 @@ private extension BottomSheetController {
             updateBottomChildContainerTopConstraint(isGrabberBackgroundTranslucent: isTranslucent)
         }
     }
-
+    
     func updateShadowColors() {
         guard let color = theme.shadow?.color.cgColor else { return }
         view.layer.shadowColor = color
     }
-
+    
     func updateBottomChildContainerTopConstraint(isGrabberBackgroundTranslucent: Bool) {
         bottomContainerInnerViewTranslucentTopConstraint.isActive = isGrabberBackgroundTranslucent
         bottomContainerInnerViewTopConstraint.isActive = !isGrabberBackgroundTranslucent
     }
-
+    
     func setInitialPosition() {
         bottomContainerBottomConstraint.constant = -calculateExpectedHeight()
         bottomContainerView.alpha = 1.0
         view.layoutIfNeeded()
     }
-
+    
     func setupDimmingBackground() {
         if behavior.forwardEventsToRearController {
             mainDismissButton.isUserInteractionEnabled = false
@@ -249,7 +297,7 @@ private extension BottomSheetController {
             mainDismissButton.isUserInteractionEnabled = true
         }
     }
-
+    
     func addGesture() {
         guard behavior.swipeMode != .none else { return }
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
@@ -286,7 +334,7 @@ private extension BottomSheetController {
             self.didAlreadyUpdateHeight = true
         }
     }
-
+    
     func makeDisappearing(_ completion: @escaping () -> ()) {
         bottomContainerBottomConstraint.constant = -bottomContainerHeightConstraint.constant
         UIView.animate(withDuration: behavior.disappearingAnimationDuration, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.1, options: [.curveEaseOut], animations: {
@@ -321,14 +369,14 @@ private extension BottomSheetController {
             break
         }
     }
-
+    
     func processPanGestureBegan(_ gesture: UIPanGestureRecognizer) {
         tapGesture?.lbbsCancel()
         isGestureBeingActivated = true
         lastHeightAtPanGestureStart = bottomContainerHeightConstraint.constant
         lastChildHeightAtPanGestureStart = childHeight
     }
-
+    
     func processPanGestureChanged(_ gesture: UIPanGestureRecognizer) {
         let yTranslation: CGFloat = gesture.translation(in: bottomContainerView).y
         let destinationHeight: CGFloat = lastHeightAtPanGestureStart - yTranslation
@@ -351,7 +399,7 @@ private extension BottomSheetController {
         bottomContainerBottomConstraint.constant = newBottom
         view.layoutIfNeeded()
     }
-
+    
     func processPanGestureEnded(_ gesture: UIPanGestureRecognizer) {
         let yTranslation: CGFloat = gesture.translation(in: bottomContainerView).y
         let yVelocity: CGFloat = gesture.velocity(in: bottomContainerView).y
@@ -414,7 +462,7 @@ private extension BottomSheetController {
         }
         isGestureBeingActivated = false
     }
-
+    
     func calculateExpectedHeight(_ givenChildHeight: CGFloat? = nil) -> CGFloat {
         let childHeight: CGFloat = givenChildHeight ?? self.childHeight
         switch behavior.heightMode {
@@ -427,7 +475,7 @@ private extension BottomSheetController {
             return min(heightValues.min { abs($0 - bottomContainerHeightConstraint.constant) < abs($1 - bottomContainerHeightConstraint.constant) } ?? 0.0, heightLimit.value(from: self, screenHeight: UIScreen.main.bounds.height))
         }
     }
-
+    
     func updateCornerRadiusFor(destinationHeight: CGFloat) {
         bottomContainerView.layer.cornerRadius = destinationHeight == UIScreen.main.bounds.height ? UIScreen.main.lbbsCornerRadius : theme.cornerRadius
     }
@@ -463,7 +511,7 @@ extension BottomSheetController: UIGestureRecognizerDelegate {
             return true
         }
     }
-
+    
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         if let panGesture = panGesture, gestureRecognizer === panGesture {
             if let scrollView = otherGestureRecognizer.view as? UIScrollView {
