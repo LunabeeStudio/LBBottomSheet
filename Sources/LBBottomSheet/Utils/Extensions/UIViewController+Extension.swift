@@ -51,10 +51,27 @@ public extension UIViewController {
         present(bottomSheetController, animated: false, completion: nil)
         return bottomSheetController
     }
+    
+    
+    func dismissBottomSheet(_ completion: @escaping () -> ()) {
+        guard let controller = lbbsTopPresentedController as? BottomSheetController else {
+            completion()
+            return
+        }
+        controller.dismiss(completion)
+    }
 }
 
 // MARK: - Internal extensions -
 internal extension UIViewController {
+    var lbbsTopPresentedController: UIViewController {
+        var presentedController: UIViewController = self
+        while let controller = presentedController.presentedViewController {
+            presentedController = controller
+        }
+        return presentedController
+    }
+    
     func lbbsRearControllerTopInset(includeNavigationBar: Bool = true) -> CGFloat {
         var topInset: CGFloat = UIApplication.shared.lbbsKeySceneWindow?.safeAreaInsets.top ?? 0.0
         if let navController = presentingViewController as? UINavigationController ?? presentingViewController?.navigationController, !navController.isNavigationBarHidden && includeNavigationBar {
