@@ -61,7 +61,7 @@ public final class BottomSheetController: UIViewController {
     public private(set) var theme: Theme = Theme()
     public private(set) var behavior: Behavior = Behavior()
     private let minTopMargin: CGFloat = 40.0
-    private var didAlreadyUpdateHeight: Bool = false
+    private var didAlreadyStartAppearing: Bool = false
     
     private var panGesture: UIPanGestureRecognizer?
     private var tapGesture: UITapGestureRecognizer?
@@ -121,7 +121,7 @@ public final class BottomSheetController: UIViewController {
         let newHeight: CGFloat = calculateExpectedHeight()
         guard newHeight != bottomContainerHeightConstraint.constant else { return }
         bottomContainerHeightConstraint.constant = newHeight
-        if didAlreadyUpdateHeight {
+        if didAlreadyStartAppearing {
             UIView.animate(withDuration: 0.3) { self.view.layoutIfNeeded() }
         } else {
             view.layoutIfNeeded()
@@ -325,13 +325,14 @@ private extension BottomSheetController {
 // MARK: - Appearing/Disappearing animations -
 private extension BottomSheetController {
     func makeAppearing() {
+        didAlreadyStartAppearing = true
         bottomContainerHeightConstraint.constant = calculateExpectedHeight()
         bottomContainerBottomConstraint.constant = 0.0
         UIView.animate(withDuration: behavior.appearingAnimationDuration, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.1, options: [.curveEaseOut], animations: {
             self.view.backgroundColor = self.theme.dimmingBackgroundColor
             self.view.layoutIfNeeded()
         }) { _ in
-            self.didAlreadyUpdateHeight = true
+//            self.didAlreadyStartAppearing = true
         }
     }
     
