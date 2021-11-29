@@ -52,10 +52,13 @@ public extension UIViewController {
         return bottomSheetController
     }
     
-    
-    func dismissBottomSheet(_ completion: @escaping () -> ()) {
+    /// Use this function to dismiss the top presented bottom sheet.
+    /// If the top presented controller is not a bottom sheet, nothing will happen.
+    /// - Parameters:
+    ///   - completion: A completion handler to be called when the bottom sheet is dismissed.
+    func dismissBottomSheet(_ completion: (() -> Void)? = nil) {
         guard let controller = lbbsTopPresentedController as? BottomSheetController else {
-            completion()
+            completion?()
             return
         }
         controller.dismiss(completion)
