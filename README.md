@@ -137,15 +137,15 @@ The last thing for this mode is about the dynamic types. If you present in a Bot
 You don't have to manage this as the BottomSheet is listening for the content size category changes notification. If the user changes the font size, the BottomSheet will automatically trigger a height update.   
    
 If you need to manually dismiss the bottom sheet, you have 2 ways to do this.   
-In case you have a reference to the bottom sheet, you can call the
+In case you have a reference to the bottom sheet, you can call theis function on it:
 ```swift
 dismiss(_ completion: (() -> Void)? = nil)
 ```   
-function on it.   
+   
 Otherwise, from any controllers under the bottom sheet, you can call
 ```swift
 dismissBottomSheet(_ completion: (() -> Void)? = nil)
-```.   
+```   
 This will dismiss the top presented bottom sheet if it is currently the top most controller.
    
 <br/>
