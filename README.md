@@ -146,6 +146,7 @@ Otherwise, from any controllers under the bottom sheet, you can call
 ```swift
 dismissBottomSheet(_ completion: (() -> Void)? = nil)
 ```   
+
 This will dismiss the top presented bottom sheet if it is currently the top most controller.
    
 <br/>
