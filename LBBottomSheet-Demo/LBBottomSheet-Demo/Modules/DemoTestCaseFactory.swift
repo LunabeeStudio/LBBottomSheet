@@ -149,7 +149,7 @@ final class DemoTestCaseFactory {
 
                                    👉 The height limit is defined to `.screen` to allow the bottom sheet to cover the full screen height.
                                    """,
-                     codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/4c4273fbd9a2a44ca7802d3149b2f68e88f8f725/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L133"),
+                     codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/a53726b499cc0d2e2f53f5fc50b7507e7a8f68e8/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L154"),
                      theme: {
                          let grabberBackground: BottomSheetController.Theme.Grabber.Background = .color(.tableViewBackground, isTranslucent: false)
                          let grabber: BottomSheetController.Theme.Grabber = .init(background: grabberBackground)
