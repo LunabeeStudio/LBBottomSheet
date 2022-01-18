@@ -441,13 +441,18 @@ private extension BottomSheetController {
             switch behavior.heightMode {
             case .specific:
                 let isFastSwipeUpGestureDetected: Bool = yVelocity < -behavior.velocityThresholdToOpenAtMaxHeight
-                let nextUpperHeight: CGFloat = behavior.heightMode.nextHeight(with: lastChildHeightAtPanGestureStart,
+                let nextUpperHeight: CGFloat? = behavior.heightMode.nextHeight(with: lastChildHeightAtPanGestureStart,
                                                                               screenHeight: UIScreen.main.bounds.height,
                                                                               from: self,
                                                                               originHeight: lastHeightAtPanGestureStart,
-                                                                              goingUp: true) ?? (UIScreen.main.bounds.height - lbbsRearControllerTopInset())
+                                                                              goingUp: true)
                 let expectedHeight: CGFloat = calculateExpectedHeight(lastChildHeightAtPanGestureStart)
-                let destinationHeight: CGFloat = isFastSwipeUpGestureDetected ? nextUpperHeight : expectedHeight
+                let destinationHeight: CGFloat
+                if let nextUpperHeight = nextUpperHeight {
+                    destinationHeight = isFastSwipeUpGestureDetected ? nextUpperHeight : expectedHeight
+                } else {
+                    destinationHeight = expectedHeight
+                }
                 bottomContainerHeightConstraint.constant = destinationHeight
                 bottomContainerBottomConstraint.constant = 0.0
                 UIView.animate(withDuration: 0.2) {
