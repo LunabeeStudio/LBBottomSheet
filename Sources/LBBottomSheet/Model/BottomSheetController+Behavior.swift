@@ -75,19 +75,23 @@ extension BottomSheetController {
                 case let .fitContent(heightLimit):
                     return min(childHeight, heightLimit.value(from: controller, screenHeight: screenHeight))
                 case let .free(_ , maxHeight, heightLimit):
-                    guard let maxHeight = maxHeight else { return heightLimit.value(from: controller, screenHeight: screenHeight) }
-                    return min(maxHeight, heightLimit.value(from: controller, screenHeight: screenHeight))
+                    let maxHeightLimit: CGFloat = heightLimit.value(from: controller, screenHeight: screenHeight)
+                    guard let maxHeight = maxHeight else { return maxHeightLimit }
+                    return min(maxHeight, maxHeightLimit)
                 case let .specific(values, heightLimit):
-                    guard let maxHeight = values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight).last else { return heightLimit.value(from: controller, screenHeight: screenHeight) }
-                    return min(maxHeight, heightLimit.value(from: controller, screenHeight: screenHeight))
+                    let maxHeightLimit: CGFloat = heightLimit.value(from: controller, screenHeight: screenHeight)
+                    guard let maxHeight = values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight).map({ min($0, maxHeightLimit) }).last else { return maxHeightLimit }
+                    return min(maxHeight, maxHeightLimit)
                 }
             }
 
             internal func nextHeight(with childHeight: CGFloat, screenHeight: CGFloat, from controller: UIViewController, originHeight: CGFloat, goingUp: Bool) -> CGFloat? {
                 switch self {
                 case let .specific(values, heightLimit):
+                    let maxHeightLimit: CGFloat = heightLimit.value(from: controller, screenHeight: screenHeight)
                     let allValues: [CGFloat] = values.sortedPointValues(screenHeight: screenHeight, childHeight: childHeight)
-                    guard let currentIndex = allValues.firstIndex(of: originHeight) ?? (originHeight == heightLimit.value(from: controller, screenHeight: screenHeight) ? allValues.count - 1 : nil) else { return nil }
+                                                     .map { min($0, maxHeightLimit) }
+                    guard let currentIndex = allValues.firstIndex(of: originHeight) ?? (originHeight == maxHeightLimit ? allValues.count - 1 : nil) else { return nil }
                     let newIndex: Int = goingUp ? currentIndex + 1 : currentIndex - 1
                     return newIndex < 0 ? nil : min(allValues[min(newIndex, allValues.count - 1)], heightLimit.value(from: controller, screenHeight: screenHeight))
                 default:

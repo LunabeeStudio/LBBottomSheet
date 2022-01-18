@@ -139,6 +139,23 @@ final class DemoTestCaseFactory {
                             .screenRatio(value: 0.75),
                             .screenRatio(value: 1.0)
                          ], heightLimit: .screen))
+                     }),
+        DemoTestCase(title: "Specific",
+                     menuTitle: "Specific - Example #2",
+                     explanations: """
+                                   Here you have an example of a BottomSheet which is fullscreen.
+
+                                   👉 This bottom sheet has only one height value: `.screenRatio(1.0)`.
+
+                                   👉 The height limit is defined to `.screen` to allow the bottom sheet to cover the full screen height.
+                                   """,
+                     codeUrl: URL(string: "https://github.com/LunabeeStudio/LBBottomSheet/blob/a53726b499cc0d2e2f53f5fc50b7507e7a8f68e8/LBBottomSheet-Demo/LBBottomSheet-Demo/Modules/DemoTestCaseFactory.swift#L154"),
+                     theme: {
+                         let grabberBackground: BottomSheetController.Theme.Grabber.Background = .color(.tableViewBackground, isTranslucent: false)
+                         let grabber: BottomSheetController.Theme.Grabber = .init(background: grabberBackground)
+                         return BottomSheetController.Theme(grabber: grabber)
+                     }, behavior: {
+                         BottomSheetController.Behavior(heightMode: .specific(values: [.screenRatio(value: 1.0)], heightLimit: .screen))
                      })
     ]
 }

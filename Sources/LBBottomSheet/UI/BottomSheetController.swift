@@ -441,13 +441,18 @@ private extension BottomSheetController {
             switch behavior.heightMode {
             case .specific:
                 let isFastSwipeUpGestureDetected: Bool = yVelocity < -behavior.velocityThresholdToOpenAtMaxHeight
-                let nextUpperHeight: CGFloat = behavior.heightMode.nextHeight(with: lastChildHeightAtPanGestureStart,
+                let nextUpperHeight: CGFloat? = behavior.heightMode.nextHeight(with: lastChildHeightAtPanGestureStart,
                                                                               screenHeight: UIScreen.main.bounds.height,
                                                                               from: self,
                                                                               originHeight: lastHeightAtPanGestureStart,
-                                                                              goingUp: true) ?? (UIScreen.main.bounds.height - lbbsRearControllerTopInset())
+                                                                              goingUp: true)
                 let expectedHeight: CGFloat = calculateExpectedHeight(lastChildHeightAtPanGestureStart)
-                let destinationHeight: CGFloat = isFastSwipeUpGestureDetected ? nextUpperHeight : expectedHeight
+                let destinationHeight: CGFloat
+                if let nextUpperHeight = nextUpperHeight {
+                    destinationHeight = isFastSwipeUpGestureDetected ? nextUpperHeight : expectedHeight
+                } else {
+                    destinationHeight = expectedHeight
+                }
                 bottomContainerHeightConstraint.constant = destinationHeight
                 bottomContainerBottomConstraint.constant = 0.0
                 UIView.animate(withDuration: 0.2) {
@@ -470,10 +475,13 @@ private extension BottomSheetController {
         case let .fitContent(heightLimit):
             return min(childHeight, heightLimit.value(from: self, screenHeight: UIScreen.main.bounds.height))
         case let .free(minHeight, maxHeight, heightLimit):
-            return min(max(bottomContainerHeightConstraint.constant, minHeight ?? 0.0), maxHeight ?? heightLimit.value(from: self, screenHeight: UIScreen.main.bounds.height))
+            let maxHeightLimit: CGFloat = heightLimit.value(from: self, screenHeight: UIScreen.main.bounds.height)
+            return min(max(bottomContainerHeightConstraint.constant, minHeight ?? 0.0), min(maxHeight ?? maxHeightLimit, maxHeightLimit))
         case let .specific(values, heightLimit):
+            let maxHeightLimit: CGFloat = heightLimit.value(from: self, screenHeight: UIScreen.main.bounds.height)
             let heightValues: [CGFloat] = values.sortedPointValues(screenHeight: UIScreen.main.bounds.height, childHeight: childHeight)
-            return min(heightValues.min { abs($0 - bottomContainerHeightConstraint.constant) < abs($1 - bottomContainerHeightConstraint.constant) } ?? 0.0, heightLimit.value(from: self, screenHeight: UIScreen.main.bounds.height))
+                                                .map { min($0, maxHeightLimit) }
+            return min(heightValues.min { abs($0 - bottomContainerHeightConstraint.constant) < abs($1 - bottomContainerHeightConstraint.constant) } ?? 0.0, maxHeightLimit)
         }
     }
     
