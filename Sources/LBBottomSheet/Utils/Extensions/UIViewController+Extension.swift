@@ -53,9 +53,9 @@ public extension UIViewController {
     }
     
     
-    func dismissBottomSheet(_ completion: @escaping () -> ()) {
+    func dismissBottomSheet(_ completion: (() -> Void)? = nil) {
         guard let controller = lbbsTopPresentedController as? BottomSheetController else {
-            completion()
+            completion?()
             return
         }
         controller.dismiss(completion)
