@@ -287,7 +287,11 @@ private extension MainViewController {
         ]
         specificEntries.append(contentsOf: DemoTestCaseFactory.specific.map { testCase in
             MenuEntry(title: testCase.menuTitle) { [weak self] in
-                let behavior: BottomSheetController.Behavior = testCase.behavior()
+                var behavior: BottomSheetController.Behavior = testCase.behavior()
+                behavior.bottomSheetAnimationConfiguration = .init(duration: 0.6,
+                                                                   damping: 0.8,
+                                                                   velocity: 0.5,
+                                                                   options: [.curveEaseInOut])
                 let positionDelegate: BottomSheetPositionDelegate? = behavior.forwardEventsToRearController ? self : nil
                 self?.presentAsBottomSheet(DemoViewController(demoTitle: testCase.title,
                                                               explanations: testCase.explanations,
@@ -295,7 +299,7 @@ private extension MainViewController {
                                            positionDelegate: positionDelegate,
                                            bottomSheetInteractionDelegate: self,
                                            theme: testCase.theme(),
-                                           behavior: testCase.behavior())
+                                           behavior: behavior)
             }
         })
         lastEntry = specificEntries.removeLast()
