@@ -407,19 +407,6 @@ private extension BottomSheetController {
         if (yTranslation > lastHeightAtPanGestureStart * behavior.heightPercentageThresholdToDismiss || yVelocity > behavior.velocityThresholdToDismiss) {
             switch behavior.heightMode {
             case .specific:
-                let destinationHeight: CGFloat? = behavior.heightMode.nextHeight(with: lastChildHeightAtPanGestureStart,
-                                                                                 screenHeight: UIScreen.main.bounds.height,
-                                                                                 from: self,
-                                                                                 originHeight: lastHeightAtPanGestureStart,
-                                                                                 goingUp: false)
-//                if let destinationHeight = destinationHeight {
-//                    bottomContainerHeightConstraint.constant = destinationHeight
-//                    bottomContainerBottomConstraint.constant = 0.0
-//                    UIView.animate(withDuration: 0.2) {
-//                        self.updateCornerRadiusFor(destinationHeight: destinationHeight)
-//                        self.view.layoutIfNeeded()
-//                    }
-//                } else
                 if behavior.allowsSwipeToDismiss {
                     dismiss()
                 } else {
