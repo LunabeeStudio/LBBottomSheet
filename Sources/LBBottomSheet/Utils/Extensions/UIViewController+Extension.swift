@@ -45,6 +45,7 @@ public extension UIViewController {
     @discardableResult
     func presentAsBottomSheet(_ controller: UIViewController,
                               positionDelegate: BottomSheetPositionDelegate? = nil,
+                              bottomSheetInteractionDelegate: BottomSheetInteractionDelegate? = nil,
                               theme: BottomSheetController.Theme = BottomSheetController.Theme(),
                               behavior: BottomSheetController.Behavior = BottomSheetController.Behavior()) -> BottomSheetController {
         let bottomSheetController: BottomSheetController = BottomSheetController.controller(bottomSheetChild: controller, bottomSheetPositionDelegate: positionDelegate, theme: theme, behavior: behavior)

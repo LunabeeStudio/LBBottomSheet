@@ -42,6 +42,7 @@ public final class BottomSheetController: UIViewController {
     public weak var bottomSheetPositionDelegate: BottomSheetPositionDelegate? {
         didSet { notifyBottomSheetPositionUpdate() }
     }
+    public weak var bottomSheetInteractionDelegate: BottomSheetInteractionDelegate?
     
     @IBOutlet private var mainDismissButton: UIButton!
     @IBOutlet private var grabberView: UIView!
@@ -203,10 +204,15 @@ public final class BottomSheetController: UIViewController {
 
 // MARK: - Controller instantiation -
 internal extension BottomSheetController {
-    static func controller(bottomSheetChild: UIViewController, bottomSheetPositionDelegate: BottomSheetPositionDelegate? = nil, theme: Theme = Theme(), behavior: Behavior = Behavior()) -> BottomSheetController {
+    static func controller(bottomSheetChild: UIViewController,
+                           bottomSheetPositionDelegate: BottomSheetPositionDelegate? = nil,
+                           bottomSheetInteractionDelegate: BottomSheetInteractionDelegate? = nil,
+                           theme: Theme = Theme(),
+                           behavior: Behavior = Behavior()) -> BottomSheetController {
         let bottomController: BottomSheetController = UIStoryboard(name: "BottomSheet", bundle: Bundle.module).instantiateInitialViewController() as! BottomSheetController
         bottomController.bottomSheetChild = bottomSheetChild
         bottomController.bottomSheetPositionDelegate = bottomSheetPositionDelegate
+        bottomController.bottomSheetInteractionDelegate = bottomSheetInteractionDelegate
         bottomController.theme = theme
         bottomController.behavior = behavior
         return bottomController
@@ -530,6 +536,9 @@ extension BottomSheetController: UIGestureRecognizerDelegate {
 // MARK: - Actions -
 private extension BottomSheetController {
     @IBAction func dismissButtonPressed(_ sender: Any) {
-        if behavior.canTouchDimmingBackgroundToDismiss { dismiss() }
+        if behavior.canTouchDimmingBackgroundToDismiss {
+            dismiss()
+            bottomSheetInteractionDelegate?.bottomSheetInteractionDidTapOutside()
+        }
     }
 }
