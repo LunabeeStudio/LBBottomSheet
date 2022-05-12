@@ -334,7 +334,7 @@ private extension BottomSheetController {
         didAlreadyStartAppearing = true
         bottomContainerHeightConstraint.constant = calculateExpectedHeight()
         bottomContainerBottomConstraint.constant = 0.0
-        animate {
+        animateSmoothly {
             self.view.backgroundColor = self.theme.dimmingBackgroundColor
             self.view.layoutIfNeeded()
         }
@@ -544,6 +544,24 @@ private extension BottomSheetController {
             }
         } else {
             UIView.animate(withDuration: 0.3) { block() }
+        }
+    }
+
+    func animateSmoothly(_ block: @escaping () -> ()) {
+        if let animationConfiguration = behavior.bottomSheetAnimationConfiguration {
+            UIView.animate(withDuration: animationConfiguration.duration,
+                           delay: 0.0,
+                           usingSpringWithDamping: animationConfiguration.damping,
+                           initialSpringVelocity: animationConfiguration.velocity,
+                           options: [.curveEaseInOut],
+                           animations: { block() })
+        } else {
+            UIView.animate(withDuration: behavior.appearingAnimationDuration,
+                           delay: 0.0,
+                           usingSpringWithDamping: 1.0,
+                           initialSpringVelocity: 0.1,
+                           options: [.curveEaseOut],
+                           animations: { block() })
         }
     }
 }
