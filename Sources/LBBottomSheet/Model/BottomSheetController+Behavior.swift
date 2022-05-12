@@ -147,10 +147,32 @@ extension BottomSheetController {
             }
         }
 
+        /// A struct definig custom animation configuration parameters to be used to animate the bottom sheet when it's position is updated.
+        public struct BottomSheetAnimationConfiguration {
+            /// The duration of the animation.
+            public let duration: CGFloat
+            /// The spring damping of the animation.
+            public let damping: CGFloat
+            /// The spring initial velocity of the animation.
+            public let velocity: CGFloat
+            /// The extra animation options to use.
+            public let options: [UIView.AnimationOptions]
+
+            /// Initializes a new BottomSheetAnimationConfiguration.
+            public init(duration: CGFloat, damping: CGFloat, velocity: CGFloat, options: [UIView.AnimationOptions]) {
+                self.duration = duration
+                self.damping = damping
+                self.velocity = velocity
+                self.options = options
+            }
+        }
+
         /// The duration of the appearing animation.
         public var appearingAnimationDuration: Double = 0.5
         /// The duration of the disappearing animation.
         public var disappearingAnimationDuration: Double = 0.5
+        /// Custom animation configuration used to animate the bottom sheet when it's position is updated.
+        public var bottomSheetAnimationConfiguration: BottomSheetAnimationConfiguration?
         /// Defines how the bottom sheet is swippable.
         public var swipeMode: SwipeMode = .full
         /// Defines whether or not the touch events detected out of the bottom sheet should be forwarded
@@ -191,6 +213,7 @@ extension BottomSheetController {
         /// Initializes a new Behavior.
         public init(appearingAnimationDuration: Double = 0.5,
                     disappearingAnimationDuration: Double = 0.5,
+                    bottomSheetAnimationConfiguration: BottomSheetAnimationConfiguration? = nil,
                     swipeMode: BottomSheetController.Behavior.SwipeMode = .full,
                     forwardEventsToRearController: Bool = false,
                     heightPercentageThresholdToDismiss: CGFloat = 0.5,
@@ -204,6 +227,7 @@ extension BottomSheetController {
                     canTouchDimmingBackgroundToDismiss: Bool = true) {
             self.appearingAnimationDuration = appearingAnimationDuration
             self.disappearingAnimationDuration = disappearingAnimationDuration
+            self.bottomSheetAnimationConfiguration = bottomSheetAnimationConfiguration
             self.swipeMode = swipeMode
             self.forwardEventsToRearController = forwardEventsToRearController
             self.heightPercentageThresholdToDismiss = heightPercentageThresholdToDismiss
