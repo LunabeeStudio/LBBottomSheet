@@ -123,7 +123,7 @@ public final class BottomSheetController: UIViewController {
         guard newHeight != bottomContainerHeightConstraint.constant else { return }
         bottomContainerHeightConstraint.constant = newHeight
         if didAlreadyStartAppearing {
-            UIView.animate(withDuration: 0.3) { self.view.layoutIfNeeded() }
+            animate { self.view.layoutIfNeeded() }
         } else {
             view.layoutIfNeeded()
         }
@@ -167,7 +167,7 @@ public final class BottomSheetController: UIViewController {
             guard let destinationHeight = toMaximumHeight ? maximumHeight : nextHeight else { return }
             bottomContainerHeightConstraint.constant = destinationHeight
             bottomContainerBottomConstraint.constant = 0.0
-            UIView.animate(withDuration: 0.2) {
+            animate {
                 self.updateCornerRadiusFor(destinationHeight: destinationHeight)
                 self.view.layoutIfNeeded()
             }
@@ -191,7 +191,7 @@ public final class BottomSheetController: UIViewController {
             guard let destinationHeight = toMinimumHeight ? minimumHeight : nextHeight else { return }
             bottomContainerHeightConstraint.constant = destinationHeight
             bottomContainerBottomConstraint.constant = 0.0
-            UIView.animate(withDuration: 0.2) {
+            animate {
                 self.updateCornerRadiusFor(destinationHeight: destinationHeight)
                 self.view.layoutIfNeeded()
             }
@@ -334,11 +334,9 @@ private extension BottomSheetController {
         didAlreadyStartAppearing = true
         bottomContainerHeightConstraint.constant = calculateExpectedHeight()
         bottomContainerBottomConstraint.constant = 0.0
-        UIView.animate(withDuration: behavior.appearingAnimationDuration, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.1, options: [.curveEaseOut], animations: {
+        animate {
             self.view.backgroundColor = self.theme.dimmingBackgroundColor
             self.view.layoutIfNeeded()
-        }) { _ in
-//            self.didAlreadyStartAppearing = true
         }
     }
     
@@ -419,7 +417,7 @@ private extension BottomSheetController {
                     bottomContainerHeightConstraint.constant = behavior.heightMode.minimumHeight(with: lastChildHeightAtPanGestureStart,
                                                                                                  screenHeight: UIScreen.main.bounds.height)
                     bottomContainerBottomConstraint.constant = 0.0
-                    UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
+                    animate { self.view.layoutIfNeeded() }
                 }
             default:
                 if behavior.allowsSwipeToDismiss {
@@ -428,7 +426,7 @@ private extension BottomSheetController {
                     bottomContainerHeightConstraint.constant = behavior.heightMode.minimumHeight(with: lastChildHeightAtPanGestureStart,
                                                                                                  screenHeight: UIScreen.main.bounds.height)
                     bottomContainerBottomConstraint.constant = 0.0
-                    UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
+                    animate { self.view.layoutIfNeeded() }
                 }
             }
         } else {
@@ -443,7 +441,7 @@ private extension BottomSheetController {
                 let destinationHeight: CGFloat = isFastSwipeUpGestureDetected ? maximumHeight : expectedHeight
                 bottomContainerHeightConstraint.constant = destinationHeight
                 bottomContainerBottomConstraint.constant = 0.0
-                UIView.animate(withDuration: 0.2) {
+                animate {
                     self.updateCornerRadiusFor(destinationHeight: destinationHeight)
                     self.view.layoutIfNeeded()
                 }
@@ -451,7 +449,7 @@ private extension BottomSheetController {
                 let destinationHeight: CGFloat = calculateExpectedHeight(lastChildHeightAtPanGestureStart)
                 bottomContainerHeightConstraint.constant = destinationHeight
                 bottomContainerBottomConstraint.constant = 0.0
-                UIView.animate(withDuration: 0.2) { self.view.layoutIfNeeded() }
+                animate { self.view.layoutIfNeeded() }
             }
         }
         isGestureBeingActivated = false
@@ -529,6 +527,19 @@ extension BottomSheetController: UIGestureRecognizerDelegate {
             }
         } else {
             return true
+        }
+    }
+}
+
+// MARK: - Animation -
+private extension BottomSheetController {
+    func animate(_ block: @escaping () -> ()) {
+        UIView.animate(withDuration: 0.2,
+                       delay: 0.0,
+                       usingSpringWithDamping: 0.7,
+                       initialSpringVelocity: 0.5,
+                       options: []) {
+            block()
         }
     }
 }
