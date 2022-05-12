@@ -412,14 +412,15 @@ private extension BottomSheetController {
                                                                                  from: self,
                                                                                  originHeight: lastHeightAtPanGestureStart,
                                                                                  goingUp: false)
-                if let destinationHeight = destinationHeight {
-                    bottomContainerHeightConstraint.constant = destinationHeight
-                    bottomContainerBottomConstraint.constant = 0.0
-                    UIView.animate(withDuration: 0.2) {
-                        self.updateCornerRadiusFor(destinationHeight: destinationHeight)
-                        self.view.layoutIfNeeded()
-                    }
-                } else if behavior.allowsSwipeToDismiss {
+//                if let destinationHeight = destinationHeight {
+//                    bottomContainerHeightConstraint.constant = destinationHeight
+//                    bottomContainerBottomConstraint.constant = 0.0
+//                    UIView.animate(withDuration: 0.2) {
+//                        self.updateCornerRadiusFor(destinationHeight: destinationHeight)
+//                        self.view.layoutIfNeeded()
+//                    }
+//                } else
+                if behavior.allowsSwipeToDismiss {
                     dismiss()
                 } else {
                     bottomContainerHeightConstraint.constant = behavior.heightMode.minimumHeight(with: lastChildHeightAtPanGestureStart,

@@ -1,16 +1,14 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "LBBottomSheet",
-        "repositoryURL": "https://github.com/LunabeeStudio/LBBottomSheet",
-        "state": {
-          "branch": "develop",
-          "revision": "ec3b5e411e7f2159108c7681d75f7548350c5670",
-          "version": null
-        }
+  "pins" : [
+    {
+      "identity" : "lbbottomsheet",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/LunabeeStudio/LBBottomSheet",
+      "state" : {
+        "branch" : "develop",
+        "revision" : "5050b1831923697afe4404e7fcef4d4f390a3e1d"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 2
 }
