@@ -293,6 +293,7 @@ private extension MainViewController {
                                                               explanations: testCase.explanations,
                                                               codeUrl: testCase.codeUrl),
                                            positionDelegate: positionDelegate,
+                                           bottomSheetInteractionDelegate: self,
                                            theme: testCase.theme(),
                                            behavior: testCase.behavior())
             }
@@ -307,5 +308,11 @@ private extension MainViewController {
 extension MainViewController: BottomSheetPositionDelegate {
     func bottomSheetPositionDidUpdate(y: CGFloat) {
         tableView.contentInset.bottom = tableView.frame.height - y
+    }
+}
+
+extension MainViewController: BottomSheetInteractionDelegate {
+    func bottomSheetInteractionDidTapOutside() {
+        print("Did tap dimming background")
     }
 }

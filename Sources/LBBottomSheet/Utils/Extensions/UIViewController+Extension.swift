@@ -48,7 +48,11 @@ public extension UIViewController {
                               bottomSheetInteractionDelegate: BottomSheetInteractionDelegate? = nil,
                               theme: BottomSheetController.Theme = BottomSheetController.Theme(),
                               behavior: BottomSheetController.Behavior = BottomSheetController.Behavior()) -> BottomSheetController {
-        let bottomSheetController: BottomSheetController = BottomSheetController.controller(bottomSheetChild: controller, bottomSheetPositionDelegate: positionDelegate, theme: theme, behavior: behavior)
+        let bottomSheetController: BottomSheetController = .controller(bottomSheetChild: controller,
+                                                                       bottomSheetPositionDelegate: positionDelegate,
+                                                                       bottomSheetInteractionDelegate: bottomSheetInteractionDelegate,
+                                                                       theme: theme,
+                                                                       behavior: behavior)
         present(bottomSheetController, animated: false, completion: nil)
         return bottomSheetController
     }
