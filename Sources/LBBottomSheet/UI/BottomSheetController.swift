@@ -543,7 +543,7 @@ private extension BottomSheetController {
                 block()
             }
         } else {
-            UIView.animate(withDuration: 0.2) { block() }
+            UIView.animate(withDuration: 0.3) { block() }
         }
     }
 }
