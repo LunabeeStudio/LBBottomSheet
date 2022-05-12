@@ -536,9 +536,9 @@ private extension BottomSheetController {
     func animate(_ block: @escaping () -> ()) {
         UIView.animate(withDuration: 0.7,
                        delay: 0.0,
-                       usingSpringWithDamping: 0.7,
+                       usingSpringWithDamping: 0.8,
                        initialSpringVelocity: 0.5,
-                       options: []) {
+                       options: [.curveEaseInOut]) {
             block()
         }
     }
