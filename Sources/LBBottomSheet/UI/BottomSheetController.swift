@@ -515,9 +515,10 @@ extension BottomSheetController: UIGestureRecognizerDelegate {
                 let isSwipingFromGestureView: Bool = gestureView.frame.contains(gestureRecognizer.location(in: gestureView))
                 let isTheMainEmbeddedViewAScrollView: Bool = scrollView.superview?.subviews.count == 1
                 let isScrollViewAtTheTop: Bool = scrollView.contentOffset.y <= 0.0
-                let isUserSwipingDown: Bool = panGesture.translation(in: view).y > 0.0
+                let isUserSwipingDown: Bool = panGesture.translation(in: view).y >= 0.0
                 if isSwipingFromGestureView || (isTheMainEmbeddedViewAScrollView && isScrollViewAtTheTop && isUserSwipingDown && behavior.swipeMode == .full) {
                     otherGestureRecognizer.lbbsCancel()
+                    scrollView.setContentOffset(.zero, animated: true)
                     return true
                 } else {
                     return false
