@@ -335,7 +335,7 @@ private extension BottomSheetController {
         didAlreadyStartAppearing = true
         bottomContainerHeightConstraint.constant = calculateExpectedHeight()
         bottomContainerBottomConstraint.constant = 0.0
-        animateSmoothly {
+        animateAppearing {
             self.view.backgroundColor = self.theme.dimmingBackgroundColor
             self.view.layoutIfNeeded()
         }
@@ -343,11 +343,9 @@ private extension BottomSheetController {
     
     func makeDisappearing(_ completion: @escaping () -> ()) {
         bottomContainerBottomConstraint.constant = -bottomContainerHeightConstraint.constant
-        UIView.animate(withDuration: behavior.disappearingAnimationDuration, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.1, options: [.curveEaseOut], animations: {
+        animateDisappearing {
             self.view.backgroundColor = .clear
             self.view.layoutIfNeeded()
-        }) { _ in
-            completion()
         }
     }
 }
@@ -549,8 +547,8 @@ private extension BottomSheetController {
         }
     }
 
-    func animateSmoothly(_ block: @escaping () -> ()) {
-        if let animationConfiguration = behavior.bottomSheetAnimationConfiguration {
+    func animateAppearing(_ block: @escaping () -> ()) {
+        if let animationConfiguration = behavior.appearingAnimationConfiguration {
             UIView.animate(withDuration: animationConfiguration.duration,
                            delay: 0.0,
                            usingSpringWithDamping: animationConfiguration.damping,
@@ -558,7 +556,25 @@ private extension BottomSheetController {
                            options: [.curveEaseInOut],
                            animations: { block() })
         } else {
-            UIView.animate(withDuration: behavior.appearingAnimationDuration,
+            UIView.animate(withDuration: 0.5,
+                           delay: 0.0,
+                           usingSpringWithDamping: 1.0,
+                           initialSpringVelocity: 0.1,
+                           options: [.curveEaseOut],
+                           animations: { block() })
+        }
+    }
+
+    func animateDisappearing(_ block: @escaping () -> ()) {
+        if let animationConfiguration = behavior.disappearingAnimationConfiguration {
+            UIView.animate(withDuration: animationConfiguration.duration,
+                           delay: 0.0,
+                           usingSpringWithDamping: animationConfiguration.damping,
+                           initialSpringVelocity: animationConfiguration.velocity,
+                           options: [.curveEaseInOut],
+                           animations: { block() })
+        } else {
+            UIView.animate(withDuration: 0.5,
                            delay: 0.0,
                            usingSpringWithDamping: 1.0,
                            initialSpringVelocity: 0.1,

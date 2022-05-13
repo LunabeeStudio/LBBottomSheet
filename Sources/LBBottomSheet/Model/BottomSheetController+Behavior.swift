@@ -167,10 +167,10 @@ extension BottomSheetController {
             }
         }
 
-        /// The duration of the appearing animation.
-        public var appearingAnimationDuration: Double = 0.5
-        /// The duration of the disappearing animation.
-        public var disappearingAnimationDuration: Double = 0.5
+        /// Custom animation configuration used to animate the bottom sheet when it is appearing.
+        public var appearingAnimationConfiguration: BottomSheetAnimationConfiguration?
+        /// Custom animation configuration used to animate the bottom sheet when it is disappearing.
+        public var disappearingAnimationConfiguration: BottomSheetAnimationConfiguration?
         /// Custom animation configuration used to animate the bottom sheet when it's position is updated.
         public var bottomSheetAnimationConfiguration: BottomSheetAnimationConfiguration?
         /// Defines how the bottom sheet is swippable.
@@ -211,8 +211,8 @@ extension BottomSheetController {
         public var canTouchDimmingBackgroundToDismiss: Bool
 
         /// Initializes a new Behavior.
-        public init(appearingAnimationDuration: Double = 0.5,
-                    disappearingAnimationDuration: Double = 0.5,
+        public init(appearingAnimationConfiguration: BottomSheetAnimationConfiguration? = nil,
+                    disappearingAnimationConfiguration: BottomSheetAnimationConfiguration? = nil,
                     bottomSheetAnimationConfiguration: BottomSheetAnimationConfiguration? = nil,
                     swipeMode: BottomSheetController.Behavior.SwipeMode = .full,
                     forwardEventsToRearController: Bool = false,
@@ -225,8 +225,8 @@ extension BottomSheetController {
                     updateHeightOnContentSizeCategoryChange: Bool = true,
                     allowsSwipeToDismiss: Bool = true,
                     canTouchDimmingBackgroundToDismiss: Bool = true) {
-            self.appearingAnimationDuration = appearingAnimationDuration
-            self.disappearingAnimationDuration = disappearingAnimationDuration
+            self.appearingAnimationConfiguration = appearingAnimationConfiguration
+            self.disappearingAnimationConfiguration = disappearingAnimationConfiguration
             self.bottomSheetAnimationConfiguration = bottomSheetAnimationConfiguration
             self.swipeMode = swipeMode
             self.forwardEventsToRearController = forwardEventsToRearController
