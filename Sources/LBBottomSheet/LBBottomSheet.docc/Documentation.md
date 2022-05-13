@@ -171,3 +171,4 @@ LBBottomSheet is available under the Apache 2.0 license. See the LICENSE file fo
 ### Delegate
 
 - ``BottomSheetPositionDelegate``
+- ``BottomSheetInteractionDelegate``
