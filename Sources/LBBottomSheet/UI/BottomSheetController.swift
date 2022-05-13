@@ -346,6 +346,8 @@ private extension BottomSheetController {
         animateDisappearing {
             self.view.backgroundColor = .clear
             self.view.layoutIfNeeded()
+        } completion: {
+            completion()
         }
     }
 }
@@ -565,21 +567,25 @@ private extension BottomSheetController {
         }
     }
 
-    func animateDisappearing(_ block: @escaping () -> ()) {
+    func animateDisappearing(_ animationBlock: @escaping () -> (), completion: @escaping () -> ()) {
         if let animationConfiguration = behavior.disappearingAnimationConfiguration {
             UIView.animate(withDuration: animationConfiguration.duration,
                            delay: 0.0,
                            usingSpringWithDamping: animationConfiguration.damping,
                            initialSpringVelocity: animationConfiguration.velocity,
                            options: [.curveEaseInOut],
-                           animations: { block() })
+                           animations: { animationBlock() }) { _ in
+                completion()
+            }
         } else {
             UIView.animate(withDuration: 0.5,
                            delay: 0.0,
                            usingSpringWithDamping: 1.0,
                            initialSpringVelocity: 0.1,
                            options: [.curveEaseOut],
-                           animations: { block() })
+                           animations: { animationBlock() }) { _ in
+                completion()
+            }
         }
     }
 }
