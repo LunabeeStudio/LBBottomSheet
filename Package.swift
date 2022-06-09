@@ -14,7 +14,11 @@ let package = Package(
     targets: [
         .target(
             name: "LBBottomSheet",
-            dependencies: [])
+            dependencies: [],
+            exclude: [
+                "LBBottomSheet-Demo",
+                "LBBottomSheet.doccarchive.zip"
+            ])
     ],
     swiftLanguageVersions: [.v5]
 )
