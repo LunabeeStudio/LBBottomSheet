@@ -27,5 +27,6 @@ public protocol BottomSheetPositionDelegate: UIViewController {
     /// This way you can dynamically align the components being at the bottom of the controller behind the bottom sheet.
     /// - Parameters:
     ///     - y: This is the vertical bottom sheet coordinate (0.0 behing the top of the screen).
-    func bottomSheetPositionDidUpdate(y: CGFloat)
+    ///     - isAtMaximumHeight: If `true`, the current call of this delegate method indicates that the bottom sheet reached its maximum possible height.
+    func bottomSheetPositionDidUpdate(y: CGFloat, isAtMaximumHeight: Bool)
 }

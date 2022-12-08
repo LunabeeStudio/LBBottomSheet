@@ -157,7 +157,8 @@ public final class BottomSheetController: UIViewController {
     public func grow(toMaximumHeight: Bool = false) {
         switch behavior.heightMode {
         case .specific:
-            let childHeight: CGFloat = childHeight
+            lastChildHeightAtPanGestureStart = childHeight
+            let childHeight: CGFloat = lastChildHeightAtPanGestureStart
             let screenHeight: CGFloat = UIScreen.main.bounds.height
             let maximumHeight: CGFloat = behavior.heightMode.maximumHeight(with: childHeight, screenHeight: screenHeight, from: self)
             let nextHeight: CGFloat? = behavior.heightMode.nextHeight(with: childHeight,
@@ -356,7 +357,9 @@ private extension BottomSheetController {
 private extension BottomSheetController {
     func notifyBottomSheetPositionUpdate() {
         guard isViewLoaded else { return }
-        bottomSheetPositionDelegate?.bottomSheetPositionDidUpdate(y: UIScreen.main.bounds.height - bottomContainerHeightConstraint.constant - bottomContainerBottomConstraint.constant)
+        let maxHeight: CGFloat = behavior.heightMode.maximumHeight(with: lastChildHeightAtPanGestureStart, screenHeight: UIScreen.main.bounds.height, from: self)
+        let isAtMaximumHeight: Bool = bottomContainerHeightConstraint.constant == maxHeight
+        bottomSheetPositionDelegate?.bottomSheetPositionDidUpdate(y: UIScreen.main.bounds.height - bottomContainerHeightConstraint.constant - bottomContainerBottomConstraint.constant, isAtMaximumHeight: isAtMaximumHeight)
     }
 }
 
@@ -454,6 +457,8 @@ private extension BottomSheetController {
             }
         }
         isGestureBeingActivated = false
+
+
     }
     
     func calculateExpectedHeight(_ givenChildHeight: CGFloat? = nil) -> CGFloat {
