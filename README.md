@@ -5,7 +5,7 @@
 <p align="center">
 <img src="https://img.shields.io/github/v/tag/LunabeeStudio/LBBottomSheet?color=informational&label=Version&sort=semver"/>
 <img src="https://img.shields.io/badge/SPM-Compatible-brightgreen.svg?style=flat"/>
-<img src="https://img.shields.io/badge/Swift-v5.5-brightgreen.svg?style=flat&logo=swift"/>
+<img src="https://img.shields.io/badge/Swift-v5.5, v.5.6-brightgreen.svg?style=flat&logo=swift"/>
 <img src="https://img.shields.io/badge/platform-iOS_11.4+-lightgrey.svg?style=flat"/>
 <img src="https://img.shields.io/badge/License-Apache--2.0-informational.svg?style=flat"/>
 </p>
