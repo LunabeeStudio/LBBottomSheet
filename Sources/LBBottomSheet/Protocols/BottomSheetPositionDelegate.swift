@@ -22,7 +22,7 @@ import UIKit
 
 /// Implement this protocol to dynamically get bottom sheet offset changes.
 /// Only view controllers can implement this protocol.
-public protocol BottomSheetPositionDelegate: UIViewController {
+public protocol BottomSheetPositionDelegate: AnyObject {
     /// This method is called at each bottom sheet offset change during the layout process.
     /// This way you can dynamically align the components being at the bottom of the controller behind the bottom sheet.
     /// - Parameters:
