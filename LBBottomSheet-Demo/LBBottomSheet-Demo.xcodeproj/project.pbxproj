@@ -20,7 +20,6 @@
 		37564C4D2724AFF8009918BD /* MenuEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37564C4C2724AFF8009918BD /* MenuEntry.swift */; };
 		37564C502724B066009918BD /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37564C4F2724B066009918BD /* Appearance.swift */; };
 		37564C522724B0EC009918BD /* UIColor+Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37564C512724B0EC009918BD /* UIColor+Appearance.swift */; };
-		3778E2682727EB62001DD801 /* LBBottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 3778E2672727EB62001DD801 /* LBBottomSheet */; };
 		379C6FD027294E620034530A /* StandardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 379C6FCF27294E620034530A /* StandardCell.xib */; };
 		379C6FD3272950BD0034530A /* ImageCardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 379C6FD2272950BD0034530A /* ImageCardCell.xib */; };
 		37CC614027283DED00C2D13D /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CC613F27283DEC00C2D13D /* DemoViewController.swift */; };
@@ -80,6 +79,7 @@
 		37CD11242723105900D8A0B3 /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		37CD11272723107800D8A0B3 /* MainCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		37CD11292723107D00D8A0B3 /* RootCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootCoordinator.swift; sourceTree = "<group>"; };
+		A8FC099129C4AA5C00D6D3CD /* LBBottomSheet */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = LBBottomSheet; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,7 +87,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3778E2682727EB62001DD801 /* LBBottomSheet in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,6 +189,7 @@
 		37CD10E12723096700D8A0B3 = {
 			isa = PBXGroup;
 			children = (
+				A8FC099029C4AA5C00D6D3CD /* Packages */,
 				37CD10EC2723096700D8A0B3 /* LBBottomSheet-Demo */,
 				37CD10EB2723096700D8A0B3 /* Products */,
 			);
@@ -360,6 +360,14 @@
 			path = Application;
 			sourceTree = "<group>";
 		};
+		A8FC099029C4AA5C00D6D3CD /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				A8FC099129C4AA5C00D6D3CD /* LBBottomSheet */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -377,7 +385,6 @@
 			);
 			name = "LBBottomSheet-Demo";
 			packageProductDependencies = (
-				3778E2672727EB62001DD801 /* LBBottomSheet */,
 			);
 			productName = "LBBottomSheet-Demo";
 			productReference = 37CD10EA2723096700D8A0B3 /* LBBottomSheet-Demo.app */;
@@ -408,7 +415,6 @@
 			);
 			mainGroup = 37CD10E12723096700D8A0B3;
 			packageReferences = (
-				3778E2662727EB61001DD801 /* XCRemoteSwiftPackageReference "LBBottomSheet" */,
 			);
 			productRefGroup = 37CD10EB2723096700D8A0B3 /* Products */;
 			projectDirPath = "";
@@ -688,25 +694,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		3778E2662727EB61001DD801 /* XCRemoteSwiftPackageReference "LBBottomSheet" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/LunabeeStudio/LBBottomSheet";
-			requirement = {
-				branch = develop;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		3778E2672727EB62001DD801 /* LBBottomSheet */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3778E2662727EB61001DD801 /* XCRemoteSwiftPackageReference "LBBottomSheet" */;
-			productName = LBBottomSheet;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 37CD10E22723096700D8A0B3 /* Project object */;
 }
