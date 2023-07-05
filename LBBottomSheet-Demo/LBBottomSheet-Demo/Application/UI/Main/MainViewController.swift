@@ -310,7 +310,7 @@ private extension MainViewController {
 }
 
 extension MainViewController: BottomSheetPositionDelegate {
-    func bottomSheetPositionDidUpdate(y: CGFloat) {
+    func bottomSheetPositionDidUpdate(y: CGFloat, isAtMaximumHeight: Bool) {
         tableView.contentInset.bottom = tableView.frame.height - y
     }
 }
