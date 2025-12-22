@@ -57,4 +57,34 @@ final class ForwardingEventsView: UIView {
         }
     }
 
+    @available(iOS 18.0, *)
+    override func accessibilityHitTest(_ point: CGPoint, event: UIEvent?) -> Any? {
+        // Résultat "normal" côté accessibilité dans cette vue
+        let accessibilityHitTest: Any? = super.accessibilityHitTest(point, event: event)
+
+        // On réutilise la même logique de détection que hitTest(_:with:)
+        // pour savoir si le point est dans excludedParentView (ou un de ses enfants).
+        let hitTest: UIView? = super.hitTest(point, with: event)
+
+        var currentView: UIView? = hitTest
+        var isChildOfExcludedParentView: Bool = hitTest == excludedParentView
+
+        while let superview = currentView?.superview {
+            currentView = superview
+            if currentView == excludedParentView {
+                isChildOfExcludedParentView = true
+                break
+            }
+        }
+
+        if isChildOfExcludedParentView {
+            // Dans la bottom sheet (exclue) : on ne forward pas.
+            // (Fallback sur hitTest si jamais a11y retourne nil)
+            return accessibilityHitTest ?? hitTest
+        } else {
+            // Hors zone exclue : on forward vers la vue derrière.
+            let destinationPoint: CGPoint = convert(point, to: destinationView)
+            return destinationView?.accessibilityHitTest(destinationPoint, event: event) ?? accessibilityHitTest
+        }
+    }
 }
