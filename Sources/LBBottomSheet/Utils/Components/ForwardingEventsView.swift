@@ -64,7 +64,7 @@ final class ForwardingEventsView: UIView {
 
         // On réutilise la même logique de détection que hitTest(_:with:)
         // pour savoir si le point est dans excludedParentView (ou un de ses enfants).
-        let hitTest: UIView? = super.hitTest(point, with: event)
+        let hitTest: UIView? = hitTest(point, with: event)
 
         var currentView: UIView? = hitTest
         var isChildOfExcludedParentView: Bool = hitTest == excludedParentView
