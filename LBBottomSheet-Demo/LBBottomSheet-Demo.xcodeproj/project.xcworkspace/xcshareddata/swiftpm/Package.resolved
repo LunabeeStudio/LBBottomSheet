@@ -1,4 +1,5 @@
 {
+  "originHash" : "33d2d5055148f0b415142ccae45b611a3f6990f55d83f88e427464e6e8848d69",
   "pins" : [
     {
       "identity" : "lbbottomsheet",
@@ -6,9 +7,9 @@
       "location" : "https://github.com/LunabeeStudio/LBBottomSheet",
       "state" : {
         "branch" : "develop",
-        "revision" : "64becfee6827dec32895cec3ac23dfd0ecdaca86"
+        "revision" : "5d7ea5742e9f4db6798479dc87db09ecece736aa"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
