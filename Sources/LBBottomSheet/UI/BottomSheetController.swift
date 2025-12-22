@@ -115,7 +115,12 @@ public final class BottomSheetController: UIViewController {
         setupDimmingBackground()
         makeAppearing()
     }
-    
+
+    public override func accessibilityPerformEscape() -> Bool {
+        dismiss()
+        return true
+    }
+
     /// Call this function to tell the bottom sheet the embedded controller height did change.
     /// This way, this controller will calculate the new needed height and the bottom sheet layout will be updated.
     public func preferredHeightInBottomSheetDidUpdate() {
