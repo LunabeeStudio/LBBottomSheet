@@ -27,7 +27,7 @@ public final class BottomSheetController: UIViewController {
         get { .overFullScreen }
         set { }
     }
-    
+
     /// This is the height of the grabber "zone".
     /// ![TopInset](TopInset)
     ///
@@ -37,14 +37,14 @@ public final class BottomSheetController: UIViewController {
     /// ```
     /// You can have a look at <doc:/LBBottomSheet/BottomSheetController/Theme-swift.struct/Grabber-swift.struct> to check the <doc:/LBBottomSheet/BottomSheetController/Theme-swift.struct/Grabber-swift.struct/topMargin>.
     public var topInset: CGFloat { (theme.grabber?.topMargin ?? 0.0) * 2.0 + (theme.grabber?.size.height ?? 0.0) }
-    
+
     /// The delegate to get the bottom sheet position updates if the presenting controller needs to update its content bottom inset.
     public weak var bottomSheetPositionDelegate: BottomSheetPositionDelegate? {
         didSet { notifyBottomSheetPositionUpdate() }
     }
     /// The delegate to get bottom sheet interactions events.
     public weak var bottomSheetInteractionDelegate: BottomSheetInteractionDelegate?
-    
+
     @IBOutlet private var mainDismissButton: UIButton!
     @IBOutlet private var grabberView: UIView!
     @IBOutlet private var gestureView: UIView!
@@ -59,12 +59,12 @@ public final class BottomSheetController: UIViewController {
     @IBOutlet private var bottomContainerBottomConstraint: NSLayoutConstraint!
     @IBOutlet private var bottomContainerLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private var bottomContainerTrailingConstraint: NSLayoutConstraint!
-    
+
     public private(set) var theme: Theme = Theme()
     public private(set) var behavior: Behavior = Behavior()
     private let minTopMargin: CGFloat = 40.0
     private var didAlreadyStartAppearing: Bool = false
-    
+
     private var panGesture: UIPanGestureRecognizer?
     private var tapGesture: UITapGestureRecognizer?
     private var isGestureBeingActivated: Bool = false
@@ -95,7 +95,8 @@ public final class BottomSheetController: UIViewController {
         }
     }
     private var isFirstLoad: Bool = true
-    
+    private var cachedAccessibilityElements: [Any]?
+
     /// Overriden to customize the way the controller is initialized.
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,7 +105,7 @@ public final class BottomSheetController: UIViewController {
         addGesture()
         addObservers()
     }
-    
+
     /// Overriden to customize the way the controller is appearing.
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -114,6 +115,11 @@ public final class BottomSheetController: UIViewController {
         setInitialPosition()
         setupDimmingBackground()
         makeAppearing()
+        // If we're forwarding events to the rear controller, keep focus on the sheet by default,
+        // while still allowing swipe navigation to reach rear elements.
+        if behavior.forwardEventsToRearController {
+            UIAccessibility.post(notification: .screenChanged, argument: bottomContainerView)
+        }
     }
 
     public override func accessibilityPerformEscape() -> Bool {
@@ -134,31 +140,31 @@ public final class BottomSheetController: UIViewController {
             view.layoutIfNeeded()
         }
     }
-    
+
     /// Overriden to update the shadow color in case of light/dark mode change.
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateShadowColors()
     }
-    
+
     /// Overriden to call the position delegate update method after a layout calculation.
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         notifyBottomSheetPositionUpdate()
     }
-    
+
     /// Use this function to dismiss the bottom sheet. This will animate the disappearing based on the behavior configuration.
     public func dismiss(_ completion: (() -> Void)? = nil) {
         makeDisappearing {
             super.dismiss(animated: false, completion: completion)
         }
     }
-    
+
     @available(swift, obsoleted: 5.0, message: "Use the bottom sheet provided dismiss function instead of the default one.", renamed: "dismiss(_:)")
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         super.dismiss(animated: flag, completion: completion)
     }
-    
+
     public func grow(toMaximumHeight: Bool = false) {
         switch behavior.heightMode {
         case .specific:
@@ -183,7 +189,7 @@ public final class BottomSheetController: UIViewController {
             break
         }
     }
-    
+
     public func reduce(toMinimumHeight: Bool = false) {
         switch behavior.heightMode {
         case .specific:
@@ -235,7 +241,7 @@ private extension BottomSheetController {
         bottomContainerView.layer.maskedCorners = theme.maskedCorners
         bottomContainerView.layer.masksToBounds = true
         bottomContainerView.alpha = 0.0
-        
+
         if let grabber = theme.grabber {
             topGrabberConstraint.constant = grabber.topMargin
             widthGrabberConstraint.constant = grabber.size.width
@@ -252,7 +258,7 @@ private extension BottomSheetController {
         } else {
             grabberView.isHidden = true
         }
-        
+
         if let shadow = theme.shadow {
             updateShadowColors()
             view.layer.shadowOffset = shadow.offset
@@ -261,13 +267,13 @@ private extension BottomSheetController {
             view.layer.shouldRasterize = true
             view.layer.rasterizationScale = UIScreen.main.scale
         }
-        
+
         lbbsAddChildViewController(bottomSheetChild, containerView: bottomContainerInnerView)
         bottomContainerView.backgroundColor = bottomSheetChild.view.backgroundColor
         bottomContainerLeadingConstraint.constant = theme.leadingMargin
         bottomContainerTrailingConstraint.constant = theme.trailingMargin
     }
-    
+
     func initGrabberBackgroundView() {
         guard let background = theme.grabber?.background else { return }
         switch background {
@@ -281,40 +287,62 @@ private extension BottomSheetController {
             updateBottomChildContainerTopConstraint(isGrabberBackgroundTranslucent: isTranslucent)
         }
     }
-    
+
     func updateShadowColors() {
         guard let color = theme.shadow?.color.cgColor else { return }
         view.layer.shadowColor = color
     }
-    
+
     func updateBottomChildContainerTopConstraint(isGrabberBackgroundTranslucent: Bool) {
         bottomContainerInnerViewTranslucentTopConstraint.isActive = isGrabberBackgroundTranslucent
         bottomContainerInnerViewTopConstraint.isActive = !isGrabberBackgroundTranslucent
     }
-    
+
     func setInitialPosition() {
         bottomContainerBottomConstraint.constant = -calculateExpectedHeight()
         bottomContainerView.alpha = 1.0
         view.layoutIfNeeded()
     }
-    
+
     func setupDimmingBackground() {
         if behavior.forwardEventsToRearController {
+            // Touch forwarding already handled by ForwardingEventsView.
             mainDismissButton.isUserInteractionEnabled = false
+
+            // Accessibility: do NOT trap VoiceOver inside the presented controller.
+            view.accessibilityViewIsModal = false
+
+            // Make the dimming button/background fully invisible to accessibility.
             mainDismissButton.isAccessibilityElement = false
-//            dimmingView.isAccessibilityElement = false
             mainDismissButton.accessibilityElementsHidden = true
+
+            // Ensure the root view is not treated as a single element.
             view.isAccessibilityElement = false
+
             if let rearView = presentingViewController?.view {
                 let view: ForwardingEventsView = self.view as! ForwardingEventsView
                 view.destinationView = rearView
                 view.excludedParentView = bottomContainerView
+
+                // Provide a combined accessibility traversal order:
+                // - the sheet content (bottomContainerView)
+                // - the rear controller content (rearView)
+                // This allows VoiceOver to reach elements "behind" the sheet when needed.
+                cachedAccessibilityElements = [bottomContainerView as Any, rearView as Any]
+                self.view.accessibilityElements = cachedAccessibilityElements
+            } else {
+                cachedAccessibilityElements = [bottomContainerView as Any]
+                self.view.accessibilityElements = cachedAccessibilityElements
             }
         } else {
             mainDismissButton.isUserInteractionEnabled = true
+
+            // Default behavior: keep normal VoiceOver navigation within the presented sheet.
+            cachedAccessibilityElements = nil
+            view.accessibilityElements = nil
         }
     }
-    
+
     func addGesture() {
         guard behavior.swipeMode != .none else { return }
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerHandler(_:)))
@@ -350,7 +378,7 @@ private extension BottomSheetController {
             self.view.layoutIfNeeded()
         }
     }
-    
+
     func makeDisappearing(_ completion: @escaping () -> ()) {
         bottomContainerBottomConstraint.constant = -bottomContainerHeightConstraint.constant
         animateDisappearing {
@@ -387,14 +415,14 @@ private extension BottomSheetController {
             break
         }
     }
-    
+
     func processPanGestureBegan(_ gesture: UIPanGestureRecognizer) {
         tapGesture?.lbbsCancel()
         isGestureBeingActivated = true
         lastHeightAtPanGestureStart = bottomContainerHeightConstraint.constant
         lastChildHeightAtPanGestureStart = childHeight
     }
-    
+
     func processPanGestureChanged(_ gesture: UIPanGestureRecognizer) {
         let yTranslation: CGFloat = gesture.translation(in: bottomContainerView).y
         let destinationHeight: CGFloat = lastHeightAtPanGestureStart - yTranslation
@@ -417,7 +445,7 @@ private extension BottomSheetController {
         bottomContainerBottomConstraint.constant = newBottom
         view.layoutIfNeeded()
     }
-    
+
     func processPanGestureEnded(_ gesture: UIPanGestureRecognizer) {
         let yTranslation: CGFloat = gesture.translation(in: bottomContainerView).y
         let yVelocity: CGFloat = gesture.velocity(in: bottomContainerView).y
@@ -447,8 +475,8 @@ private extension BottomSheetController {
             case .specific:
                 let isFastSwipeUpGestureDetected: Bool = yVelocity < -behavior.velocityThresholdToOpenAtMaxHeight
                 let maximumHeight: CGFloat = behavior.heightMode.maximumHeight(with: lastChildHeightAtPanGestureStart,
-                                                                              screenHeight: UIScreen.main.bounds.height,
-                                                                              from: self)
+                                                                               screenHeight: UIScreen.main.bounds.height,
+                                                                               from: self)
                 let expectedHeight: CGFloat = calculateExpectedHeight(lastChildHeightAtPanGestureStart)
 
                 let destinationHeight: CGFloat = isFastSwipeUpGestureDetected ? maximumHeight : expectedHeight
@@ -469,7 +497,7 @@ private extension BottomSheetController {
 
 
     }
-    
+
     func calculateExpectedHeight(_ givenChildHeight: CGFloat? = nil) -> CGFloat {
         let childHeight: CGFloat = givenChildHeight ?? self.childHeight
         switch behavior.heightMode {
@@ -481,11 +509,11 @@ private extension BottomSheetController {
         case let .specific(values, heightLimit):
             let maxHeightLimit: CGFloat = heightLimit.value(from: self, screenHeight: UIScreen.main.bounds.height)
             let heightValues: [CGFloat] = values.sortedPointValues(screenHeight: UIScreen.main.bounds.height, childHeight: childHeight)
-                                                .map { min($0, maxHeightLimit) }
+                .map { min($0, maxHeightLimit) }
             return min(heightValues.min { abs($0 - bottomContainerHeightConstraint.constant) < abs($1 - bottomContainerHeightConstraint.constant) } ?? 0.0, maxHeightLimit)
         }
     }
-    
+
     func updateCornerRadiusFor(destinationHeight: CGFloat) {
         bottomContainerView.layer.cornerRadius = destinationHeight == UIScreen.main.bounds.height ? UIScreen.main.lbbsCornerRadius : theme.cornerRadius
     }
