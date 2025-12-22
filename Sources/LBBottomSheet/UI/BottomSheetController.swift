@@ -95,7 +95,6 @@ public final class BottomSheetController: UIViewController {
         }
     }
     private var isFirstLoad: Bool = true
-    private var cachedAccessibilityElements: [Any]?
 
     /// Overriden to customize the way the controller is initialized.
     public override func viewDidLoad() {
@@ -115,11 +114,6 @@ public final class BottomSheetController: UIViewController {
         setInitialPosition()
         setupDimmingBackground()
         makeAppearing()
-        // If we're forwarding events to the rear controller, keep focus on the sheet by default,
-        // while still allowing swipe navigation to reach rear elements.
-        if behavior.forwardEventsToRearController {
-            UIAccessibility.post(notification: .screenChanged, argument: bottomContainerView)
-        }
     }
 
     public override func accessibilityPerformEscape() -> Bool {
@@ -306,40 +300,18 @@ private extension BottomSheetController {
 
     func setupDimmingBackground() {
         if behavior.forwardEventsToRearController {
-            // Touch forwarding already handled by ForwardingEventsView.
             mainDismissButton.isUserInteractionEnabled = false
-
-            // Accessibility: do NOT trap VoiceOver inside the presented controller.
-            view.accessibilityViewIsModal = false
-
-            // Make the dimming button/background fully invisible to accessibility.
             mainDismissButton.isAccessibilityElement = false
+            //            dimmingView.isAccessibilityElement = false
             mainDismissButton.accessibilityElementsHidden = true
-
-            // Ensure the root view is not treated as a single element.
             view.isAccessibilityElement = false
-
             if let rearView = presentingViewController?.view {
                 let view: ForwardingEventsView = self.view as! ForwardingEventsView
                 view.destinationView = rearView
                 view.excludedParentView = bottomContainerView
-
-                // Provide a combined accessibility traversal order:
-                // - the sheet content (bottomContainerView)
-                // - the rear controller content (rearView)
-                // This allows VoiceOver to reach elements "behind" the sheet when needed.
-                cachedAccessibilityElements = [bottomContainerView as Any, rearView as Any]
-                self.view.accessibilityElements = cachedAccessibilityElements
-            } else {
-                cachedAccessibilityElements = [bottomContainerView as Any]
-                self.view.accessibilityElements = cachedAccessibilityElements
             }
         } else {
             mainDismissButton.isUserInteractionEnabled = true
-
-            // Default behavior: keep normal VoiceOver navigation within the presented sheet.
-            cachedAccessibilityElements = nil
-            view.accessibilityElements = nil
         }
     }
 
