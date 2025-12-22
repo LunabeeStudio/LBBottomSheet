@@ -296,6 +296,7 @@ private extension BottomSheetController {
     func setupDimmingBackground() {
         if behavior.forwardEventsToRearController {
             mainDismissButton.isUserInteractionEnabled = false
+            mainDismissButton.isAccessibilityElement = false
             if let rearView = presentingViewController?.view {
                 let view: ForwardingEventsView = self.view as! ForwardingEventsView
                 view.destinationView = rearView
