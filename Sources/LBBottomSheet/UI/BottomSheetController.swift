@@ -297,6 +297,8 @@ private extension BottomSheetController {
         if behavior.forwardEventsToRearController {
             mainDismissButton.isUserInteractionEnabled = false
             mainDismissButton.isAccessibilityElement = false
+//            dimmingView.isAccessibilityElement = false
+            mainDismissButton.accessibilityElementsHidden = true
             if let rearView = presentingViewController?.view {
                 let view: ForwardingEventsView = self.view as! ForwardingEventsView
                 view.destinationView = rearView
