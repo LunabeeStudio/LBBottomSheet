@@ -302,7 +302,6 @@ private extension BottomSheetController {
         if behavior.forwardEventsToRearController {
             mainDismissButton.isUserInteractionEnabled = false
             mainDismissButton.isAccessibilityElement = false
-            //            dimmingView.isAccessibilityElement = false
             mainDismissButton.accessibilityElementsHidden = true
             view.isAccessibilityElement = false
             if let rearView = presentingViewController?.view {
