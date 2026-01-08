@@ -23,6 +23,9 @@ import UIKit
 /// This class is the main component of this package.
 /// It is presented modally and embeds the controller you want to present as a bottom sheet.
 public final class BottomSheetController: UIViewController {
+
+    private var presentingControllerAccessibilityHiddenBackup: Bool?
+
     override public var modalPresentationStyle: UIModalPresentationStyle {
         get { .overFullScreen }
         set { }
@@ -151,6 +154,10 @@ public final class BottomSheetController: UIViewController {
     public func dismiss(_ completion: (() -> Void)? = nil) {
         makeDisappearing {
             super.dismiss(animated: false, completion: completion)
+            if let backup = self.presentingControllerAccessibilityHiddenBackup {
+                self.presentingViewController?.view.accessibilityElementsHidden = backup
+                self.presentingControllerAccessibilityHiddenBackup = nil
+            }
         }
     }
 
@@ -309,8 +316,21 @@ private extension BottomSheetController {
                 view.destinationView = rearView
                 view.excludedParentView = bottomContainerView
             }
+
+            if presentingControllerAccessibilityHiddenBackup == nil {
+                presentingControllerAccessibilityHiddenBackup = presentingViewController?.view.accessibilityElementsHidden
+            }
+            presentingViewController?.view.accessibilityElementsHidden = false
+            view.accessibilityViewIsModal = false
+            presentationController?.containerView?.accessibilityViewIsModal = false
+            view.superview?.accessibilityViewIsModal = false
+            UIAccessibility.post(notification: .layoutChanged, argument: nil)
         } else {
             mainDismissButton.isUserInteractionEnabled = true
+
+            view.accessibilityViewIsModal = true
+            presentationController?.containerView?.accessibilityViewIsModal = true
+            view.superview?.accessibilityViewIsModal = true
         }
     }
 
