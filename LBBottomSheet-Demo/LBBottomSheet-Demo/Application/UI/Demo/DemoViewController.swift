@@ -42,6 +42,7 @@ final class DemoViewController: CVTableViewController {
         super.viewDidLoad()
         initTableView()
         reloadUI()
+        
     }
 
     override func createRows() -> [CVRow] {

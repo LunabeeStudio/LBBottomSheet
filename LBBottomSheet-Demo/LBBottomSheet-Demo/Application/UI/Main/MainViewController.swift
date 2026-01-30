@@ -21,6 +21,18 @@
 import UIKit
 import LBBottomSheet
 
+import SwiftUI
+
+struct MyView: View {
+    var body: some View {
+        VStack(spacing: 20.0) {
+            Text("Coucou")
+            Text("Ceci est une vue de démo")
+            Text("Un peu plus grande pour le test d'accessibilité")
+        }
+    }
+}
+
 final class MainViewController: CVTableViewController {
     override var prefersStatusBarHidden: Bool { true }
     override var prefersHomeIndicatorAutoHidden: Bool { true }
@@ -249,6 +261,21 @@ private extension MainViewController {
                                            behavior: testCase.behavior())
             }
         })
+
+        fitContentEntries.append(
+            MenuEntry(title: "Fit content (SwiftUI) - Example #5") { [weak self] in
+                let testCase: DemoTestCase = DemoTestCaseFactory.fitContent.last!
+                let behavior: BottomSheetController.Behavior = testCase.behavior()
+                let positionDelegate: BottomSheetPositionDelegate? = behavior.forwardEventsToRearController ? self : nil
+
+                let controller: UIHostingController = .init(rootView: MyView())
+                self?.presentAsBottomSheet(controller,
+                                           positionDelegate: positionDelegate,
+                                           theme: testCase.theme(),
+                                           behavior: testCase.behavior())
+            }
+        )
+
         var lastEntry: MenuEntry = fitContentEntries.removeLast()
         lastEntry.isFooter = true
         fitContentEntries.append(lastEntry)
