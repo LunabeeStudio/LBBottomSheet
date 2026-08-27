@@ -95,6 +95,8 @@ extension MainViewController: BottomSheetPositionDelegate {
 
 This will prevent you from having content hidden by the BottomSheet in case you need to interact with it.   
    
+> Important: The `y` value is expressed in the window coordinate space, not in the display one. If you need the full height to compute an offset, read it from `view.window?.bounds.height` rather than from `UIScreen.main.bounds.height`: both are identical until the scene is resized (iOS 27 DeviceHub, iPhone Mirroring, an iPhone app on iPad), where only the window describes what the user actually sees.   
+   
 
 ### FitContent - Advanced configuration
 In this mode, by default, the height is automatically calculated:

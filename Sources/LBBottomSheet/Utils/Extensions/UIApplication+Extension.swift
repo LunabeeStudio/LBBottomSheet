@@ -21,11 +21,11 @@
 import UIKit
 
 internal extension UIApplication {
-    /// This will return the first connected scene key window of the main screen if it exists.
+    /// This will return the first foreground active connected scene key window if it exists.
     var lbbsKeySceneWindow: UIWindow? {
         if #available(iOS 13.0, *) {
             return UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
-                .filter { $0.screen === UIScreen.main }
+                .filter { $0.activationState == .foregroundActive }
                 .first?.windows
                 .filter { $0.isKeyWindow }.first ?? UIApplication.shared.keyWindow
         } else {
