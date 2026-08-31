@@ -26,7 +26,9 @@ public protocol BottomSheetPositionDelegate: AnyObject {
     /// This method is called at each bottom sheet offset change during the layout process.
     /// This way you can dynamically align the components being at the bottom of the controller behind the bottom sheet.
     /// - Parameters:
-    ///     - y: This is the vertical bottom sheet coordinate (0.0 behing the top of the screen).
+    ///     - y: This is the vertical bottom sheet coordinate in the window coordinate space (0.0 being the top of the window).
+    ///     On a resized scene (iOS 27 DeviceHub, iPhone Mirroring, an iPhone app on iPad) the window is smaller than the display, and
+    ///     `y` is relative to the window. Compute your insets from `view.window?.bounds.height`, not from `UIScreen.main`.
     ///     - isAtMaximumHeight: If `true`, the current call of this delegate method indicates that the bottom sheet reached its maximum possible height.
     func bottomSheetPositionDidUpdate(y: CGFloat, isAtMaximumHeight: Bool)
 }
